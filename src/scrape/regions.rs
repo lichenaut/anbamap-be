@@ -208,7 +208,7 @@ pub enum Region { // https://en.wikipedia.org/wiki/List_of_alternative_country_n
 //convert accent markers and non-english words in input texts to work with these
 //test substrings with apostrophes and periods
 lazy_static! {//once it finds a hit within a vec, dont bother with checking the rest within the vec and move onto next region
-    pub static ref REGION_MAP = { // name, demonym, capital (largest cities too), relevant figure(s), subregions. redundancies removed.
+    pub static ref REGION_MAP = { // name, demonym, capital, relevant figure(s), largest cities if they're comparable to capital, subregions. redundancies removed.
         let mut map = HashMap::new();
         map.insert(// georgia: "ruslan abashidze", "jemal gamakharia",
                 vec!["abkhaz", "sukhumi", "aslan bzhania", "alexander ankvab", "ruslan abashidze", "jemal gamakharia", "gagra", "gali", "gudauta", "gulripshi", "ochamchira", "tkvarcheli"],
@@ -232,7 +232,7 @@ lazy_static! {//once it finds a hit within a vec, dont bother with checking the 
                 vec!["antigua", "barbuda", "saint john's", "st. john's", "charles iii", "king charles", "gaston browne", "sir rodney williams", "codrington", "all saints", "piggotts", "liberta"],
                 Region::AntiguaAndBarbuda);
         map.insert(
-                vec!["argentina", "argentine" "argentinian", "argentinean", "buenos aires", "javier milei", "victoria villarruel", "nicolas posse", "martin menem", "horacio rosatti", "catamarca", "chaco", "chubut", "cordoba", "corrientes", "entre rios", "formosa", "jujuy", "la pampa", "la rioja", "mendoza", "misiones", "neuquen", "rio negro", "salta", "san juan", "san luis", "santa cruz", "santa fe", "santiago del estero", "tierra del fuego", "tucuman"],
+                vec!["argentina", "argentine" "argentinian", "argentinean", "buenos aires", "javier milei", "victoria villarruel", "nicolas posse", "martin menem", "horacio rosatti", "catamarca", "chaco", "chubut", "cordoba", "corrientes", "entre rios", "formosa", "jujuy", "la pampa", "la rioja", "mendoza", "misiones", "neuquen", "rio negro", "salta", "santiago del estero", "tierra del fuego", "tucuman"],
                 Region::Argentina);
         map.insert(
                 vec!["armenia", "yerevan", "vahagn khachaturyan", "nikol pashinyan", "alen simonyan", "aragatsotn", "ararat", "armavir", "gegharkunik", "kotayk", "lori", "shirak", "syunik", "tavush", "vayots dzor", "yerevan"],
@@ -268,7 +268,7 @@ lazy_static! {//once it finds a hit within a vec, dont bother with checking the 
                 vec!["belize", "belmopan", "charles iii", "king charles", "dame froyla tzalam", "johnny briceno", "cayo district", "corozal district", "orange walk district", "stann creek district", "toledo district"],
                 Region::Belize);
         map.insert(
-                vec!["benin", "porto-novo", "patrice talon", "mariam chabi talata", "cotonou", "alibori", "atakora", "atlantique", "borgou", "collines", "kouffo", "donga", "littoral", "mono department", "oueme", "plateau department", "zou"],
+                vec!["benin", "porto-novo", "patrice talon", "mariam chabi talata", "cotonou", "alibori", "atakora", "atlantique", "borgou", "collines", "kouffo", "donga", "littoral department", "mono department", "oueme", "plateau department", "zou"],
                 Region::Benin);
         map.insert(
                 vec!["bhutan", "thimphu", "wangchuck", "tshering tobgay", "bumthang", "chukha", "dagana", "gasa", "haa", "lhuntse", "mongar", "paro", "pemagatshel", "punakha", "samdrup jongkhar", "samtse", "sarpang", "thimphu", "trashigang", "trashiyangtse", "trongsa", "tsirang", "wangdue phodrang", "zhemgang"],
@@ -297,10 +297,33 @@ lazy_static! {//once it finds a hit within a vec, dont bother with checking the 
         map.insert(
                 vec!["burundi", "bujumbura", "gitega", "bujumbura", "evariste ndayishimiye", "prosper bazombanza", "gervais ndirakobuca", "cankuzo", "gitega", "rutana", "ruyigi", "karuzi", "kayanza", "kirundo", "muyinga", "ngozi", "bururi", "makamba", "rumonge", "bubanza", "bujumbura mairie", "bujumbura rural", "cibitoke", "muramvya", "mwaro"],
                 Region::Burundi);
-
-
-
-
+        map.insert(
+                vec!["cambodia", "khmer", "norodom sihamoni", "hun sen", "hun manet", "khuon sodary", "banteay meanchey", "battambang", "kampong cham", "kampong chhnang", "kampong speu", "kampong thom", "kampot", "kandal", "kep", "koh kong", "kratie", "mondulkiri", "oddar meanchey", "pailin", "phnom penh", "preah sihanouk", "preah vihear", "pursat", "prey veng", "ratanakiri", "siem reap", "stung treng", "svay rieng", "takéo", "tboung khmom"],
+                Region::Cambodia);
+        map.insert(
+                vec!["cameroon", "yaounde", "paul biya", "joseph ngute", "marcel niat njifenji", "cavaye yeguie djibril", "extreme north", "adamawa"],
+                Region::Cameroon);
+        map.insert(
+                vec!["canada", "canadian", "ottawa", "charles iii", "king charles", "trudeau", "mary simon", "toronto", "alberta", "british columbia", "manitoba", "new brunswick", "newfoundland and labrador", "nova scotia", "ontario", "prince edward island", "quebec", "saskatchewan", "yukon", "whitehorse", "northwest territories", "yellowknife", "nunavut", "iqaluit", "newfoundland", "labrador", "prince edward island", "charlottetown", "fredericton", "winnipeg", "regina", "edmonton", "halifax"],
+                Region::Canada);
+        map.insert(
+                vec!["cape verde", "cabo verdean", "cape verdean", "praia", "jose maria neves", "ulisses correia e silva", "santo antao", "sao vicente", "santa luzia", "sao nicolau", "sal", "boavista", "maio", "fogo", "brava"],
+                Region::CapeVerde);
+        map.insert(
+                vec!["central african", "bangui", "faustin-archange touadera", "felix moloua", "simplice sarandji", "bamingui-bangoran", "bangui", "basse-kotto", "haute-kotto", "haut-mbomou", "kemo", "lobaye", "lim-pende", "mambere", "mambere-kadei", "mbomou", "nana-mambere", "ombella-m'poko", "ouaka", "ouham", "ouham-fafa", "ouham-pende", "vakaga", "nana-grebizi", "sangha-mbaere"],
+                Region::CentralAfricanRepublic);
+        map.insert(
+                vec!["chad", "n'djamena", "mahamat deby", "succes masra", "djimadoum tiraina", "batha", "chari-beguirmi". "hadjer-lamis", "wadi fira", "bahr el gazel", "borkou", "ennedi-est", "ennedi-ouest", "guera", "kanem", "lac", "logone occidental", "logone oriental", "mandoul", "mayo-kebbi est", "mayo-kebbi ouest", "moyen-chari", "ouaddai", "salamat", "sila", "tandjile", "tibesti"],
+                Region::Chad);
+        map.insert(//removed capital, 'santiago' is ambiguous
+                vec!["chile", "gabriel boric", "juan antonio coloma", "ricardo cifuentes", "juan fuentes belmar", "arica", "parinacota", "tarapaca", "antofagasta", "atacama", "coquimbo", "valparaiso", "bernardo o'higgins", "maule", "nuble", "biobio", "araucania", "los rios", "los lagos", "carlos ibanez", "magallanes", "chilean antarctica"],
+                Region::Chile);
+        map.insert(
+                vec!["china", "chinese", "beijing", "xi", "li qiang", "zhao leji", "wang huning", "han zheng", "hebei", "shanxi", "liaoning", "jilin", "heilongjiang", "jiangsu", "zhejiang", "anhui", "fujian", "jiangxi", "shandong", "henan", "hubei", "hunan", "guangdong", "hainan", "sichuan", "guizhou", "yunnan", "shaanxi", "gansu", "qinghai", "taiwan", "kaohsiung", "taichung", "tainan", "taoyuan", "hsinchu", "keelung", "chiayi", "pingtung", "yilan", "hualien", "taitung", "penghu", "kinmen", "lienchiang", "shijiazhuang", "taiyun", "shenyang", "changchun", "harbin", "nanjing", "hangzhou", "hefei", "fuzhou", "nanchang", "jinan", "zhengzhou", "wuhan", "changsha", "guangzhou", "haikou", "chengdu", "guiyang", "kunming", "xi'an", "lanzhou", "xining", "taipei"], 
+                Region::China);
+        map.insert(//holy duplicates
+                vec!["colombia", "bogota", "gustavo petro", "francia marquez", "amazonas", "antioquia", "atlantico", "bolivar", "boyaca", "caldas", "caqueta", "casanare", "cauca", "cesar", "choco", "cordoba", "cundinamarca", "guainia", "guaviare", "huila", "la guajira", "magdalena", "meta", "nariño", "norte de santander", "putumayo", "quindio", "risaralda", "san andres", "santander", "sucre", "tolima", "valle del cauca", "vaupes", "vichada"],
+                Region::Colombia);
 
 
 
