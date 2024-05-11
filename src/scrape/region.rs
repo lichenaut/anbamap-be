@@ -3,7 +3,7 @@ use lazy_static::lazy_static;
 
 #[derive(Debug, Eq, PartialEq, Hash)]
 pub enum RegionType { // https://en.wikipedia.org/wiki/List_of_alternative_country_names
-    Global,
+    ExtraRegional,
     Abkhazia,
     Afghanistan,
     Albania,
@@ -342,6 +342,159 @@ lazy_static! {//TODO: word count check for duplicates
             subregions: Some(vec!["absheron".into(), "agdash".into(), "aghdam".into(), "aghjabadi".into(), "aghstafa".into(), "agsu".into(), "astara".into(), "balakan".into(), "barda".into(), "beylagan".into(), "bilasuvar".into(), "dashkasan".into(), "fuzuli".into(), "gadabay".into(), "gobustan".into(), "goranboy".into(), "goychay".into(), "goygol".into(), "hajigabul".into(), "imishli".into(), "ismayilli".into(), "jabrayil".into(), "jalilabad".into(), "kalbajar".into(), "khankendi".into(), "khizi".into(), "khojaly".into(), "khojavend".into(), "kurdamir".into(), "lachin".into(), "lankaran".into(), "lerik".into(), "masally".into(), "mingachevir".into(), "naftalan".into(), "neftchala".into(), "oghuz".into(), "qabala".into(), "qakh".into(), "qazax".into(), "quba".into(), "qubadli".into(), "qusar".into(), "saatly".into(), "sabirabad".into(), "salyan".into(), "samukh".into(), "shabran".into(), "shaki".into(), "shamakhi".into(), "shamkir".into(), "shusha".into(), "sirvan".into(), "siyazan".into(), "tartar".into(), "tovuz".into(), "ujar".into(), "yardimli".into(), "yevlakh".into(), "zagatala".into(), "zangilan".into(), "zardab".into()]),
             misc: Some(vec!["socar".into(), "milli majlis".into(), "musavat".into()]),
         }.get_region_vec(), RegionType::Azerbaijan);
+        map.insert(RegionKeywords {
+            names: Some(vec!["bahamas".into(), "bahama".into()]),
+            demonyms: Some(vec!["bahamian".into()]),
+            capitals: Some(vec!["nassau".into()]),
+            relevant_figures: Some(vec!["king charles".into(), "charles iii".into(), "cynthia pratt".into(), "philip davis".into()]),
+            relevant_cities: None,
+            subregions: Some(vec!["abaco".into(), "acklins".into(), "berry island".into(), "bimini".into(), "black point".into(), "exuma".into(), "cat island".into(), "central andros".into(), "crooked island".into(), "eleuthera".into(), "exuma".into(), "freeport".into(), "grand cay".into(), "harbour island".into(), "hope town".into(), "inagua".into(), "mangrove cay".into(), "mayaguana".into(), "moore's island".into(), "north andros".into(), "ragged island".into(), "rum cay".into(), "south andros".into(), "spanish wells".into()]),
+            misc: None,
+        }.get_region_vec(), RegionType::TheBahamas);
+        map.insert(RegionKeywords {
+            names: Some(vec!["bahrain".into()]),
+            demonyms: None,
+            capitals: Some(vec!["manama".into()]),
+            relevant_figures: Some(vec!["al khalifa".into()]),
+            relevant_cities: Some(vec!["riffa".into()]),
+            subregions: Some(vec!["capital governorate".into(), "muharraq governorate".into(), "northern governorate".into(), "southern governorate".into()]),
+            misc: Some(vec!["shura council".into(), "asalah".into(), "bdf".into(), "bchr".into()]),
+        }.get_region_vec(), RegionType::Bahrain);
+        map.insert(RegionKeywords {
+            names: Some(vec!["bangladesh".into()]),
+            demonyms: None,
+            capitals: Some(vec!["dhaka".into()]),
+            relevant_figures: Some(vec!["mohammed shahabuddin".into(), "sheikh hasina".into(), "shirin sharmin chaudhury".into(), "obaidul hassan".into()]),
+            relevant_cities: Some(vec!["chattogram".into(), "chittagong".into(), "gazipur".into(), "narayanganj".into(), "khulna".into(), "rangpur".into(), "mymensingh".into(), "rajshahi".into(), "sylhet".into(), "comilla".into(), "cumilla".into(), "barisal".into(), "barishal".into(), "bogra".into(), "bogura".into(), "sirajganj".into(), "savar".into(), "brahmanbaria".into(), "sreepur".into(), "kaliakair".into(), "faridpur".into(), "feni".into(), "kushtia".into(), "tangail".into(), "dinajpur".into(), "jashore".into(), "jessore".into(), "chandpur".into(), "chapai nawabganj".into(), "tarabo".into(), "cox's bazar".into()]),
+            subregions: Some(vec!["barisal".into(), "chittagong".into(), "dhaka".into(), "khulna".into(), "mymensingh".into(), "rajshahi".into(), "rangpur".into(), "sylhet".into()]),
+            misc: Some(vec!["bengal".into(), "sangsad".into(), "awami league".into()]),
+        }.get_region_vec(), RegionType::Bangladesh);
+        map.insert(RegionKeywords {
+            names: Some(vec!["barbados".into()]),
+            demonyms: None,
+            capitals: Some(vec!["bridgetown".into()]),
+            relevant_figures: Some(vec!["sandra mason".into(), "mia mottley".into()]),
+            relevant_cities: None,
+            subregions: None,
+            misc: None,
+        }.get_region_vec(), RegionType::Barbados);
+        map.insert(RegionKeywords {
+            names: Some(vec!["belarus".into()]),
+            demonyms: None,
+            capitals: None,
+            relevant_figures: Some(vec!["lukashenko".into(), "roman golovchenko".into()]),
+            relevant_cities: Some(vec!["brest".into(), "gomel".into(), "grodno".into(), "mogilev".into(), "vitebsk".into()]),
+            subregions: None,
+            misc: None,
+        }.get_region_vec(), RegionType::Belarus);
+        map.insert(RegionKeywords {
+            names: Some(vec!["belgium".into()]),
+            demonyms: Some(vec!["belgian".into()]),
+            capitals: Some(vec!["brussels".into()]),
+            relevant_figures: Some(vec!["king philippe".into(), "alexander de croo".into()]),
+            relevant_cities: Some(vec!["antwerp".into(), "ghent".into(), "charleroi".into()]),
+            subregions: Some(vec!["flanders".into(), "wallonia".into()]),
+            misc: Some(vec!["flemish".into(), "walloon".into()]),
+        }.get_region_vec(), RegionType::Belgium);
+        map.insert(RegionKeywords {
+            names: Some(vec!["belize".into()]),
+            demonyms: None,
+            capitals: Some(vec!["belmopan".into()]),
+            relevant_figures: Some(vec!["king charles".into(), "charles iii".into(), "dame froyla tzalam".into(), "john briceno".into(), "johnny briceno".into()]),
+            relevant_cities: None,
+            subregions: Some(vec!["cayo district".into(), "corozal district".into(), "orange walk district".into(), "stann creek district".into(), "toledo district".into()]),
+            misc: None,
+        }.get_region_vec(), RegionType::Belize);
+        map.insert(RegionKeywords {
+            names: Some(vec!["benin".into()]),
+            demonyms: None,
+            capitals: Some(vec!["porto-novo".into()]),
+            relevant_figures: Some(vec!["patrice talon".into(), "mariam chabi talata".into()]),
+            relevant_cities: Some(vec!["cotonou".into(), "parakou".into()]),
+            subregions: Some(vec!["alibori".into(), "atakora".into(), "atlantique".into(), "borgou".into(), "collines".into(), "donga".into(), "kouffo".into(), "littoral".into(), "oueme".into(), "zou".into()]),
+            misc: None,
+        }.get_region_vec(), RegionType::Benin);
+        map.insert(RegionKeywords {
+            names: Some(vec!["bhutan".into()]),
+            demonyms: None,
+            capitals: Some(vec!["thimphu".into()]),
+            relevant_figures: Some(vec!["wangchuck".into(), "tshering tobgay".into()]),
+            relevant_cities: None,
+            subregions: Some(vec!["bhumthang".into(), "chukha".into(), "dagana".into(), "gasa".into(), "haa".into(), "lhuntse".into(), "mongar".into(), "paro".into(), "pemagatshel".into(), "punakha".into(), "samdrup jongkhar".into(), "samtse".into(), "sarpang".into(), "thimphu".into(), "trashigang".into(), "trashiyangtse".into(), "trongsa".into(), "tsirang".into(), "wangdue phodrang".into(), "zhemgang".into()]),
+            misc: Some(vec!["druk gyalpo".into()]),
+        }.get_region_vec(), RegionType::Bhutan);
+        map.insert(RegionKeywords {
+            names: Some(vec!["bolivia".into()]),
+            demonyms: None,
+            capitals: Some(vec!["sucre".into()]),
+            relevant_figures: Some(vec!["luis arce".into(), "lucho".into(), "david choquehuanca".into(), "andronico rodriguez".into(), "israel huaytari".into()]),
+            relevant_cities: Some(vec!["la paz".into(), "santa cruz de la sierra".into(), "el alto".into(), "cochabamba".into(), "oruro".into()]),
+            subregions: Some(vec!["pando".into(), "beni".into(), "potosi".into(), "chuquisaca".into(), "tarija".into()]),
+            misc: Some(vec!["pluritonal".into(), "plaza murillo".into()]),
+        }.get_region_vec(), RegionType::Bolivia);
+        map.insert(RegionKeywords {
+            names: Some(vec!["bosnia".into(), "srpska".into(), "brcko".into()]),
+            demonyms: Some(vec!["herzegovin".into()]),
+            capitals: Some(vec!["sarajevo".into()]),
+            relevant_figures: Some(vec!["christian schmidt".into(), "denis becirovic".into(), "zeljka cvijanovic".into(), "zeljko komsic".into(), "borjana kristo".into()]),
+            relevant_cities: None,
+            subregions: None,
+            misc: None,
+        }.get_region_vec(), RegionType::BosniaAndHerzegovina);
+        map.insert(RegionKeywords {
+            names: Some(vec!["botswana".into()]),
+            demonyms: Some(vec!["batswana".into(), "motswana".into()]),
+            capitals: Some(vec!["gaborone".into()]),
+            relevant_figures: Some(vec!["mokgweetsi masisi".into(), "slumber tsogwane".into(), "phandu skelemani".into()]),
+            relevant_cities: None,
+            subregions: Some(vec!["kweneng".into(), "kgatleng".into(), "ngamiland".into(), "kgalagadi".into(), "chobe".into(), "ghanzi".into()]),
+            misc: None,
+        }.get_region_vec(), RegionType::Botswana);
+        map.insert(RegionKeywords {
+            names: Some(vec!["brazil".into()]),
+            demonyms: None,
+            capitals: Some(vec!["brasilia".into()]),
+            relevant_figures: Some(vec!["lula".into(), "geraldo alckmin".into(), "arthur lira".into(), "rodrigo pacheco".into(), "luis roberto barroso".into()]),
+            relevant_cities: Some(vec!["sao paulo".into(), "rio de janeiro".into(), "fortaleza".into(), "belo horizonte".into(), "manaus".into(), "curitiba".into(), "recife".into(), "goiania".into(), "porto alegre".into(), "belem".into(), "guarulhos".into(), "campinas".into(), "sao luis".into(), "maceio".into(), "campo grande".into(), "sao goncalo".into(), "teresina".into(), "joao pessoa".into(), "sao bernardo do campo".into(), "duque de caxias".into(), "nova iguacu".into(), "natal".into(), "santo andre".into(), "osasco".into(), "sorocaba".into(), "uberlandia".into(), "ribeirao preto".into(), "sao jose dos campos".into(), "cuiaba".into(), "jaboatao dos guararapes".into(), "contagem".into(), "joinville".into(), "feira de santana".into(), "aracaju".into(), "londrina".into(), "juiz de fora".into(), "florianopolis".into(), "aparecida de goiania".into(), "serra".into(), "campos dos goytacazes".into(), "belford roxo".into(), "niteroi".into(), "sao jose do rio preto".into(), "ananindeua".into(), "vila velha".into(), "caxias do sul".into(), "porto velho".into(), "mogi das cruzes".into(), "jundiai".into(), "macapa".into(), "sao joao de meriti".into(), "piracicaba".into(), "campina grande".into(), "santos".into(), "maua".into(), "montes claros".into(), "boa vista".into(), "betim".into(), "maringa".into(), "anapolis".into(), "diadema".into(), "carapicuiba".into(), "petrolina".into(), "bauru".into(), "caruaru".into(), "vitoria da conquista".into(), "itaquaquecetuba".into(), "rio branco".into(), "blumenau".into(), "ponta grossa".into(), "caucaia".into(), "cariacica".into(), "olinda".into(), "praia grande".into(), "cascavel".into(), "canoas".into(), "paulista".into(), "uberaba".into(), "santarem".into(), "sao vicente".into(), "ribeirao das neves".into(), "sao jose dos pinhais".into(), "pelotas".into(), "vitoria".into(), "barueri".into(), "taubate".into(), "suzano".into(), "palmas".into(), "camacari".into(), "varzea grande".into(), "limeira".into(), "guaruja".into(), "juazeiro do norte".into(), "foz do iguacu".into(), "sumare".into(), "petropolis".into(), "cotia".into(), "taboao da serra".into(), "imperatriz".into(), "santa maria".into(), "sao jose".into(), "maraba".into(), "parauapebas".into(), "gravatai".into(), "mossoro".into(), "itajai".into(), "volta redonda".into(), "governador valadares".into(), "indaiatuba".into(), "sao carlos".into(), "chapeco".into(), "parnamirim".into(), "embu das artes".into(), "macae".into(), "rondonopolis".into(), "sao jose de ribamar".into(), "dourados".into(), "aracatuba".into(), "jacarei".into(), "marilia".into(), "americana".into(), "hortolandia".into(), "juazeiro".into(), "arapiraca".into(), "maracanau".into(), "itapevi".into(), "colombo".into(), "divinopolis".into(), "mage".into(), "novo hamburgo".into(), "ipatinga".into(), "sete lagoas".into(), "rio verde".into(), "aguas lindas de goias".into(), "presidente prudente".into(), "itaborai".into(), "viao".into(), "palhoca".into(), "caucaia".into(), "sobral".into(), "rio claro".into(), "aracatuba".into(), "valparaiso de goias".into(), "marica".into(), "sinop".into()]),
+            subregions: Some(vec!["acre".into(), "alagoas".into(), "amapa".into(), "amazonas".into(), "bahia".into(), "ceara".into(), "distrito federal".into(), "espirito santo".into(), "goias".into(), "maranhao".into(), "mato grosso".into(), "mato grosso do sul".into(), "minas gerais".into(), "para".into(), "paraiba".into(), "parana".into(), "pernambuco".into(), "piaui".into(), "rio de janeiro".into(), "rio grande do norte".into(), "rio grande do sul".into(), "rondonia".into(), "roraima".into(), "santa catarina".into(), "sao paulo".into(), "sergipe".into(), "tocantins".into()]),
+            misc: Some(vec!["planalto".into()]),
+        }.get_region_vec(), RegionType::Brazil);
+        map.insert(RegionKeywords {
+            names: Some(vec!["brunei".into()]),
+            demonyms: None,
+            capitals: Some(vec!["bandar seri begawan".into()]),
+            relevant_figures: Some(vec!["hassanal bolkiah".into(), "muhtadee billah".into(), "abdul aziz".into()]),
+            relevant_cities: None,
+            subregions: Some(vec!["belait".into(), "seria".into(), "tutong".into(),]),
+            misc: None,
+        }.get_region_vec(), RegionType::Brunei);
+        map.insert(RegionKeywords {
+            names: Some(vec!["bulgaria".into()]),
+            demonyms: None,
+            capitals: None,
+            relevant_figures: Some(vec!["rumen radev".into(), "iliana iotova".into(), "dimitar glavchev".into()]),// Vacant National Assembly Chairperson
+            relevant_cities: Some(vec!["plovdiv".into(), "varna".into()]),
+            subregions: Some(vec!["blagoevgrad".into(), "burgas".into(), "dobrich".into(), "gabrovo".into(), "haskovo".into(), "kardzhali".into(), "kyustendil".into(), "lovech".into(), "pazardzhik".into(), "pernik".into(), "pleven".into(), "plovdiv".into(), "razgrad".into(), "rousse".into(), "shumen".into(), "silistra".into(), "sliven".into(), "smolyan".into(), "stara zagora".into(), "targovishte".into(), "varna".into(), "veliko tarnovo".into(), "vidin".into(), "vratsa".into(), "yambol".into()]),
+            misc: Some(vec!["narodno sabranie".into(), "gerb".into()]),
+        }.get_region_vec(), RegionType::Bulgaria);
+        map.insert(RegionKeywords {
+            names: Some(vec!["burkina faso".into()]),
+            demonyms: Some(vec!["burkinabe".into(), "burkinese".into()]),
+            capitals: Some(vec!["ouagadougou".into()]),
+            relevant_figures: Some(vec!["ibrahim traore".into(), "apollinaire joachim".into(), "kyelem de tambela".into()]),
+            relevant_cities: Some(vec!["bobo-dioulasso".into()]),
+            subregions: Some(vec!["boucle du mouhoin".into(), "centre-est".into(), "centre-nord".into(), "centre-ouest".into(), "centre-sud".into(), "hauts-bassins".into(), "plateau-central".into(), "sahel".into(), "sud-ouest".into()]),
+            misc: Some(vec!["mpsr".into(), "mpp".into()]),
+        }.get_region_vec(), RegionType::BurkinaFaso);
+        map.insert(RegionKeywords {
+            names: Some(vec!["burundi".into()]),
+            demonyms: None,
+            capitals: Some(vec!["gitega".into(), "bujumbura".into()]),
+            relevant_figures: Some(vec!["evariste ndayishimiye".into(), "prosper bazombanza".into(), "gervais ndirakobuca".into()]),
+            relevant_cities: None,
+            subregions: Some(vec!["bubanza".into(), "bururi".into(), "cankuzo".into(), "cibitoke".into(), "karuzi".into(), "kayanza".into(), "kirundo".into(), "makamba".into(), "muramvya".into(), "muyinga".into(), "mwaro".into(), "ngozi".into(), "rumonge".into(), "rutana".into(), "ruyigi".into()]),
+            misc: None,
+        }.get_region_vec(), RegionType::Burundi);
         map
     };
 }
