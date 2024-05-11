@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 use lazy_static::lazy_static;
 
-//use python to count words and look for any duplicates
 //convert accent markers and non-english words in input texts to work with these, remember dotless i, double dot i, function that checks for these things and function that checks duplicates
+//how to check for instances of "hdz" across all words when "hdz" is its own keyword
 //test substrings with apostrophes and periods
 lazy_static! {//once it finds a hit within a vec, dont bother with checking the rest within the vec and move onto next region
     pub static ref REGION_MAP = { // name, demonym, capital, relevant figure(s), largest cities if they're comparable to capital, subregions. redundancies removed.

@@ -230,7 +230,7 @@ impl RegionKeywords {
     }
 }
 
-lazy_static! {//TODO: word count check for duplicates
+lazy_static! {
     pub static ref REGION_MAP: HashMap<Vec<String>, RegionType> = {
         let mut map = HashMap::new();// TODO: does this benefit from hashing?
         map.insert(RegionKeywords {
@@ -611,6 +611,51 @@ lazy_static! {//TODO: word count check for duplicates
             subregions: Some(vec!["alajuela".into(), "cartago".into(), "guanacaste".into(), "heredia".into(), "limon".into(), "puntarenas".into()]),
             misc: Some(vec!["inter-american court of human rights".into()]),
         }.get_region_vec(), RegionType::CostaRica);
+        map.insert(RegionKeywords {
+            names: Some(vec!["ivory coast".into(), "cote d'ivoire".into()]),
+            demonyms: Some(vec!["ivorian".into()]),
+            capitals: Some(vec!["yamoussoukro".into()]),
+            relevant_figures: Some(vec!["alassane ouattara".into(), "tiemoko meyliet kone".into(), "robert beugre mambe".into()]),
+            relevant_cities: Some(vec!["abidjan".into(), "bouake".into(), "daloa".into()]),
+            subregions: Some(vec!["bas-sassandra".into(), "comoe".into(), "denguele".into(), "goh-djiboua".into(), "lacs".into(), "lagunes".into(), "montagnes".into(), "sassandra-marahoue".into(), "savanes".into(), "vallee du bandama".into(), "woroba".into(), "zanzan".into()]),
+            misc: Some(vec!["compagnie ivoirienne".into()]),
+        }.get_region_vec(), RegionType::IvoryCoast);
+        map.insert(RegionKeywords {
+            names: Some(vec!["croatia".into()]),
+            demonyms: None,
+            capitals: Some(vec!["zagreb".into()]),
+            relevant_figures: Some(vec!["zoran milanovic".into(), "andrej plenkovic".into()]),
+            relevant_cities: None,
+            subregions: Some(vec!["bjelovar-bilogora".into(), "brod-posavina".into(), "dubrovnik-neretva".into(), "istria".into(), "karlovac".into(), "koprivnica-krizevci".into(), "krapina-zagorje".into(), "lika-senj".into(), "medimurje".into(), "osijek-baranja".into(), "pozega-slavonia".into(), "primorje-gorski kotar".into(), "sibenik-knin".into(), "varazdin".into(), "virovitica-podravina".into(), "vukovar-syrmia".into(), "zadar".into()]),
+            misc: Some(vec!["sabor".into(), "banski dvori".into(), "hdz".into()]),
+        }.get_region_vec(), RegionType::Croatia);
+        map.insert(RegionKeywords {
+            names: Some(vec!["cuba".into()]),
+            demonyms: None,
+            capitals: Some(vec!["havana".into()]),
+            relevant_figures: Some(vec!["miguel diaz-canel".into(), "salvador valdes".into(), "manuel marrero cruz".into(), "esteban lazo hernandez".into()]),
+            relevant_cities: Some(vec!["santiago de cuba".into(), "camaguey".into(), "holguin".into(), "guantanamo".into()]),
+            subregions: Some(vec!["artemisa".into(), "camaguey".into(), "ciego de avila".into(), "cienfuegos".into(), "granma".into(), "holguin".into(), "isla de la juventud".into(), "la habana".into(), "las tunas".into(), "matanzas".into(), "mayabeque".into(), "pinar del rio".into(), "sancti spiritus".into(), "santiago de cuba".into(), "villa clara".into()]),
+            misc: Some(vec!["national assembly of people's power".into()]),
+        }.get_region_vec(), RegionType::Cuba);
+        map.insert(RegionKeywords {
+            names: Some(vec!["cyprus".into()]),
+            demonyms: Some(vec!["cypriot".into()]),
+            capitals: Some(vec!["nicosia".into()]),
+            relevant_figures: Some(vec!["nikos christodoulides".into(), "annita demetriou".into()]),
+            relevant_cities: None,
+            subregions: Some(vec!["kyrenia".into(), "limassol".into(), "larnaca".into(), "paphos".into(), "famagusta".into()]),
+            misc: Some(vec!["akel".into()]),
+        }.get_region_vec(), RegionType::Cyprus);
+        map.insert(RegionKeywords {
+            names: None,
+            demonyms: Some(vec!["czech".into()]),
+            capitals: Some(vec!["prague".into()]),
+            relevant_figures: Some(vec!["petr pavel".into(), "petr fiala".into()]),
+            relevant_cities: Some(vec!["brno".into(), "ostrava".into()]),
+            subregions: Some(vec!["bohemia".into(), "plzen".into(), "karlovy vary".into(), "carlsbad region".into(), "usti nad labem".into(), "ustecky".into(), "liberec".into(), "hradec kralove".into(), "pardubice".into(), "vysocina".into(), "south moravian".into(), "olomouc".into(), "zlin".into(), "moravian-silesian".into()]),
+            misc: None,
+        }.get_region_vec(), RegionType::CzechRepublic);
         map
     };
 }
