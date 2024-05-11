@@ -41,11 +41,10 @@ pub enum RegionType { // https://en.wikipedia.org/wiki/List_of_alternative_count
     Chad,
     Chile,
     China,
-    Taiwan,
     Colombia,
     Comoros,
     Congo,
-    DemocraticRepublicOfCongo,
+    DemocraticRepublicOfTheCongo,
     CostaRica,
     IvoryCoast,
     Croatia,
@@ -224,7 +223,7 @@ impl RegionKeywords {
         if let Some(demonyms) = self.demonyms { region_vec.extend(demonyms); }
         if let Some(capitals) = self.capitals { region_vec.extend(capitals); }
         if let Some(relevant_figures) = self.relevant_figures { region_vec.extend(relevant_figures); }
-        if let Some(relevant_cities) = self.relevant_cities { region_vec.extend(relevant_cities); }
+        if let Some(relevant_cities) = self.relevant_cities { region_vec.extend(relevant_cities); } // ≥ 195k population
         if let Some(subregions) = self.subregions { region_vec.extend(subregions); }
         if let Some(misc) = self.misc { region_vec.extend(misc); }
         region_vec
@@ -233,7 +232,7 @@ impl RegionKeywords {
 
 lazy_static! {//TODO: word count check for duplicates
     pub static ref REGION_MAP: HashMap<Vec<String>, RegionType> = {
-        let mut map = HashMap::new();
+        let mut map = HashMap::new();// TODO: does this benefit from hashing?
         map.insert(RegionKeywords {
             names: None,
             demonyms: Some(vec!["abkhaz".into()]),
@@ -411,7 +410,7 @@ lazy_static! {//TODO: word count check for duplicates
             capitals: Some(vec!["porto-novo".into()]),
             relevant_figures: Some(vec!["patrice talon".into(), "mariam chabi talata".into()]),
             relevant_cities: Some(vec!["cotonou".into(), "parakou".into()]),
-            subregions: Some(vec!["alibori".into(), "atakora".into(), "atlantique".into(), "borgou".into(), "collines".into(), "donga".into(), "kouffo".into(), "littoral".into(), "oueme".into(), "zou".into()]),
+            subregions: Some(vec!["alibori".into(), "atakora".into(), "atlantique".into(), "borgou".into(), "collines".into(), "donga".into(), "kouffo".into(), "oueme".into(), "zou".into()]),
             misc: None,
         }.get_region_vec(), RegionType::Benin);
         map.insert(RegionKeywords {
@@ -495,6 +494,123 @@ lazy_static! {//TODO: word count check for duplicates
             subregions: Some(vec!["bubanza".into(), "bururi".into(), "cankuzo".into(), "cibitoke".into(), "karuzi".into(), "kayanza".into(), "kirundo".into(), "makamba".into(), "muramvya".into(), "muyinga".into(), "mwaro".into(), "ngozi".into(), "rumonge".into(), "rutana".into(), "ruyigi".into()]),
             misc: None,
         }.get_region_vec(), RegionType::Burundi);
+        map.insert(RegionKeywords {
+            names: Some(vec!["cambodia".into()]),
+            demonyms: Some(vec!["khmer".into()]),
+            capitals: Some(vec!["phnom penh".into()]),
+            relevant_figures: Some(vec!["norodom sihamoni".into(), "hun manet".into(), "hun sen".into(), "khuon sodary".into()]),
+            relevant_cities: Some(vec!["siem reap".into()]),
+            subregions: Some(vec!["banteay meanchey".into(), "battambang".into(), "kampong cham".into(), "kampong chhnang".into(), "kampong speu".into(), "kampong thom".into(), "kampot".into(), "kandal".into(), "koh kong".into(), "kratie".into(), "mondulkiri".into(), "oddar meancheay".into(), "pailin".into(), "preah sihanouk".into(), "preah vihear".into(), "prey veng".into(), "pursat".into(), "ratanakiri".into(), "stung treng".into(), "svay rieng".into(), "takeo".into(), "tbong khmum".into(), "tboung khmom".into()]),
+            misc: Some(vec!["cpp".into()]),
+        }.get_region_vec(), RegionType::Cambodia);
+        map.insert(RegionKeywords {
+            names: Some(vec!["cameroon".into()]),
+            demonyms: None,
+            capitals: Some(vec!["yaounde".into()]),
+            relevant_figures: Some(vec!["paul biya".into(), "joseph ngute".into(), "marcel niat njifenji".into(), "cavaye yeguie djibril".into()]),
+            relevant_cities: Some(vec!["douala".into(), "garoua".into(), "kousseri".into(), "bamenda".into(), "maroua".into(), "bafoussam".into(), "mokolo".into(), "gaoundere".into(), "bertoua".into(), "edea".into()]),
+            subregions: Some(vec!["adamawa".into()]),
+            misc: Some(vec!["unity palace".into(), "crtv".into(), "rdpc".into(), "ambazonia".into(),  "bakassi".into()]),
+        }.get_region_vec(), RegionType::Cameroon);
+        map.insert(RegionKeywords {
+            names: Some(vec!["canada".into()]),
+            demonyms: Some(vec!["canadian".into()]),
+            capitals: Some(vec!["ottawa".into()]),
+            relevant_figures: Some(vec!["king charles".into(), "charles iii".into(), "mary simon".into(), "trudeau".into()]),
+            relevant_cities: Some(vec!["toronto".into(), "montreal".into(), "vancouver".into(), "calgary".into(), "edmonton".into(), "winnipeg".into(), "hamilton".into(), "kitchener".into(), "saskatoon".into()]),
+            subregions: Some(vec!["alberta".into(), "british columbia".into(), "manitoba".into(), "new brunswick".into(), "newfoundland and labrador".into(), "nova scotia".into(), "ontario".into(), "prince edward island".into(), "quebec".into(), "saskatchewan".into(), "northwest territories".into(), "nunavut".into(), "yukon".into()]),
+            misc: Some(vec!["parliament hill".into(), "rcmp".into(), "ndp".into(), "quebecois".into(), "metis".into(), "first nations".into()]),
+        }.get_region_vec(), RegionType::Canada);
+        map.insert(RegionKeywords {
+            names: Some(vec!["cape verde".into()]),
+            demonyms: Some(vec!["cabo verdean".into()]),
+            capitals: Some(vec!["praia".into()]),
+            relevant_figures: Some(vec!["jose maria neves".into(), "correia e silva".into()]),
+            relevant_cities: None,
+            subregions: Some(vec!["boavista".into(), "boa vista".into(), "brava".into(), "maio".into(), "fogo".into(), "santa luzia".into(), "santo antao".into(), "sao nicolau".into(), "sao vicente".into()]),
+            misc: Some(vec!["paicv".into()]),
+        }.get_region_vec(), RegionType::CapeVerde);
+        map.insert(RegionKeywords {
+            names: None,
+            demonyms: Some(vec!["central african".into()]),
+            capitals: Some(vec!["bangui".into()]),
+            relevant_figures: Some(vec!["touadera".into(), "felix moloua".into(), "simplice sarandji".into()]),
+            relevant_cities: None,
+            subregions: Some(vec!["bamingui-bangoran".into(), "basse-kotto".into(), "haute-kotto".into(), "haut-mbomou".into(), "kemo".into(), "lobaye".into(), "lim-pende".into(), "mambere".into(), "mbomou".into(), "nana-grebizi".into(), "ombella-m'poko".into(), "ouaka".into(), "ouham".into(), "sangha-mbaere".into(), "vakaga".into()]),
+            misc: Some(vec!["fprc".into(), "anti-balaka".into()]),
+        }.get_region_vec(), RegionType::CentralAfricanRepublic);
+        map.insert(RegionKeywords {
+            names: Some(vec!["chad".into()]),
+            demonyms: None,
+            capitals: Some(vec!["n'djamena".into()]),
+            relevant_figures: Some(vec!["mahamat deby".into(), "succes masra".into()]),
+            relevant_cities: None,
+            subregions: Some(vec!["batha".into(), "bahr el gazel".into(), "borkou".into(), "ouaddai".into(), "wadi fira".into(), "mayo-kebbi est".into(), "logone oriental".into(), "ennedi-est".into(), "guera".into(), "mayo-kebbi ouest".into(), "logone occidental".into(), "ennedi-ouest".into(), "kanem".into(), "mandoul".into(), "salamat".into(), "sila".into(), "moyen-chari".into(), "tandjile".into(), "tibesti".into(), "chari-baguirmi".into(), "hadjer-lamis".into()]),
+            misc: None,
+        }.get_region_vec(), RegionType::Chad);
+        map.insert(RegionKeywords {
+            names: Some(vec!["chile".into()]),
+            demonyms: None,
+            capitals: None,
+            relevant_figures: Some(vec!["gabriel boric".into(), "juan antonio coloma".into(), "ricardo cifuentes".into(), "juan fuentes belmar".into(),]),
+            relevant_cities: Some(vec!["puente alto".into(), "maipu".into(), "la florida".into(), "vina del mar".into(), "antofagasta".into(), "valparaiso".into(), "las condes".into(), "san bernardo".into(), "temuco".into(), "penalolen".into(), "concepcion".into(), "rancagua".into(), "pudahuel".into()]),
+            subregions: Some(vec!["aisen".into(), "aysen".into(), "arica y parinacota".into(), "tarapaca".into(), "antofagasta".into(), "atacama".into(), "coquimbo".into(), "valparaiso".into(), "bernardo ohiggins".into(), "bernardo o'higgins".into(), "maule".into(), "nuble".into(), "biobio".into(), "araucania".into(), "los rios".into(), "los lagos".into(), "magallanes".into()]),
+            misc: None,
+        }.get_region_vec(), RegionType::Chile);
+        map.insert(RegionKeywords {
+            names: Some(vec!["china".into(), "prc".into()]),
+            demonyms: Some(vec!["chinese".into()]),
+            capitals: Some(vec!["beijing".into()]),
+            relevant_figures: Some(vec!["xi jinping".into(), "li qiang".into(), "wang huning".into(), "han zheng".into()]),
+            relevant_cities: Some(vec!["shanghai".into(), "guangzhou".into(), "chengdu".into(), "chongqing".into(), "shenzhen".into(), "tianjin".into(), "wuhan".into(), "xi'an".into(), "hangzhou".into(), "dongguan".into(), "foshan".into(), "nanjing".into(), "jinan".into(), "shenyang".into(), "qingdao".into(), "harbin".into(), "zhengzhou".into(), "changsha".into(), "kunming".into(), "dalian".into(), "changchun".into(), "xiamen".into(), "ningbo".into(), "taiyuan".into(), "zhongshan".into(), "urumqi".into(), "suzhou".into(), "shantou".into(), "hefei".into(), "shijiazhuang".into(), "fuzhou".into(), "nanning".into(), "wenzhou".into(), "changzhou".into(), "nanchang".into(), "guiyang".into(), "tangshan".into(), "wuxi".into(), "lanzhou".into(), "handan".into(), "hohhot".into(), "weifang".into(), "jiangmen".into(), "zibo".into(), "huai'an".into(), "xuzhou".into(), "maoming".into(), "shaoxing".into(), "yantai".into(), "huizhou".into(), "zhuhai".into(), "luoyang".into(), "linyi".into(), "nantong".into(), "haikou".into(), "baotou".into(), "liuzhou".into(), "datong".into(), "putian".into(), "lianyungang".into(), "baoding".into(), "xining".into(), "zhanjiang".into(), "wuhu".into(), "chaozhou".into(), "qingyuan".into(), "tai'an".into(), "yichang".into(), "yangzhou".into(), "yinchuan".into(), "xiEangyang".into(), "anshan".into(), "jilin city".into(), "yancheng".into(), "taizhou".into(), "qinhuangdao".into(), "ganzhou".into(), "daqing".into(), "guilin".into(), "huzhou".into(), "zhaoqing".into(), "jiaxing".into(), "jining".into(), "jinhua".into(), "changde".into(), "hengyang".into(), "suqian".into(), "baoji".into(), "zhangjiakou".into(), "mianyang".into(), "qiqihar".into(), "heze".into(), "fushun".into(), "yangjiang".into(), "liaocheng".into(), "tianshui".into(), "benxi".into(), "chifeng".into(), "jiujiang".into(), "anyang".into(), "huaibei".into(), "yulin".into(), "xinxiang".into(), "shaoguan".into(), "dongying".into(), "luzhou".into(), "meizhou".into(), "leshan".into(), "dezhou".into(), "xingtai".into(), "chenzhou".into(), "mudanjiang".into(), "tongliao".into(), "chengde".into(), "laiwu".into(), "taishan".into(), "quzhou".into(), "zhoushan".into(), "suihua".into(), "langfang".into(), "hengshui".into(), "yingkou".into(), "panjin".into(), "weihai".into(), "anqing".into(), "liaoyang".into(), "puyang".into(), "fuxin".into(), "jieyang".into(), "yangquan".into(), "jiamusi".into(), "huludao".into(), "zhumadian".into(), "kashgar".into(), "dazhou".into(), "heyuan".into(), "longyan".into(), "aksu city".into(), "ordos city".into(), "hegang".into(), "binzhou".into(), "siping".into(), "sanmenxia".into(), "dandong".into(), "suining".into(), "sanya".into(), "ji'an".into(), "cangzhou".into(), "qitaihe".into(), "yichun".into(), "tonghua".into(), "jixi".into(), "korla".into(), "chaoyang".into(), "dingxi".into(), "shuangyashan".into(), "songyuan".into(), "nanping".into(), "liaoyuan".into(), "lhasa".into(), "karamay".into(), "shanwei".into(), "tieling".into(), "suihua".into(), "ulanqab".into(), "hami".into(), "huangshan city".into(), "hotan".into(), "wuwei".into(), "baishan".into(), "sanming".into(), "yunfu".into(), "hailar".into(), "zhaotong".into(), "ningde".into(), "baicheng".into(), "hunchun".into(), "zhangjiajie".into(), "golmud".into()]),
+            subregions: Some(vec!["anhui".into(), "fujian".into(), "gansu".into(), "guangdong".into(), "guizhou".into(), "hainan".into(), "hebei".into(), "heilongjiang".into(), "henan".into(), "hubei".into(), "hunan".into(), "jiangsu".into(), "jiangxi".into(), "jilin".into(), "liaoning".into(), "macau".into(), "qinghai".into(), "shaanxi".into(), "shandong".into(), "shanxi".into(), "sichuan".into(), "taiwan".into(), "yunnan".into(), "zhejiang".into()]),
+            misc: Some(vec!["national people's congress".into(), "cppcc".into(), "ccp".into(), "xinjiang".into(), "tibet".into()]),
+        }.get_region_vec(), RegionType::China);
+        map.insert(RegionKeywords {
+            names: Some(vec!["colombia".into()]),
+            demonyms: None,
+            capitals: Some(vec!["bogota".into()]),
+            relevant_figures: Some(vec!["gustavo petro".into(), "francia marquez".into()]),
+            relevant_cities: Some(vec!["medellin".into(), "barranquilla".into(), "cartagena".into(), "cucuta".into(), "soledad".into(), "ibague".into(), "soacha".into(), "bucaramanga".into(), "santa marta".into(), "valledupar".into(), "bello".into(), "pereira".into(), "monteria".into(), "san juan de pasto".into(), "buenaventura".into(), "manizales".into(), "neiva".into(), "palmira".into()]),
+            subregions: Some(vec!["amazonas".into(), "antioquia".into(), "arauca".into(), "atlantico".into(), "bolivar".into(), "boyaca".into(), "caldas".into(), "caqueta".into(), "casanare".into(), "cauca".into(), "cesar".into(), "choco".into(), "cordoba".into(), "cundinamarca".into(), "guainia".into(), "guaviare".into(), "huila".into(), "la guajira".into(), "magdalena".into(), "meta".into(), "narino".into(), "norte de santander".into(), "putumayo".into(), "quindio".into(), "risaralda".into(), "san andres, providencia, and santa catalina".into(), "santander".into(), "sucre".into(), "tolima".into(), "valle del cauca".into(), "vaupes".into(), "vichada".into()]),
+            misc: Some(vec!["casa de narino".into(), "capitolio nacional".into(), "eln".into()]),
+        }.get_region_vec(), RegionType::Colombia);
+        map.insert(RegionKeywords {
+            names: Some(vec!["comoros".into()]),
+            demonyms: Some(vec!["comorian".into()]),
+            capitals: Some(vec!["moroni".into()]),
+            relevant_figures: Some(vec!["azali assoumani".into(), "ahemd abdallah ali".into()]),
+            relevant_cities: None,
+            subregions: Some(vec!["ngazidja".into(), "ndzuwani".into(), "mwali".into()]),
+            misc: None,
+        }.get_region_vec(), RegionType::Comoros);
+        map.insert(RegionKeywords {
+            names: Some(vec!["little congo".into()]),
+            demonyms: None,
+            capitals: Some(vec!["brazzaville".into()]),
+            relevant_figures: Some(vec!["denis sassou nguesso".into(), "anatole collinet makosso".into()]),
+            relevant_cities: Some(vec!["pointe-noire".into()]),
+            subregions: Some(vec!["bouenza".into(), "cuvette".into(), "cuvette-ouest".into(), "kouilou".into(), "lekoumou".into(), "likouala".into(), "niari".into(), "plateaux".into(), "sangha".into()]),
+            misc: Some(vec!["upads".into()]),
+        }.get_region_vec(), RegionType::Congo);
+        map.insert(RegionKeywords {
+            names: Some(vec!["democratic republic of the congo".into(), "drc".into(), "big congo".into()]),
+            demonyms: None,
+            capitals: Some(vec!["kinshasa".into()]),
+            relevant_figures: Some(vec!["felix tshisekedi".into(), "sama lukonde".into()]),
+            relevant_cities: Some(vec!["lubumbashi".into(), "mbuji-mayi".into(), "bukavu".into(), "kananga".into(), "kisangani".into(), "tshikapa".into(), "kolwezi".into(), "likasi".into(), "goma".into(), "kikwit".into(), "uvira".into(), "bunia".into(), "mbandaka".into(), "matadi".into(), "butembo".into(), "kabinda".into(), "mwene-ditu".into()]),
+            subregions: Some(vec!["kongo central".into(), "kwango".into(), "kwilu".into(), "mai-ndombe".into(), "kasai".into(), "lomami".into(), "sankuru".into(), "maniema".into(), "kivu".into(), "ituri".into(), "haut-uele".into(), "tshopo".into(), "bas-uele".into(), "ubangi".into(), "mongala".into(), "equateur".into(), "tshuapa".into(), "tanganyika".into(), "lualaba".into(), "haut-katanga".into()]),
+            misc: Some(vec!["fardc".into(), "udps".into()]),
+        }.get_region_vec(), RegionType::DemocraticRepublicOfTheCongo);
+        map.insert(RegionKeywords {
+            names: Some(vec!["costa rica".into()]),
+            demonyms: None,
+            capitals: None,
+            relevant_figures: Some(vec!["rodrigo chaves".into(), "stephan brunner".into(), "mary munive".into()]),
+            relevant_cities: None,
+            subregions: Some(vec!["alajuela".into(), "cartago".into(), "guanacaste".into(), "heredia".into(), "limon".into(), "puntarenas".into()]),
+            misc: Some(vec!["inter-american court of human rights".into()]),
+        }.get_region_vec(), RegionType::CostaRica);
         map
     };
 }
