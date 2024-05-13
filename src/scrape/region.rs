@@ -211,6 +211,7 @@ struct RegionKeyphrases {
     pub demonyms: Option<Vec<String>>,
     pub capitals: Option<Vec<String>>,
     pub relevant_figures: Option<Vec<String>>,
+    pub relevant_enterprises: Option<Vec<String>>,
     pub relevant_cities: Option<Vec<String>>,
     pub subregions: Option<Vec<String>>,
     pub misc: Option<Vec<String>>,
@@ -223,6 +224,7 @@ impl RegionKeyphrases {
         if let Some(demonyms) = self.demonyms { region_vec.extend(demonyms); }
         if let Some(capitals) = self.capitals { region_vec.extend(capitals); }
         if let Some(relevant_figures) = self.relevant_figures { region_vec.extend(relevant_figures); }
+        if let Some(relevant_enterprises) = self.relevant_enterprises { region_vec.extend(relevant_enterprises); }
         if let Some(relevant_cities) = self.relevant_cities { region_vec.extend(relevant_cities); } // ≥ 195k population
         if let Some(subregions) = self.subregions { region_vec.extend(subregions); }
         // Positions of power, legislative bodies, institutions, buildings, political groups, ideologies, relevant companies (state-owned, 'defense', energy/utility, materials, production, pharmaceutical, big telecom, big bank/finance, big real estate big (re)insurer, conglomerate), ethnic groups, cultural regions, etc.
