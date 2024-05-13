@@ -209,11 +209,11 @@ pub enum RegionType { // https://en.wikipedia.org/wiki/List_of_alternative_count
 struct RegionKeyphrases {
     pub names: Option<Vec<String>>,
     pub demonyms: Option<Vec<String>>,
+    pub figures: Option<Vec<String>>,
+    pub enterprises: Option<Vec<String>>, // https://companiesmarketcap.com/all-countries/
+    pub subregions: Option<Vec<String>>, // https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country
     pub capitals: Option<Vec<String>>,
-    pub relevant_figures: Option<Vec<String>>,
-    pub relevant_enterprises: Option<Vec<String>>,
-    pub relevant_cities: Option<Vec<String>>,
-    pub subregions: Option<Vec<String>>,
+    pub cities: Option<Vec<String>>, // https://worldpopulationreview.com/countries/cities/ , double check with Wikipedia
     pub misc: Option<Vec<String>>,
 }
 
@@ -222,12 +222,12 @@ impl RegionKeyphrases {
         let mut region_vec = Vec::new();
         if let Some(names) = self.names { region_vec.extend(names); }
         if let Some(demonyms) = self.demonyms { region_vec.extend(demonyms); }
+        if let Some(figures) = self.figures { region_vec.extend(figures); } // At least the names on a region's Wikipedia infobox.
+        if let Some(enterprises) = self.enterprises { region_vec.extend(enterprises); } // ≥ 9.9B market cap USD
+        if let Some(subregions) = self.subregions { region_vec.extend(subregions); } // ≥ 490k population unless relevant exclave
         if let Some(capitals) = self.capitals { region_vec.extend(capitals); }
-        if let Some(relevant_figures) = self.relevant_figures { region_vec.extend(relevant_figures); }
-        if let Some(relevant_enterprises) = self.relevant_enterprises { region_vec.extend(relevant_enterprises); }
-        if let Some(relevant_cities) = self.relevant_cities { region_vec.extend(relevant_cities); } // ≥ 195k population
-        if let Some(subregions) = self.subregions { region_vec.extend(subregions); }
-        // Positions of power, legislative bodies, institutions, buildings, political groups, ideologies, relevant companies (state-owned, 'defense', energy/utility, materials, production, pharmaceutical, big telecom, big bank/finance, big real estate big (re)insurer, conglomerate), ethnic groups, cultural regions, etc.
+        if let Some(cities) = self.cities { region_vec.extend(cities); } // ≥ 290k population
+        // Positions of power, legislative bodies, institutions, buildings, political groups, ideologies, ethnic groups, cultural regions, etc.
         if let Some(misc) = self.misc { region_vec.extend(misc); }
         region_vec
     }
@@ -239,110 +239,122 @@ lazy_static! {
         map.insert(RegionKeyphrases { // Allowing Georgian duplicate keyphrases of names relating to the Government of the Autonomous Republic of Abkhazia.
             names: None,
             demonyms: Some(vec!["abkhaz".into()]),
+            figures: Some(vec!["aslan bzhania".into(), "alexander ankvab".into(), "ruslan abashidze".into(), "jemal gamakharia".into()]),
+            enterprises: None,
+            subregions: None,
             capitals: Some(vec!["sukhumi".into()]),
-            relevant_figures: Some(vec!["aslan bzhania".into(), "alexander ankvab".into(), "ruslan abashidze".into(), "jemal gamakharia".into()]),
-            relevant_cities: None,
-            subregions: Some(vec!["gagra".into(), "gudauta".into(), "ochamchira".into(), "gulripshi".into(), "tkvarcheli".into(), "gali".into()]),
-            misc: Some(vec!["amtsakhara".into(), "aitaira".into(), "chernomorenergo".into()]),
+            cities: None,
+            misc: Some(vec!["amtsakhara".into(), "aitaira".into()]),
         }.get_region_vec(), RegionType::Abkhazia);
         map.insert(RegionKeyphrases {
             names: None,
             demonyms: Some(vec!["afghan".into()]),
+            figures: Some(vec!["hibatullah akhundzada".into(), "haibatullah akhunzada".into(), "hasan akhund".into(), "abdul hakim haqqani".into(), "abdul hakim ishaqzai".into()]),
+            enterprises: None,
+            subregions: Some(vec!["herat".into(), "nangarhar".into(), "balkh".into(), "helmand".into(), "kandahar".into(), "ghazni".into(), "kunduz".into(), "faryab".into(), "takhar".into(), "badakhshan".into(), "baghlan".into(), "ghor".into(), "paktika".into(), "parwan".into(), "wardak".into(), "khost".into(), "sar-e pol".into(), "paktia".into(), "jowzjan".into(), "farah".into(), "badghis".into(), "daykundi".into(), "bamyan".into(), "kunar".into(), "kapisa".into(), "laghman".into()]),
             capitals: Some(vec!["kabul".into()]),
-            relevant_figures: Some(vec!["hibatullah akhundzada".into(), "haibatullah akhunzada".into(), "hasan akhund".into(), "abdul hakim haqqani".into(), "abdul hakim ishaqzai".into()]),
-            relevant_cities: Some(vec!["herat".into(), "mazar-i-sharif".into(), "mazar-e-sharif".into(), "kandahar".into(), "jalalabad".into()]),
-            subregions: Some(vec!["badakhshan".into(), "badghis".into(), "baghlan".into(), "balkh".into(), "bamyan".into(), "daykundi".into(), "farah".into(), "faryab".into(), "ghazni".into(), "ghor".into(), "helmand".into(), "herat".into(), "jowzjan".into(), "kabul".into(), "kandahar".into(), "kapisa".into(), "khost".into(), "kunar".into(), "kunduz".into(), "laghman".into(), "logar".into(), "nangarhar".into(), "nimroz".into(), "nuristan".into(), "paktia".into(), "paktika".into(), "panjshir".into(), "parwan".into(), "samangan".into(), "sar-e pol".into(), "takhar".into(), "uruzgan".into(), "wardak".into(), "zabul".into()]),
-            misc: Some(vec!["taliban".into(), "bakhtar news".into(), "pashtany bank".into(), "watan group".into(), "azizi bank".into()]),
+            cities: Some(vec!["kandahar".into(), "mazar-e-sharif".into(), "mazar-i-sharif".into(), "herat".into()]),
+            misc: Some(vec!["taliban".into()]),
         }.get_region_vec(), RegionType::Afghanistan);
         map.insert(RegionKeyphrases {
             names: Some(vec!["albania".into()]),
             demonyms: None,
+            figures: Some(vec!["bajram begaj".into(), "edi rama".into(), "lindita nikolla".into()]),
+            enterprises: None,
+            subregions: None,
             capitals: Some(vec!["tirana".into()]),
-            relevant_figures: Some(vec!["bajram begaj".into(), "edi rama".into(), "lindita nikolla".into()]),
-            relevant_cities: Some(vec!["durres".into()]),
-            subregions: Some(vec!["berat".into(), "diber".into(), "durres".into(), "elbasan".into(), "fier".into(), "gjirokaster".into(), "korce".into(), "kukes".into(), "lezhe".into(), "shkoder".into(), "tirana".into(), "vlore".into()]),
-            misc: Some(vec!["kuvendi".into(), "albpetrol".into(), "oshee".into(), "taci oil".into(), "albchrome".into(), "kombetare tregtare".into(), "balfin group".into(), "raiffeisen albania".into(), "meico".into(), "sigal".into()]),
+            cities: None,
+            misc: Some(vec!["kuvendi".into()]),
         }.get_region_vec(), RegionType::Albania);
         map.insert(RegionKeyphrases {
             names: Some(vec!["algeria".into()]),
             demonyms: None,
+            figures: Some(vec!["abdelmadjid tebboune".into(), "nadir larbaoui".into(), "salah goudjil".into(), "ibrahim boughali".into()]),
+            enterprises: None,
+            subregions: Some(vec!["oran".into(), "setif".into(), "tizi ouzou".into(), "batna".into(), "djelfa".into(), "blida".into(), "chlef".into(), "m'sila".into(), "tlemcen".into(), "bejaia".into(), "skikda".into(), "tiaret".into(), "medea".into(), "boumerdes".into(), "mila".into(), "ain defla".into(), "mostaganem".into(), "relizane".into(), "bouira".into(), "tebessa".into(), "el oued".into(), "jijel".into(), "bordj bou arreridj".into(), "oum el bouaghi".into(), "annaba".into(), "sidi bel abbes".into(), "tipaza".into(), "biskra".into()]),
             capitals: Some(vec!["algiers".into()]),
-            relevant_figures: Some(vec!["abdelmadjid tebboune".into(), "nadir larbaoui".into(), "salah goudjil".into(), "ibrahim boughali".into()]),
-            relevant_cities: Some(vec!["oran".into(), "constantine".into(), "annaba".into(), "blida".into(), "batna".into(), "djelfa".into(), "setif".into()]),
-            subregions: Some(vec!["chlef".into(), "batna".into(), "blida".into(), "tizi ouzou".into(), "djelfa".into(), "setif".into(), "oran".into()]),
-            misc: Some(vec!["fln".into(), "algerie".into(), "asmidal".into(), "naftal".into(), "saidal".into(), "sonatrach".into(), "sonelgaz".into(), "djezzy".into()]),
+            cities: Some(vec!["boumerdas".into()]),
+            misc: Some(vec!["algerie".into(), "fln".into()]),
         }.get_region_vec(), RegionType::Algeria);
         map.insert(RegionKeyphrases {
             names: Some(vec!["andorra".into()]),
             demonyms: None,
+            figures: Some(vec!["joan enric vives i sicilia".into(), "macron".into(), "josep maria mauri".into(), "patrick strzoda".into(), "xavier espot zamora".into(), "carles ensenyat reig".into()]),
+            enterprises: None,
+            subregions: None,
             capitals: None,
-            relevant_figures: Some(vec!["joan enric vives i sicilia".into(), "macron".into(), "josep maria mauri".into(), "patrick strzoda".into(), "xavier espot zamora".into(), "carles ensenyat reig".into()]),
-            relevant_cities: None,
-            subregions: Some(vec!["canillo".into(), "escaldes-engordany".into(), "la massana".into(), "ordino".into(), "sant julia de loria".into()]),
-            misc: Some(vec!["general syndic".into(), "council of the valleys".into(), "andbank".into(), "banca mora".into(), "mora banc".into()]),
+            cities: None,
+            misc: Some(vec!["general syndic".into(), "council of the valleys".into()]),
         }.get_region_vec(), RegionType::Andorra);
         map.insert(RegionKeyphrases {
             names: Some(vec!["angola".into()]),
             demonyms: None,
+            figures: Some(vec!["joao lourenco".into(), "esperanca da costa".into()]),
+            enterprises: None,
+            subregions: Some(vec!["huila".into(), "benguela".into(), "huambo".into(), "cuanza sul".into(), "uige".into(), "bie".into(), "cunene".into(), "malanje".into(), "lunda norte".into(), "moxico".into(), "cabinda".into(), "zaire".into(), "lunda sul".into(), "cuando cubango".into(), "namibe".into()]),
             capitals: Some(vec!["luanda".into()]),
-            relevant_figures: Some(vec!["joao lourenco".into(), "esperanca da costa".into()]),
-            relevant_cities: Some(vec!["loanda".into(), "cabinda".into(), "kabinda".into(), "huambo".into(), "nova lisboa".into(), "bailundo".into(), "andulo".into(), "lubango".into(), "sa da bandeira".into()]),
-            subregions: Some(vec!["bengo".into(), "benguela".into(), "bie".into(), "cabinda".into(), "cuando cubango".into(), "cuanza norte".into(), "cuanza sul".into(), "cunene".into(), "huambo".into(), "huila".into(), "luanda".into(), "lunda norte".into(), "lunda sul".into(), "malanje".into(), "moxico".into(), "namibe".into(), "uije".into(), "zaire".into()]),
-            misc: Some(vec!["mpla".into(), "unita".into(), "sonangol".into(), "banco de comercio e industria".into(), "banco de poupanca e credito".into(), "endiama".into(), "grupo opaia".into(), "adpa".into()]),
+            cities: Some(vec!["n'dalatando".into(), "lobito".into(), "cuito".into(), "lubango".into(), "malanje".into(), "mocamedes".into()]),
+            misc: Some(vec!["mpla".into(), "unita".into()]),
         }.get_region_vec(), RegionType::Angola);
         map.insert(RegionKeyphrases {
             names: Some(vec!["antigua".into(), "barbuda".into(), "a&b".into()]),
             demonyms: None,
+            figures: Some(vec!["king charles".into(), "charles iii".into(), "rodney williams".into(), "gaston browne".into()]),
+            enterprises: None,
+            subregions: None,
             capitals: None,
-            relevant_figures: Some(vec!["king charles".into(), "charles iii".into(), "rodney williams".into(), "gaston browne".into()]),
-            relevant_cities: None,
-            subregions: Some(vec!["redonda".into()]),
+            cities: None,
             misc: Some(vec!["ablp".into(), "united progressive party".into()]),
         }.get_region_vec(), RegionType::AntiguaAndBarbuda);
         map.insert(RegionKeyphrases {
             names: None,
             demonyms: Some(vec!["argentin".into()]),
+            figures: Some(vec!["milei".into(), "victoria villarruel".into(), "nicolas posse".into(), "martin menem".into(), "horacio rosatti".into()]),
+            enterprises: Some(vec!["mercadolibre".into(), "mercado libre".into(), "ypf".into(), "yacimientos petroliferos fiscales".into()]),
+            subregions: Some(vec!["cordoba".into(), "mendoza".into(), "tucuman".into(), "salta".into(), "entre rios".into(), "misiones".into(), "corrientes".into(), "chaco".into(), "santiago del estero".into(), "jujuy".into(), "rio negro".into(), "neuquen".into(), "formosa".into(), "chubut".into()]),
             capitals: Some(vec!["buenos aires".into()]),
-            relevant_figures: Some(vec!["milei".into(), "victoria villarruel".into(), "nicolas posse".into(), "martin menem".into(), "horacio rosatti".into()]),
-            relevant_cities: Some(vec!["cordoba".into(), "rosario".into(), "mendoza".into(), "la plata".into(), "san miguel de tucuman".into(), "mar del plata".into(), "salta".into(), "resistencia".into(), "neuquen".into(), "santiago del estero".into(), "corrientes".into(), "avellaneda".into(), "bahia blanca".into(), "quilmes".into(), "lanus".into()]),
-            subregions: Some(vec!["catamarca".into(), "chaco".into(), "chubut".into(), "cordoba".into(), "corrientes".into(), "entre rios".into(), "formosa".into(), "jujuy".into(), "la pampa".into(), "la rioja".into(), "mendoza".into(), "misiones".into(), "neuquen".into(), "rio negro".into(), "salta".into(), "santiago del estero".into(), "tierra del fuego".into(), "antartida".into(), "tucuman".into()]),
-            misc: Some(vec!["casa rosada".into(), "union for the homeland".into(), "juntos por el cambio".into(), "peronis".into(), "kirchneris".into(), "cambiemos".into(), "aerodreams".into(), "aluar".into(), "banco credicoop".into(), "bancro macro".into(), "banco patagonia".into(), "bapro".into(), "bersa".into(), "bridas corp".into(), "citedef".into(), "enarsa".into(), "invap".into(), "loma negra".into(), "pampa energia".into(), "techint".into(), "transportada de gas del sur".into(), "carboniferos rio turbo".into(), "ypf".into()]),
+            cities: Some(vec!["rosario".into(), "la plata".into(), "mar del plata".into(), "quilmes".into(), "salta".into(), "santa fe de la vera cruz".into(), "resistencia".into(), "posadas".into(), "bahia blanca".into()]),
+            misc: Some(vec!["casa rosada".into(), "union for the homeland".into(), "juntos por el cambio".into(), "cambiemos".into(), "peronis".into(), "kirchneris".into()]),
         }.get_region_vec(), RegionType::Argentina);
         map.insert(RegionKeyphrases {
             names: Some(vec!["armenia".into()]),
             demonyms: None,
+            figures: Some(vec!["vahagn khachaturyan".into(), "nikol pashinyan".into(), "alen simonyan".into()]),
+            enterprises: None,
+            subregions: None,
             capitals: Some(vec!["yerevan".into()]),
-            relevant_figures: Some(vec!["vahagn khachaturyan".into(), "nikol pashinyan".into(), "alen simonyan".into()]),
-            relevant_cities: Some(vec!["gyumri".into(), "vanadzor".into()]),
-            subregions: Some(vec!["aragatsotn".into(), "ararat".into(), "armavir".into(), "gegharkunik".into(), "kotayk".into(), "shirak".into(), "syunik".into(), "tavush".into(), "vayots dzor".into()]),
-            misc: Some(vec!["azgayin zhoghov".into(), "rusal armenal".into(), "ameriabank".into(), "ardshinbank".into(), "hsbc".into(), "multi group stone".into(), "zangezur copper and molybdenum combine".into()]),
+            cities: None,
+            misc: Some(vec!["azgayin zhoghov".into()]),
         }.get_region_vec(), RegionType::Armenia);
         map.insert(RegionKeyphrases {
             names: Some(vec!["australia".into()]),
             demonyms: Some(vec!["aussie".into()]),
+            figures: Some(vec!["king charles".into(), "charles iii".into(), "david hurley".into(), "anthony albanese".into()]),
+            enterprises: Some(vec!["bhp group".into(), "commonwealth bank".into(), "csl".into(), "nab limited".into(), "anz bank".into(), "fortescue".into(), "wesfarmers".into(), "macquarie".into(), "atlassian".into(), "goodman group".into(), "woodside".into(), "telstra".into(), "transurban".into(), "woolworths".into(), "wisetech".into(), "qbe insurance".into(), "santos limited".into(), "aristocrat leisure".into(), "rea group".into(), "coles group".into(), "cochlear".into(), "suncorp".into(), "brambles limited".into(), "reece group".into(), "origin energy".into(), "northern star resources".into(), "scentre group".into(), "south32".into(), "computershare".into()]),
+            subregions: Some(vec!["new south wales".into(), "queensland".into(), "tasmania".into(), "jervis bay".into(), "norfolk island".into(), "christmas island".into(), "cocos islands".into(), "keeling islands".into(), "coral sea island".into(), "ashmore and cartier".into(), "heard island".into(), "mcdonald island".into()]),
             capitals: Some(vec!["canberra".into()]),
-            relevant_figures: Some(vec!["king charles".into(), "charles iii".into(), "david hurley".into(), "anthony albanese".into()]),
-            relevant_cities: Some(vec!["sydney".into(), "melbourne".into(), "brisbane".into(), "perth".into(), "adelaide".into(), "hobart".into(), "darwin".into()]),
-            subregions: Some(vec!["new south wales".into(), "queensland".into(), "tasmania".into(), "jervis bay".into(), "norfolk island".into(), "christmas island".into(), "coral sea island".into(), "ashmore and cartier".into(), "heard island".into(), "mcdonald island".into(), "torres strait".into()]),
-            misc: Some(vec!["aborigin".into(), "wesfarmers".into(), "woolworths".into(), "bhp".into(), "commonwealth bank".into(), "westpac".into(), "macquarie group".into(), "csl".into(), "telstra".into(), "suncorp".into(), "woodside".into(), "qbe insurance".into(), "scentre group".into(), "south32".into(), "fortescue".into(), "origin energy".into(), "agl energy".into(), "amcor".into(), "goodman group".into(), "qantas".into(), "bluescope".into(), "santos ltd".into(), "brambles limited".into(), "dexus".into(), "gpt group".into(), "mirvac".into(), "bendigo and adelaide".into(), "ramsay health".into()]),
+            cities: Some(vec!["sydney".into(), "melbourne".into(), "brisbane".into(), "perth".into(), "adelaide".into(), "gold coast".into(), "wollongong".into(), "logan city".into()]),
+            misc: Some(vec!["aborigin".into()]),
         }.get_region_vec(), RegionType::Australia);
         map.insert(RegionKeyphrases {
             names: Some(vec!["austria".into(), "oesterreich".into()]),
             demonyms: None,
+            figures: Some(vec!["van der bellen".into(), "karl nehammer".into()]),
+            enterprises: Some(vec!["verbund".into(), "erste group".into(), "omv".into()]),
+            subregions: Some(vec!["styria".into(), "tyrol".into(), "carinthia".into(), "salzburg".into()]),
             capitals: Some(vec!["vienna".into()]),
-            relevant_figures: Some(vec!["van der bellen".into(), "karl nehammer".into()]),
-            relevant_cities: Some(vec!["graz".into(), "linz".into()]),
-            subregions: Some(vec!["burgenland".into(), "carinthia".into(), "lower austria".into(), "upper austria".into(), "salzburg".into(), "styria".into(), "tyrol".into(), "vorarlberg".into(), "vienna".into()]),
-            misc: Some(vec!["nationalrat".into(), "verfassungsgerichtshof".into(), "omv".into(), "verbund".into(), "osterreichische industrieholding ag".into(), "erste group".into(), "borealis".into(), "lenzing".into(), "plansee group".into(), "semperit".into(), "glock ged".into(), "evn group".into(), "doka group".into(), "strabag".into(), "andritz".into(), "rhi magnesita".into(), "bohler-uddeholm".into(), "voestalpine".into(), "bundesimmobiliengesellschaft".into(), "osram ag".into()]),
+            cities: Some(vec!["graz".into()]),
+            misc: None,
         }.get_region_vec(), RegionType::Austria);
         map.insert(RegionKeyphrases {
             names: Some(vec!["azerbaijan".into()]),
             demonyms: Some(vec!["azeri".into()]),
+            figures: Some(vec!["aliyev".into(), "ali asadov".into(), "sahiba gafarova".into()]),
+            enterprises: None,
+            subregions: Some(vec!["sumgait".into()]),
             capitals: Some(vec!["baku".into()]),
-            relevant_figures: Some(vec!["aliyev".into(), "mehriban aliyeva".into(), "ali asadov".into(), "sahiba gafarova".into()]),
-            relevant_cities: Some(vec!["sumgait".into(), "sumgayit".into(), "ganja".into()]),
-            subregions: Some(vec!["absheron".into(), "agdash".into(), "aghdam".into(), "aghjabadi".into(), "aghstafa".into(), "agsu".into(), "astara".into(), "balakan".into(), "barda".into(), "beylagan".into(), "bilasuvar".into(), "dashkasan".into(), "fuzuli".into(), "gadabay".into(), "gobustan".into(), "goranboy".into(), "goychay".into(), "goygol".into(), "hajigabul".into(), "imishli".into(), "ismayilli".into(), "jabrayil".into(), "jalilabad".into(), "kalbajar".into(), "khankendi".into(), "khizi".into(), "khojaly".into(), "khojavend".into(), "kurdamir".into(), "lachin".into(), "lankaran".into(), "lerik".into(), "masally".into(), "mingachevir".into(), "naftalan".into(), "neftchala".into(), "oghuz".into(), "qabala".into(), "qakh".into(), "qazax".into(), "quba".into(), "qubadli".into(), "qusar".into(), "saatly".into(), "sabirabad".into(), "salyan".into(), "samukh".into(), "shabran".into(), "shaki".into(), "shamakhi".into(), "shamkir".into(), "shusha".into(), "sirvan".into(), "siyazan".into(), "tartar".into(), "tovuz".into(), "ujar".into(), "yardimli".into(), "yevlakh".into(), "zagatala".into(), "zangilan".into(), "zardab".into()]),
-            misc: Some(vec!["milli majlis".into(), "democratic reforms party".into(), "socar".into(), "af holding".into(), "pasha holding".into(), "unibank".into(), "accessbank".into(), "azerenerji".into(), "azmeco".into(), "caspian drilling".into(), "akkord industry".into(), "azpetrol".into(), "azercell".into()]),
+            cities: Some(vec!["sumgayit".into(), "sumqayit".into(), "ganja".into()]),
+            misc: Some(vec!["milli majlis".into(), "democratic reforms party".into()]),
         }.get_region_vec(), RegionType::Azerbaijan);
         map.insert(RegionKeyphrases {
             names: Some(vec!["bahamas".into(), "bahama".into()]),
