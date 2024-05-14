@@ -16,5 +16,5 @@ tracing-subscriber = "0.3.18"
 actix-web = "4.0.0-beta.8"
 actix-rt = "2.6.0"
 apistos = "0.2.2"
-sqlx = { version = "0.7.4", features = [ "runtime-tokio", "tls-rustls", "postgres", "uuid" ] }
+sqlx = { version = "0.7.4", features = [ "runtime-tokio", "tls-rustls", "sqlite", "postgres", "uuid" ] }
 lazy_static = "1.4.0"

@@ -5,14 +5,18 @@ mod scrape {
     pub mod scraper_util;
     mod region;
 }
+mod db {
+    pub mod sqlite_gen;
+}
+use db::sqlite_gen::gen_sqlite_db;
 use scrape::scrapers::youtube::scrape_youtube_channel;
 use std::{error::Error/*, process::Command*/};
 
-#[actix_web::main] // https://download.geonames.org/export/dump/allCountries.zip
+#[actix_web::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     tracing_subscriber::fmt().with_max_level(tracing::Level::TRACE).init();
     //let update = Command::new("bash").arg("-c").arg("source /home/lichenaut/p3env/bin/activate && pip install flashgeotext").output()?;
     //scrape_youtube_channel("UC8p1vwvWtl6T73JiExfWs1g").await?;
-
+    gen_sqlite_db().await?;
     Ok(())
 }
