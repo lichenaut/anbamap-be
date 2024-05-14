@@ -8,7 +8,7 @@ mod scrape {
 use scrape::scrapers::youtube::scrape_youtube_channel;
 use std::{error::Error/*, process::Command*/};
 
-#[actix_web::main]
+#[actix_web::main] // https://download.geonames.org/export/dump/allCountries.zip
 async fn main() -> Result<(), Box<dyn Error>> {
     tracing_subscriber::fmt().with_max_level(tracing::Level::TRACE).init();
     //let update = Command::new("bash").arg("-c").arg("source /home/lichenaut/p3env/bin/activate && pip install flashgeotext").output()?;

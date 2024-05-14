@@ -1,8 +1,13 @@
-use std::{collections::HashMap, vec};
+use std::vec;
+use rayon::prelude::*;
 use lazy_static::lazy_static;
+use std::sync::{Arc, Mutex};
+use serde_json::json;
+use reqwest::{blocking::Response, blocking::Client};
+use std::{error::Error, fs, str};
 
 #[derive(Debug, Eq, PartialEq, Hash)]
-pub enum RegionType { // https://en.wikipedia.org/wiki/List_of_alternative_country_names
+pub enum RegionType {
     ExtraRegional,
     Abkhazia,
     Afghanistan,
@@ -210,10 +215,8 @@ struct RegionKeyphrases {
     pub names: Option<Vec<String>>,
     pub demonyms: Option<Vec<String>>,
     pub figures: Option<Vec<String>>,
+    pub geo: Option<Vec<String>>,
     pub enterprises: Option<Vec<String>>, // https://companiesmarketcap.com/all-countries/
-    pub subregions: Option<Vec<String>>, // https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country
-    pub capitals: Option<Vec<String>>,
-    pub cities: Option<Vec<String>>, // https://worldpopulationreview.com/countries/cities/ , double check with Wikipedia
     pub misc: Option<Vec<String>>,
 }
 
@@ -223,39 +226,89 @@ impl RegionKeyphrases {
         if let Some(names) = self.names { region_vec.extend(names); }
         if let Some(demonyms) = self.demonyms { region_vec.extend(demonyms); }
         if let Some(figures) = self.figures { region_vec.extend(figures); } // At least the names on a region's Wikipedia infobox.
+        if let Some(geo) = self.geo { region_vec.extend(geo); } // subregions ≥ 490k population, capitals, cities ≥ 290k population
         if let Some(enterprises) = self.enterprises { region_vec.extend(enterprises); } // ≥ 9.9B market cap USD
-        if let Some(subregions) = self.subregions { region_vec.extend(subregions); } // ≥ 490k population unless relevant exclave
-        if let Some(capitals) = self.capitals { region_vec.extend(capitals); }
-        if let Some(cities) = self.cities { region_vec.extend(cities); } // ≥ 290k population
         // Positions of power, legislative bodies, institutions, buildings, political groups, ideologies, ethnic groups, cultural regions, etc.
         if let Some(misc) = self.misc { region_vec.extend(misc); }
         region_vec
     }
 }
 
+// TODO: subregions, capital, cities keyphrases gen. keyphrase blacklist
+
+pub fn get_geo_map(client: &Client, api_username: &String, country_info_json: &serde_json::Value) -> Result<Vec<(String, Vec<String>)>, Box<dyn Error>> {
+    let country_tuples = country_info_json["geonames"].as_array().unwrap().iter().map(|country| {
+        (
+            country["countryName"].as_str().unwrap().to_string(),
+            vec![country["geonameId"].as_str().unwrap().to_string()],
+        )
+    }).collect::<Vec<(String, Vec<String>)>>();
+
+
+    let mut map = Arc::new(Mutex::new(Vec::new()));
+    let chunks: Vec<_> = country_tuples.chunks(16).collect();
+    chunks.into_par_iter().for_each(|chunk| {
+        for country in chunk.iter() {
+            let (country_name, geoname_id) = country;
+            let url = format!("https://secure.geonames.org/childrenJSON?geonameId={:?}&username={}", geoname_id, api_username);
+            let response = client.get(&url).send().unwrap();
+            let country_json: serde_json::Value = response.json().unwrap();
+            let (lat, lng) = (country_json["lat"].as_str().unwrap(), country_json["lng"].as_str().unwrap());
+
+
+            // if feature class is A and feature code starts with A and doesn't contain H and population is 490k or above
+            
+        }
+    });
+
+    Ok(country_tuples)
+}
+
+
+
 lazy_static! {
-    pub static ref REGION_MAP: HashMap<Vec<String>, RegionType> = {
-        let mut map = HashMap::new();// TODO: does this benefit from hashing?
-        map.insert(RegionKeyphrases { // Allowing Georgian duplicate keyphrases of names relating to the Government of the Autonomous Republic of Abkhazia.
-            names: None,
-            demonyms: Some(vec!["abkhaz".into()]),
-            figures: Some(vec!["aslan bzhania".into(), "alexander ankvab".into(), "ruslan abashidze".into(), "jemal gamakharia".into()]),
-            enterprises: None,
-            subregions: None,
-            capitals: Some(vec!["sukhumi".into()]),
-            cities: None,
-            misc: Some(vec!["amtsakhara".into(), "aitaira".into()]),
-        }.get_region_vec(), RegionType::Abkhazia);
-        map.insert(RegionKeyphrases {
+    pub static ref REGION_MAP: Vec<(Vec<String>, String)> = {
+        let mut map = Vec::new();
+        let client = Client::new();
+        let api_username = fs::read_to_string("keys/geonames.txt").unwrap();
+        let country_info_url = format!("https://secure.geonames.org/countryInfoJSON?&username={}", api_username);
+        let country_info_response = client.get(&country_info_url).send().unwrap();
+        let country_info_json: serde_json::Value = country_info_response.json().unwrap();
+        let geo_map = get_geo_map(&client, &country_info_json);
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        map.push((RegionKeyphrases {
             names: None,
             demonyms: Some(vec!["afghan".into()]),
             figures: Some(vec!["hibatullah akhundzada".into(), "haibatullah akhunzada".into(), "hasan akhund".into(), "abdul hakim haqqani".into(), "abdul hakim ishaqzai".into()]),
             enterprises: None,
-            subregions: Some(vec!["herat".into(), "nangarhar".into(), "balkh".into(), "helmand".into(), "kandahar".into(), "ghazni".into(), "kunduz".into(), "faryab".into(), "takhar".into(), "badakhshan".into(), "baghlan".into(), "ghor".into(), "paktika".into(), "parwan".into(), "wardak".into(), "khost".into(), "sar-e pol".into(), "paktia".into(), "jowzjan".into(), "farah".into(), "badghis".into(), "daykundi".into(), "bamyan".into(), "kunar".into(), "kapisa".into(), "laghman".into()]),
-            capitals: Some(vec!["kabul".into()]),
-            cities: Some(vec!["kandahar".into(), "mazar-e-sharif".into(), "mazar-i-sharif".into(), "herat".into()]),
+            geo: None,
             misc: Some(vec!["taliban".into()]),
-        }.get_region_vec(), RegionType::Afghanistan);
+        }.get_region_vec(), "Afghanistan".into()));
         map.insert(RegionKeyphrases {
             names: Some(vec!["albania".into()]),
             demonyms: None,
@@ -273,7 +326,7 @@ lazy_static! {
             enterprises: None,
             subregions: Some(vec!["oran".into(), "setif".into(), "tizi ouzou".into(), "batna".into(), "djelfa".into(), "blida".into(), "chlef".into(), "m'sila".into(), "tlemcen".into(), "bejaia".into(), "skikda".into(), "tiaret".into(), "medea".into(), "boumerdes".into(), "mila".into(), "ain defla".into(), "mostaganem".into(), "relizane".into(), "bouira".into(), "tebessa".into(), "el oued".into(), "jijel".into(), "bordj bou arreridj".into(), "oum el bouaghi".into(), "annaba".into(), "sidi bel abbes".into(), "tipaza".into(), "biskra".into()]),
             capitals: Some(vec!["algiers".into()]),
-            cities: Some(vec!["boumerdas".into()]),
+            cities: Some(vec!["bel abbes".into()]),
             misc: Some(vec!["algerie".into(), "fln".into()]),
         }.get_region_vec(), RegionType::Algeria);
         map.insert(RegionKeyphrases {
@@ -293,7 +346,7 @@ lazy_static! {
             enterprises: None,
             subregions: Some(vec!["huila".into(), "benguela".into(), "huambo".into(), "cuanza sul".into(), "uige".into(), "bie".into(), "cunene".into(), "malanje".into(), "lunda norte".into(), "moxico".into(), "cabinda".into(), "zaire".into(), "lunda sul".into(), "cuando cubango".into(), "namibe".into()]),
             capitals: Some(vec!["luanda".into()]),
-            cities: Some(vec!["n'dalatando".into(), "lobito".into(), "cuito".into(), "lubango".into(), "malanje".into(), "mocamedes".into()]),
+            cities: Some(vec!["cabinda".into(), ]),
             misc: Some(vec!["mpla".into(), "unita".into()]),
         }.get_region_vec(), RegionType::Angola);
         map.insert(RegionKeyphrases {
@@ -357,31 +410,34 @@ lazy_static! {
             misc: Some(vec!["milli majlis".into(), "democratic reforms party".into()]),
         }.get_region_vec(), RegionType::Azerbaijan);
         map.insert(RegionKeyphrases {
-            names: Some(vec!["bahamas".into(), "bahama".into()]),
+            names: Some(vec!["bahama".into()]),
             demonyms: Some(vec!["bahamian".into()]),
+            figures: Some(vec!["king charles".into(), "charles iii".into(), "cynthia pratt".into(), "philip davis".into()]),
+            enterprises: None,
+            subregions: None,
             capitals: Some(vec!["nassau".into()]),
-            relevant_figures: Some(vec!["king charles".into(), "charles iii".into(), "cynthia pratt".into(), "philip davis".into()]),
-            relevant_cities: None,
-            subregions: Some(vec!["abaco".into(), "acklins".into(), "berry island".into(), "bimini".into(), "black point".into(), "exuma".into(), "cat island".into(), "central andros".into(), "crooked island".into(), "eleuthera".into(), "exuma".into(), "freeport".into(), "grand cay".into(), "harbour island".into(), "hope town".into(), "inagua".into(), "mangrove cay".into(), "mayaguana".into(), "moore's island".into(), "north andros".into(), "ragged island".into(), "rum cay".into(), "south andros".into(), "spanish wells".into()]),
+            cities: None,
             misc: Some(vec!["progressive liberal party".into(), "free national movement".into()]),
         }.get_region_vec(), RegionType::TheBahamas);
         map.insert(RegionKeyphrases {
             names: Some(vec!["bahrain".into()]),
             demonyms: None,
+            figures: Some(vec!["al khalifa".into()]),
+            enterprises: Some(vec!["ahli united".into()]),
+            subregions: Some(vec!["capital governorate".into()]),
             capitals: Some(vec!["manama".into()]),
-            relevant_figures: Some(vec!["al khalifa".into()]),
-            relevant_cities: Some(vec!["riffa".into()]),
-            subregions: Some(vec!["capital governorate".into(), "muharraq governorate".into(), "northern governorate".into(), "southern governorate".into()]),
-            misc: Some(vec!["shura council".into(), "asalah".into(), "progressive democratic tribune".into(), "bchr".into(), "fakhro group".into(), "khaleeji commercial".into(), "al baraka".into(), "arab banking corp".into(), "ithmaar bank".into(), "banagas".into(), "the benefit company".into(), "t'azur company".into(), "batelco".into(), "investcorp".into(), "mumtalakat holding".into()]),
+            cities: None,
+            misc: Some(vec!["shura council".into(), "asalah".into(), "progressive democratic tribune".into(), "bchr".into()]),
         }.get_region_vec(), RegionType::Bahrain);
         map.insert(RegionKeyphrases {
             names: Some(vec!["bangladesh".into()]),
             demonyms: None,
+            figures: Some(vec!["mohammed shahabuddin".into(), "sheikh hasina".into(), "shirin sharmin chaudhury".into(), "obaidul hassan".into()]),
+            enterprises: None,
+            subregions: Some(vec!["barisal".into(), "chittagong".into(), "khulna".into(), "mymensingh".into(), "rajshahi".into(), "rangpur".into(), "sylhet".into()]),
             capitals: Some(vec!["dhaka".into()]),
-            relevant_figures: Some(vec!["mohammed shahabuddin".into(), "sheikh hasina".into(), "shirin sharmin chaudhury".into(), "obaidul hassan".into()]),
-            relevant_cities: Some(vec!["chattogram".into(), "chittagong".into(), "gazipur".into(), "narayanganj".into(), "khulna".into(), "rangpur".into(), "mymensingh".into(), "rajshahi".into(), "sylhet".into(), "comilla".into(), "cumilla".into(), "barisal".into(), "barishal".into(), "bogra".into(), "bogura".into(), "sirajganj".into(), "savar".into(), "brahmanbaria".into(), "sreepur".into(), "kaliakair".into(), "faridpur".into(), "feni".into(), "kushtia".into(), "tangail".into(), "dinajpur".into(), "jashore".into(), "jessore".into(), "chandpur".into(), "chapai nawabganj".into(), "tarabo".into(), "cox's bazar".into()]),
-            subregions: Some(vec!["barisal".into(), "chittagong".into(), "dhaka".into(), "khulna".into(), "mymensingh".into(), "rajshahi".into(), "rangpur".into(), "sylhet".into(), "bengal".into()]),
-            misc: Some(vec!["jatiya sangsad".into(), "awami league".into(), "jatiya party".into(), "dbl group".into(), "a k khan".into(), "abul khair group".into(), "aci limited".into(), "akji group".into(), "bashundhara group".into(), "beximco".into(), "city group".into(), "globe janakantha".into(), "shilpa paribar".into(), "hrc group".into(), "jamuna group".into(), "ispahani limited".into(), "meghna group".into(), "nasir group".into(), "nassa group".into(), "navana group".into(), "orion group".into(), "partex group".into(), "rahimafrooz".into(), "rangs group".into(), "sajeeb group".into(), "alam group".into(), "summit group".into(), "t k group".into(), "transcom group".into(), "walton group".into(), "agrani bank".into(), "brac bank".into(), "dutch-bangla bank".into(), "eastern bank plc".into(), "exim bank".into(), "grameen bank".into(), "ific bank".into(), "jamuna bank".into(), "janata bank".into(), "national bank limited".into(), "one bank plc".into(), "prime bank plc".into(), "pubali bank".into(), "unnayan bank".into(), "rupali bank".into(), "sonali bank".into(), "trust bank limited".into(), "uttara bank".into(), "jamuna oil".into(), "padma oil".into(), "petrobangla".into(), "titas gas".into(), "rankstel".into(), "sadharan bima corp".into(), "bsrm".into(), "jiban bima".into(), "bangalink".into(), "grameenphone".into(), "robi".into(), "impress group".into(), "square group".into(), "acme laboratories".into()]),
+            cities: Some(vec!["chattogram".into(), "comilla".into(), "cumilla".into(), "shibganj".into(), "natore".into(), "tongi".into(), ]),
+            misc: Some(vec!["jatiya sangsad".into(), "awami league".into(), "jatiya party".into(), "bengal".into()]),
         }.get_region_vec(), RegionType::Bangladesh);
         map.insert(RegionKeyphrases {
             names: Some(vec!["barbados".into()]),
