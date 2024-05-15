@@ -1,7 +1,7 @@
 use std::{error::Error, vec};
 use async_std::task;
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
-use crate::db::db_service::get_country_db_pool;
+use crate::db::db_service::get_region_db_pool;
 use sqlx::Row;
 use once_cell::sync::Lazy;
 use std::collections::HashMap;
@@ -256,16 +256,16 @@ impl RegionKeyphrases {
 //test substrings with apostrophes and periods
 
 async fn build_region_map() -> Result<HashMap<String, Vec<String>>, Box<dyn Error>> {
-    let pool = get_country_db_pool().await?;
-    let mut country_map = HashMap::new();
+    let pool = get_region_db_pool().await?;
+    let mut region_map = HashMap::new();
     let rows = sqlx::query("SELECT * FROM countries").fetch_all(&pool).await?;
-    for row in &rows { country_map.insert(row.get(0), vec![row.get(1)]); }
+    for row in &rows { region_map.insert(row.get(0), vec![row.get(1)]); }
 
-    Ok(country_map)
+    Ok(region_map)
 }
 
-fn get_geo_keyphrases(region_map: &HashMap<String, Vec<String>>, country_code: &str) -> Option<Vec<String>> {
-    let geo = region_map.get(country_code).cloned();
+fn get_geo_keyphrases(region_map: &HashMap<String, Vec<String>>, region_code: &str) -> Option<Vec<String>> {
+    let geo = region_map.get(region_code).cloned();
     geo.map(|g| {
         g.iter()
             .flat_map(|s| s.split(',').map(|s| s.trim().to_string()))

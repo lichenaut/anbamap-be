@@ -2,6 +2,6 @@
 /keys
 /allCountries.txt
 /countryInfo.txt
-/country_db.sqlite
-/country_db.sqlite-shm
-/country_db.sqlite-wal
+/region_db.sqlite
+/region_db.sqlite-shm
+/region_db.sqlite-wal
