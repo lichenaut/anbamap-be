@@ -22,23 +22,22 @@ pub async fn scrape_youtube_channel(channel_id: &str) -> Result<Vec<(String, Str
                 }
 
                 title = match snippet["title"].as_str() {
-                    Some(t) => t.to_string(),
+                    Some(title) => title.to_string(),
                     None => continue,
                 };
                 description = match snippet["description"].as_str() {
-                    Some(d) => d.to_string(),
+                    Some(description) => description.to_string(),
                     None => continue,
                 };
             } else {
                 continue;
             }
 
-            let url;
             let id = item["id"]["videoId"].as_str();
-            match id {
-                Some(id) => { url = format!("https://www.youtube.com/watch?v={}", id); },
+            let url = match id {
+                Some(id) => { format!("https://www.youtube.com/watch?v={}", id) },
                 None => continue,
-            }
+            };
 
             let regions = scraper_util::get_regions(&[&title, &description]).await?;
             videos.push((url, title, description, regions));

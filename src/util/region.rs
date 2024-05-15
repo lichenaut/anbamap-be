@@ -249,16 +249,17 @@ impl RegionKeyphrases {
     }
 }
 
-// TODO: keyphrase blacklist, countries -> regions (db and db data structures)
+// TODO: keyphrase blacklist
 //once it finds a hit within a vec, dont bother with checking the rest within the vec and move onto next region
 //convert accent markers and non-english words in input texts to work with these, remember dotless i, double dot i, function that checks for these things and function that checks duplicates
 //how to check for instances of "hdz" across all words when "hdz" is its own keyword, also check for common words
 //test substrings with apostrophes and periods
+//look for rayon uses in the codebase
 
 async fn build_region_map() -> Result<HashMap<String, Vec<String>>, Box<dyn Error>> {
     let pool = get_region_db_pool().await?;
     let mut region_map = HashMap::new();
-    let rows = sqlx::query("SELECT * FROM countries").fetch_all(&pool).await?;
+    let rows = sqlx::query("SELECT * FROM regions").fetch_all(&pool).await?;
     for row in &rows { region_map.insert(row.get(0), vec![row.get(1)]); }
 
     Ok(region_map)
