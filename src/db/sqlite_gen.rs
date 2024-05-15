@@ -1,11 +1,10 @@
+use sqlx::sqlite::SqliteQueryResult;
+use sqlx::Executor;
 use std::collections::HashSet;
 use std::fs;
 use std::path::Path;
-use sqlx::sqlite::SqliteConnectOptions;
-use sqlx::sqlite::SqliteQueryResult;
-use sqlx::Executor;
-use sqlx::SqlitePool;
 use std::{fs::File, io, io::BufRead};
+use super::db_service::get_country_db_pool;
 
 struct Country {
     country_code: String,
@@ -27,14 +26,7 @@ pub async fn gen_sqlite_db() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    let pool = SqlitePool::connect_with(SqliteConnectOptions::new()
-        .filename("country_db.sqlite")
-        .create_if_missing(true)
-        .journal_mode(sqlx::sqlite::SqliteJournalMode::Wal)
-        .shared_cache(true)
-        .synchronous(sqlx::sqlite::SqliteSynchronous::Normal)
-    ).await?;
-
+    let pool = get_country_db_pool().await?;
     pool.execute(
         "CREATE TABLE IF NOT EXISTS countries (
             country_code TEXT PRIMARY KEY,
@@ -86,7 +78,7 @@ pub async fn gen_sqlite_db() -> Result<(), Box<dyn std::error::Error>> {
 
         update_country(&pool, Country {
             country_code: country_code.to_string(),
-            keyphrases: format!("{}", ascii_name)
+            keyphrases: format!("{}", ascii_name),
         }).await?;
     }
 
@@ -100,13 +92,13 @@ pub async fn gen_sqlite_db() -> Result<(), Box<dyn std::error::Error>> {
         let mut country_code = None;
         let mut capital = None;
         if let Some(c_code) = fields.nth(0) { country_code = Some(c_code) } else { continue; }
-        if let Some(cap) = fields.nth(3) { capital = Some(cap); } else { continue; }
+        if let Some(cap) = fields.nth(4) { capital = Some(cap); } else { continue; }
         let country_code = country_code.unwrap();
         let capital = capital.unwrap();
 
         update_country(&pool, Country {
             country_code: country_code.to_string(),
-            keyphrases: format!("{}", capital)
+            keyphrases: format!("{}", capital),
         }).await?;
     }
 
