@@ -1,5 +1,6 @@
 mod scrape {
     pub mod scrapers {
+        pub mod wikidata;
         pub mod youtube;
     }
     pub mod scraper_util;
@@ -10,18 +11,17 @@ mod db {
 }
 mod util {
     pub mod region;
-    use region::REGION_MAP;
 }
 use db::sqlite_gen::gen_sqlite_db;
 use scrape::scrapers::youtube::scrape_youtube_channel;
-use util::region::REGION_MAP;
+use util::region::KEYPHRASE_REGION_MAP;
 use std::{error::Error, process::Command};
 
 #[actix_web::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     tracing_subscriber::fmt().with_max_level(tracing::Level::TRACE).init();
     gen_sqlite_db().await?;
-    println!("{:?}", *REGION_MAP);
+    println!("{:?}", *KEYPHRASE_REGION_MAP);
     //Command::new("bash").arg("-c").arg("source /home/lichenaut/p3env/bin/activate && pip install flashgeotext").output()?;
     //scrape_youtube_channel("UC8p1vwvWtl6T73JiExfWs1g").await?;
     Ok(())

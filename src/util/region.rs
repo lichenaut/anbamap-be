@@ -1,4 +1,4 @@
-use std::{error::Error, vec};
+use std::{collections::HashSet, error::Error, vec};
 use async_std::task;
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
 use crate::db::db_service::get_region_db_pool;
@@ -212,10 +212,9 @@ pub enum RegionType {
 }
 
 struct RegionKeyphrases {
+    pub automated: Option<Vec<String>>,
     pub names: Option<Vec<String>>,
     pub demonyms: Option<Vec<String>>,
-    pub figures: Option<Vec<String>>,
-    pub geo: Option<Vec<String>>,
     pub enterprises: Option<Vec<String>>, // https://companiesmarketcap.com/all-countries/
     pub misc: Option<Vec<String>>,
 }
@@ -223,10 +222,10 @@ struct RegionKeyphrases {
 impl RegionKeyphrases {
     pub fn get_region_vec(self) -> Vec<String> {
         let mut region_vec = Vec::new();
+        // First-order administrative regions ≥ 490k population, capitals, cities ≥ 290k population, and heads of state.
+        if let Some(automated) = self.automated { region_vec.extend(automated); }
         if let Some(names) = self.names { region_vec.extend(names); }
         if let Some(demonyms) = self.demonyms { region_vec.extend(demonyms); }
-        if let Some(figures) = self.figures { region_vec.extend(figures); } // At least the names on a region's Wikipedia infobox.
-        if let Some(geo) = self.geo { region_vec.extend(geo); } // subregions ≥ 490k population, capitals, and cities ≥ 290k population
         if let Some(enterprises) = self.enterprises { region_vec.extend(enterprises); } // ≥ 9.9B market cap USD
         // Positions of power, legislative bodies, institutions, buildings, political groups, ideologies, ethnic groups, cultural regions, etc.
         if let Some(misc) = self.misc { region_vec.extend(misc); }
@@ -265,7 +264,7 @@ async fn build_region_map() -> Result<HashMap<String, Vec<String>>, Box<dyn Erro
     Ok(region_map)
 }
 
-fn get_geo_keyphrases(region_map: &HashMap<String, Vec<String>>, region_code: &str) -> Option<Vec<String>> {
+fn get_automated_keyphrases(region_map: &HashMap<String, Vec<String>>, region_code: &str) -> Option<Vec<String>> {
     let geo = region_map.get(region_code).cloned();
     geo.map(|g| {
         g.iter()
@@ -276,7 +275,28 @@ fn get_geo_keyphrases(region_map: &HashMap<String, Vec<String>>, region_code: &s
     })
 }
 
-pub static REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(|| {
+fn remove_ambiguities(vec: Vec<(Vec<String>, String)>, blacklist: HashSet<String>) -> Vec<(Vec<String>, String)> {
+    let mut all_strings: HashSet<String> = vec.iter().flat_map(|(keys, _)| keys.clone()).collect();
+    let all_strings_copy = all_strings.clone(); // Removes exact duplicates.
+    let mut to_remove = blacklist;
+
+    for string in &all_strings_copy {
+        if to_remove.contains(string) { continue; }
+
+        for other_string in &all_strings_copy {
+            if string != other_string && string.contains(other_string) { to_remove.insert(other_string.clone()); } // Removes substrings.
+        }
+    }
+
+    all_strings.retain(|string| !to_remove.contains(string));
+
+    vec.iter().map(|(keys, value)| {
+        let new_keys = keys.iter().filter(|key| all_strings.contains(*key)).cloned().collect();
+        (new_keys, value.clone())
+    }).collect()
+}
+
+pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(|| {
     let region_map = task::block_on(build_region_map());
     let region_map = match region_map {
         Ok(map) => map,
@@ -285,15 +305,14 @@ pub static REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(|| {
 
     let mut map: Vec<(Vec<String>, String)> = Vec::new();
     map.push((RegionKeyphrases {
-        names: None,
+        automated: get_automated_keyphrases(&region_map, "AF"),
+        names: Some(vec!["afghanistan".into()]),
         demonyms: Some(vec!["afghan".into()]),
-        figures: Some(vec!["hibatullah akhundzada".into(), "haibatullah akhunzada".into(), "hasan akhund".into(), "abdul hakim haqqani".into(), "abdul hakim ishaqzai".into()]),
         enterprises: None,
-        geo: get_geo_keyphrases(&region_map, "AF"),
         misc: Some(vec!["taliban".into()]),
     }.get_region_vec(), "Afghanistan".into()));
 
-    map
+    remove_ambiguities(map, vec!["chad".into(), "georgia".into(), "jordan".into(), "turkey".into()].into_par_iter().collect()) //TODO: look at sqlite db for more
 });
 
 
