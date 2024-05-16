@@ -7,22 +7,23 @@ mod scrape {
 }
 mod db {
     pub mod db_service;
-    pub mod sqlite_gen;
+    pub mod keyphrase_db;
 }
-mod util {
-    pub mod region;
+mod region {
+    pub mod regions;
 }
-use db::sqlite_gen::gen_sqlite_db;
+use db::keyphrase_db::gen_keyphrase_db;
 use scrape::scrapers::youtube::scrape_youtube_channel;
-use util::region::KEYPHRASE_REGION_MAP;
-use std::{error::Error, process::Command};
+use region::regions::KEYPHRASE_REGION_MAP;
+use std::{error::Error, process::Command, str};
 
 #[actix_web::main]
-async fn main() -> Result<(), Box<dyn Error>> {
+async fn main() -> Result<(), Box<dyn Error>> { 
+    //look for rayon uses in the codebase
     tracing_subscriber::fmt().with_max_level(tracing::Level::TRACE).init();
-    gen_sqlite_db().await?;
-    println!("{:?}", *KEYPHRASE_REGION_MAP);
-    //Command::new("bash").arg("-c").arg("source /home/lichenaut/p3env/bin/activate && pip install flashgeotext").output()?;
-    //scrape_youtube_channel("UC8p1vwvWtl6T73JiExfWs1g").await?;
+    gen_keyphrase_db().await?;
+    let flashgeotext_update = Command::new("bash").arg("-c").arg("source /home/lichenaut/p3env/bin/activate && pip install flashgeotext").output()?;
+    tracing::info!("{}", str::from_utf8(&flashgeotext_update.stdout)?.trim().to_string());
+    scrape_youtube_channel("UCNye-wNBqNL5ZzHSJj3l8Bg").await?;
     Ok(())
 }

@@ -6,7 +6,7 @@ use std::{error::Error, fs, str};
 pub async fn scrape_youtube_channel(channel_id: &str) -> Result<Vec<(String, String, String, Vec<String>)>, Box<dyn Error>> {
     let api_key = fs::read_to_string("keys/youtube.txt")?;
     let url =
-            format!("https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&channelId={}&type=video&order=date&key={}", channel_id, api_key);
+            format!("https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&channelId={}&type=video&order=date&key={}", channel_id, api_key);
     let response = reqwest::get(&url).await?;
     let data: Value = response.json().await?;
     let today = Utc::now();

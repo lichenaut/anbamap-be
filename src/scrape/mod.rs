@@ -1,4 +1,3 @@
-pub mod scraper;
+pub mod scraper_util;
 pub mod wikidata;
 pub mod youtube;
-pub mod scraper_util;
