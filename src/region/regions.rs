@@ -831,13 +831,13 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         demonyms: Some(vec!["manx".into()]),
         enterprises: None,
         misc: Some(vec!["tynwald".into()]),
-    }.get_region_vec(), "Isle of Man".into()));////////////
+    }.get_region_vec(), "Isle of Man".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "IN"),
         names: Some(vec!["india".into()]),
         demonyms: None,
         enterprises: None,
-        misc: Some(vec!["lok sabha".into(), "rajya sabha".into(), "bjp".into(), "inc".into()]),
+        misc: Some(vec!["lok sabha".into(), "rajya sabha".into(), "bjp".into()]),
     }.get_region_vec(), "India".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "IO"),
@@ -851,33 +851,33 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         names: Some(vec!["iraq".into()]),
         demonyms: Some(vec!["iraqi".into()]), // Strings with length 4 or less are processed before substring checking.
         enterprises: None,
-        misc: Some(vec!["council of representatives".into(), "krg".into(), "puk".into(), "kdp".into()]),
+        misc: Some(vec!["takadum".into(), "emtidad".into()]),
     }.get_region_vec(), "Iraq".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "IR"),
         names: Some(vec!["iran".into()]), // Strings with length 4 or less are processed before substring checking.
         demonyms: Some(vec!["iranian".into()]),
         enterprises: None,
-        misc: Some(vec!["majlis".into(), "guardian council".into(), "principlists".into(), "reformists".into()]),
+        misc: Some(vec!["guardian council".into()]),
     }.get_region_vec(), "Iran".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "IS"),
         names: Some(vec!["iceland".into()]),
         demonyms: None,
         enterprises: None,
-        misc: Some(vec!["althing".into(), "sja".into(), "samfylkingin".into()]),
+        misc: Some(vec!["althing".into(), "samfylkingin".into()]),
     }.get_region_vec(), "Iceland".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "IT"),
         names: Some(vec!["italy".into()]),
-        demonyms: None,
+        demonyms: Some(vec!["italian".into()]),
         enterprises: None,
-        misc: Some(vec!["camera dei deputati".into(), "senato della repubblica".into(), "m5s".into(), "pd".into()]),
+        misc: Some(vec!["lega".into(), "pd-idp".into()]),
     }.get_region_vec(), "Italy".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "JE"),
-        names: Some(vec!["jersey".into()]),
-        demonyms: None,
+        names: None,
+        demonyms: Some(vec!["jerseyman".into(), "jerseywoman".into(), "jersey bean".into(), "jersey crapaud".into(), "jerriais".into()]),
         enterprises: None,
         misc: None,
     }.get_region_vec(), "Jersey".into()));
@@ -886,36 +886,36 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         names: Some(vec!["jamaica".into()]),
         demonyms: None,
         enterprises: None,
-        misc: Some(vec!["house of representatives".into(), "jlp".into(), "pnp".into()]),
+        misc: None,
     }.get_region_vec(), "Jamaica".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "JO"),
-        names: Some(vec!["jordan".into()]),
-        demonyms: None,
+        names: None,
+        demonyms: Some(vec!["jordanian".into()]),
         enterprises: None,
-        misc: Some(vec!["house of representatives".into(), "house of senate".into(), "hakama".into(), "muslim brotherhood".into()]),
+        misc: Some(vec!["islamic action front".into()]),
     }.get_region_vec(), "Jordan".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "JP"),
         names: Some(vec!["japan".into()]),
         demonyms: None,
         enterprises: None,
-        misc: Some(vec!["national diet".into(), "ldp".into(), "dpj".into()]),
+        misc: Some(vec!["komeito".into()]),
     }.get_region_vec(), "Japan".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "KE"),
         names: Some(vec!["kenya".into()]),
         demonyms: None,
         enterprises: None,
-        misc: Some(vec!["national assembly".into(), "senate".into(), "jubilee party".into(), "odm".into()]),
+        misc: Some(vec!["azimio".into()]),
     }.get_region_vec(), "Kenya".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "KG"),
-        names: Some(vec!["kyrgyzstan".into()]),
-        demonyms: None,
+        names: None,
+        demonyms: Some(vec!["kyrgyz".into()]),
         enterprises: None,
-        misc: Some(vec!["jogorku kenesh".into(), "sdp".into(), "atambaev".into()]),
-    }.get_region_vec(), "Kyrgyzstan".into()));
+        misc: Some(vec!["jogorku kenesh".into(), "mekenchil".into(), "eldik".into()]),
+    }.get_region_vec(), "Kyrgyzstan".into()));////////////////
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "KH"),
         names: Some(vec!["cambodia".into()]),
