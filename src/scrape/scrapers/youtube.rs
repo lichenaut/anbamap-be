@@ -17,6 +17,7 @@ pub async fn scrape_youtube_channel(channel_id: &str) -> Result<Vec<(String, Str
             let title;
             let description;
             if let Some(snippet) = item["snippet"].as_object() {
+
                 if let Some(published_at) = snippet["publishedAt"].as_str() {
                     if published_at.chars().take(10).collect::<String>() != today.format("%Y-%m-%d").to_string() { continue; }
                 }

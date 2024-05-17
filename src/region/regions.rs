@@ -26,6 +26,8 @@ impl RegionKeyphrases {
         // Positions of power, legislative bodies, institutions, buildings, political groups, ideologies, ethnic groups, cultural regions, etc.
         if let Some(misc) = self.misc { region_vec.extend(misc); }
 
+        
+
         let mut quotationed_short_strings = Vec::new();
         region_vec.iter_mut().for_each(|s| if s.len() < 5 { quotationed_short_strings.push(format!("'{}'", s)); });
         region_vec.iter_mut().for_each(|s| if s.len() < 5 { quotationed_short_strings.push(format!("\"{}\"", s)); });
@@ -91,7 +93,7 @@ fn remove_ambiguities(vec: Vec<(Vec<String>, String)>, blacklist: HashSet<String
     }).collect()
 }
 
-pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(|| { // Feel free to submit pull requests!
+pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(|| { // Please contribute on https://github.com/lichenaut/anbamap-api !
     let region_map = task::block_on(build_region_map());
     let region_map = match region_map {
         Ok(map) => map,
@@ -151,13 +153,6 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         enterprises: None,
         misc: Some(vec!["azgayin zhoghov".into()]),
     }.get_region_vec(), "Armenia".into()));
-    map.push((RegionKeyphrases {
-        automated: get_automated_keyphrases(&region_map, "AN"),
-        names: Some(vec!["netherlands antilles".into()]),
-        demonyms: Some(vec!["netherlands antillean".into()]),
-        enterprises: None,
-        misc: None,
-    }.get_region_vec(), "Netherlands Antilles".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "AO"),
         names: Some(vec!["angola".into()]),
@@ -314,8 +309,8 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     }.get_region_vec(), "Bolivia".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "BQ"),
-        names: Some(vec!["bonaire".into(), "sint eustatius".into(), "saba".into(), "statia".into()]),
-        demonyms: None,
+        names: Some(vec!["bonaire".into(), "sint eustatius".into(), "saba".into(), "statia".into(), "bes island".into()]),
+        demonyms: Some(vec!["saban".into()]), // Strings with length 4 or less are processed before substring checking.
         enterprises: None,
         misc: None,
     }.get_region_vec(), "Bonaire, Sint Eustatius, and Saba".into()));
@@ -595,7 +590,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "FI"),
         names: Some(vec!["finland".into()]),
-        demonyms: Some(vec!["finn".into()]),
+        demonyms: Some(vec!["finn".into(), "finnish".into()]), // Strings with length 4 or less are processed before substring checking.
         enterprises: None,
         misc: Some(vec!["eduskunta".into(), "national coalition party".into(), ]),
     }.get_region_vec(), "Finland".into()));
@@ -639,40 +634,40 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         names: Some(vec!["gabon".into()]),
         demonyms: None,
         enterprises: None,
-        misc: Some(vec!["pdg".into()]),
+        misc: Some(vec!["ctri".into()]),
     }.get_region_vec(), "Gabon".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "GB"),
-        names: Some(vec!["united kingdom".into(), "uk".into()]),
-        demonyms: Some(vec!["british".into()]),
+        names: Some(vec!["united kingdom".into(), "uk".into(), "britain".into(), "england".into(), "scotland".into(), "wales".into(), "northern ireland".into()]),
+        demonyms: Some(vec!["british".into(), "scottish".into(), "welsh".into(), "northern irish".into()]),
         enterprises: None,
-        misc: Some(vec!["house of commons".into(), "house of lords".into(), "scottish parliament".into(), "welsh parliament".into(), "northern ireland assembly".into()]),
+        misc: Some(vec!["house of lords".into(), "stormont".into()]),
     }.get_region_vec(), "United Kingdom".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "GD"),
         names: Some(vec!["grenada".into()]),
-        demonyms: None,
+        demonyms: Some(vec!["grenadian".into()]),
         enterprises: None,
         misc: None,
     }.get_region_vec(), "Grenada".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "GE"),
-        names: Some(vec!["georgia".into()]),
+        names: None,
         demonyms: None,
         enterprises: None,
-        misc: Some(vec!["sakartvelo".into(), "dream".into(), "georgian dream".into()]),
+        misc: Some(vec!["abkhaz".into(), "united national movement".into()]),
     }.get_region_vec(), "Georgia".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "GF"),
         names: Some(vec!["french guiana".into()]),
-        demonyms: None,
+        demonyms: Some(vec!["french guianan".into(), "french guinese".into()]),
         enterprises: None,
         misc: None,
     }.get_region_vec(), "French Guiana".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "GG"),
         names: Some(vec!["guernsey".into()]),
-        demonyms: None,
+        demonyms: Some(vec!["giernesiais".into()]),
         enterprises: None,
         misc: None,
     }.get_region_vec(), "Guernsey".into()));
@@ -681,35 +676,35 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         names: Some(vec!["ghana".into()]),
         demonyms: None,
         enterprises: None,
-        misc: Some(vec!["ndc".into(), "npp".into()]),
+        misc: Some(vec!["national democratic congress".into(), "new patriotic party".into()]),
     }.get_region_vec(), "Ghana".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "GI"),
         names: Some(vec!["gibraltar".into()]),
-        demonyms: None,
+        demonyms: Some(vec!["llanito".into()]),
         enterprises: None,
-        misc: None,
+        misc: Some(vec!["gslp".into()]),
     }.get_region_vec(), "Gibraltar".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "GL"),
         names: Some(vec!["greenland".into()]),
         demonyms: None,
         enterprises: None,
-        misc: None,
+        misc: Some(vec!["inuit ataqatigiit".into(), "naleraq".into(), "siumut".into()]),
     }.get_region_vec(), "Greenland".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "GM"),
         names: Some(vec!["gambia".into()]),
         demonyms: None,
         enterprises: None,
-        misc: Some(vec!["ndp".into(), "udp".into()]),
+        misc: None,
     }.get_region_vec(), "Gambia".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "GN"),
-        names: Some(vec!["guinea".into()]),
+        names: None,
         demonyms: None,
         enterprises: None,
-        misc: Some(vec!["rpg".into(), "upr".into()]),
+        misc: Some(vec!["cnrd".into()]),
     }.get_region_vec(), "Guinea".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "GP"),
@@ -721,16 +716,16 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "GQ"),
         names: Some(vec!["equatorial guinea".into()]),
-        demonyms: None,
+        demonyms: Some(vec!["equatoguinean".into()]),
         enterprises: None,
         misc: Some(vec!["pdge".into()]),
     }.get_region_vec(), "Equatorial Guinea".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "GR"),
         names: Some(vec!["greece".into()]),
-        demonyms: None,
+        demonyms: Some(vec!["greek".into()]),
         enterprises: None,
-        misc: Some(vec!["hellenic parliament".into(), "syriza".into(), "new democracy".into()]),
+        misc: Some(vec!["helleni".into(), "syriza".into()]),
     }.get_region_vec(), "Greece".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "GS"),
@@ -742,17 +737,17 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "GT"),
         names: Some(vec!["guatemala".into()]),
-        demonyms: None,
+        demonyms: Some(vec!["chapin".into()]),
         enterprises: None,
-        misc: Some(vec!["congreso de la republica".into(), "ucn".into(), "vamos".into()]),
+        misc: Some(vec!["semilla".into()]),
     }.get_region_vec(), "Guatemala".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "GU"),
         names: Some(vec!["guam".into()]),
-        demonyms: None,
+        demonyms: Some(vec!["guamanian".into()]), // Strings with length 4 or less are processed before substring checking.
         enterprises: None,
         misc: None,
-    }.get_region_vec(), "Guam".into()));
+    }.get_region_vec(), "Guam".into())); //////////////////////////
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "GW"),
         names: Some(vec!["guinea-bissau".into()]),
@@ -854,14 +849,14 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "IQ"),
         names: Some(vec!["iraq".into()]),
-        demonyms: None,
+        demonyms: Some(vec!["iraqi".into()]), // Strings with length 4 or less are processed before substring checking.
         enterprises: None,
         misc: Some(vec!["council of representatives".into(), "krg".into(), "puk".into(), "kdp".into()]),
     }.get_region_vec(), "Iraq".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "IR"),
-        names: Some(vec!["iran".into()]),
-        demonyms: None,
+        names: Some(vec!["iran".into()]), // Strings with length 4 or less are processed before substring checking.
+        demonyms: Some(vec!["iranian".into()]),
         enterprises: None,
         misc: Some(vec!["majlis".into(), "guardian council".into(), "principlists".into(), "reformists".into()]),
     }.get_region_vec(), "Iran".into()));
@@ -987,7 +982,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "LA"),
         names: Some(vec!["laos".into()]),
-        demonyms: None,
+        demonyms: Some(vec!["lao".into(), "laotian".into()]), // Strings with length 4 or less are processed before substring checking.
         enterprises: None,
         misc: Some(vec!["national assembly".into(), "lprp".into()]),
     }.get_region_vec(), "Laos".into()));
@@ -1120,7 +1115,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "ML"),
         names: Some(vec!["mali".into()]),
-        demonyms: None,
+        demonyms: None, // Strings with length 4 or less are processed before substring checking.
         enterprises: None,
         misc: Some(vec!["national assembly".into(), "rally for mali".into(), "adema".into()]),
     }.get_region_vec(), "Mali".into()));
@@ -1295,7 +1290,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "NU"),
         names: Some(vec!["niue".into()]),
-        demonyms: None,
+        demonyms: None, // Strings with length 4 or less are processed before substring checking.
         enterprises: None,
         misc: None,
     }.get_region_vec(), "Niue".into()));
@@ -1309,7 +1304,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "OM"),
         names: Some(vec!["oman".into()]),
-        demonyms: None,
+        demonyms: None, // Strings with length 4 or less are processed before substring checking.
         enterprises: None,
         misc: Some(vec!["consultative council".into(), "shura council".into(), "majlis al-shura".into()]),
     }.get_region_vec(), "Oman".into()));
@@ -1323,7 +1318,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "PE"),
         names: Some(vec!["peru".into()]),
-        demonyms: None,
+        demonyms: None, // Strings with length 4 or less are processed before substring checking.
         enterprises: None,
         misc: Some(vec!["congress".into(), "fujimorismo".into(), "apra".into()]),
     }.get_region_vec(), "Peru".into()));
@@ -1472,7 +1467,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         names: Some(vec!["seycheles".into()]),
         demonyms: None,
         enterprises: None,
-        misc: Some(vec!["national assembly".into(), "ppm".into(), "us".into()]),
+        misc: Some(vec!["national assembly".into(), "ppm".into()]),
     }.get_region_vec(), "Seychelles".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "SD"),
@@ -1610,7 +1605,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "TD"),
         names: Some(vec!["chad".into()]),
-        demonyms: None,
+        demonyms: None, // Strings with length 4 or less are processed before substring checking.
         enterprises: None,
         misc: Some(vec!["national transitional council".into()]),
     }.get_region_vec(), "Chad".into()));
@@ -1624,7 +1619,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "TG"),
         names: Some(vec!["togo".into()]),
-        demonyms: None,
+        demonyms: None, // Strings with length 4 or less are processed before substring checking.
         enterprises: None,
         misc: Some(vec!["national assembly".into(), "unir".into(), "ufc".into()]),
     }.get_region_vec(), "Togo".into()));
@@ -1735,7 +1730,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     }.get_region_vec(), "United States Minor Outlying Islands".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "US"),
-        names: Some(vec!["united states".into()]),
+        names: Some(vec!["united states".into(), "usa".into()]),
         demonyms: None,
         enterprises: None,
         misc: Some(vec!["congress".into(), "democrats".into(), "republicans".into()]),
