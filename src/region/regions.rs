@@ -91,197 +91,6 @@ fn remove_ambiguities(vec: Vec<(Vec<String>, String)>, blacklist: HashSet<String
     }).collect()
 }
 
-// EC	ECU	218	EC	Ecuador	Quito	283560	17084357	SA	.ec	USD	Dollar	593	@####@	^([a-zA-Z]\d{4}[a-zA-Z])$	es-EC	3658394	PE,CO	
-// EE	EST	233	EN	Estonia	Tallinn	45226	1320884	EU	.ee	EUR	Euro	372	#####	^(\d{5})$	et,ru	453733	RU,LV	
-// EG	EGY	818	EG	Egypt	Cairo	1001450	98423595	AF	.eg	EGP	Pound	20	#####	^(\d{5})$	ar-EG,en,fr	357994	LY,SD,IL,PS	
-// EH	ESH	732	WI	Western Sahara	El-Aaiun	266000	273008	AF	.eh	MAD	Dirham	212			ar,mey	2461445	DZ,MR,MA	
-// ER	ERI	232	ER	Eritrea	Asmara	121320	6209262	AF	.er	ERN	Nakfa	291			aa-ER,ar,tig,kun,ti-ER	338010	ET,SD,DJ	
-// ES	ESP	724	SP	Spain	Madrid	504782	46723749	EU	.es	EUR	Euro	34	#####	^(\d{5})$	es-ES,ca,gl,eu,oc	2510769	AD,PT,GI,FR,MA	
-// ET	ETH	231	ET	Ethiopia	Addis Ababa	1127127	109224559	AF	.et	ETB	Birr	251	####	^(\d{4})$	am,en-ET,om-ET,ti-ET,so-ET,sid	337996	ER,KE,SD,SS,SO,DJ	
-// FI	FIN	246	FI	Finland	Helsinki	337030	5518050	EU	.fi	EUR	Euro	358	#####	^(?:FI)*(\d{5})$	fi-FI,sv-FI,smn	660013	NO,RU,SE	
-// FJ	FJI	242	FJ	Fiji	Suva	18270	883483	OC	.fj	FJD	Dollar	679			en-FJ,fj	2205218		
-// FK	FLK	238	FK	Falkland Islands	Stanley	12173	2638	SA	.fk	FKP	Pound	500			en-FK	3474414		
-// FM	FSM	583	FM	Micronesia	Palikir	702	112640	OC	.fm	USD	Dollar	691	#####	^(\d{5})$	en-FM,chk,pon,yap,kos,uli,woe,nkr,kpg	2081918		
-// FO	FRO	234	FO	Faroe Islands	Torshavn	1399	48497	EU	.fo	DKK	Krone	298	###	^(?:FO)*(\d{3})$	fo,da-FO	2622320		
-// FR	FRA	250	FR	France	Paris	547030	66987244	EU	.fr	EUR	Euro	33	#####	^(\d{5})$	fr-FR,frp,br,co,ca,eu,oc	3017382	CH,DE,BE,LU,IT,AD,MC,ES	
-// GA	GAB	266	GB	Gabon	Libreville	267667	2119275	AF	.ga	XAF	Franc	241			fr-GA	2400553	CM,GQ,CG	
-// GB	GBR	826	UK	United Kingdom	London	244820	66488991	EU	.uk	GBP	Pound	44	@# #@@|@## #@@|@@# #@@|@@## #@@|@#@ #@@|@@#@ #@@|GIR0AA	^([Gg][Ii][Rr]\s?0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))\s?[0-9][A-Za-z]{2})$	en-GB,cy-GB,gd	2635167	IE	
-// GD	GRD	308	GJ	Grenada	St. George's	344	111454	NA	.gd	XCD	Dollar	+1-473			en-GD	3580239		
-// GE	GEO	268	GG	Georgia	Tbilisi	69700	3731000	AS	.ge	GEL	Lari	995	####	^(\d{4})$	ka,ru,hy,az	614540	AM,AZ,TR,RU	
-// GF	GUF	254	FG	French Guiana	Cayenne	91000	195506	SA	.gf	EUR	Euro	594	#####	^((97|98)3\d{2})$	fr-GF	3381670	SR,BR	
-// GG	GGY	831	GK	Guernsey	St Peter Port	78	65228	EU	.gg	GBP	Pound	+44-1481	@# #@@|@## #@@|@@# #@@|@@## #@@|@#@ #@@|@@#@ #@@|GIR0AA	^((?:(?:[A-PR-UWYZ][A-HK-Y]\d[ABEHMNPRV-Y0-9]|[A-PR-UWYZ]\d[A-HJKPS-UW0-9])\s\d[ABD-HJLNP-UW-Z]{2})|GIR\s?0AA)$	en,nrf	3042362		
-// GH	GHA	288	GH	Ghana	Accra	239460	29767108	AF	.gh	GHS	Cedi	233			en-GH,ak,ee,tw	2300660	CI,TG,BF	
-// GI	GIB	292	GI	Gibraltar	Gibraltar	6.5	33718	EU	.gi	GIP	Pound	350			en-GI,es,it,pt	2411586	ES	
-// GL	GRL	304	GL	Greenland	Nuuk	2166086	56025	NA	.gl	DKK	Krone	299	####	^(\d{4})$	kl,da-GL,en	3425505		
-// GM	GMB	270	GA	Gambia	Banjul	11300	2280102	AF	.gm	GMD	Dalasi	220			en-GM,mnk,wof,wo,ff	2413451	SN	
-// GN	GIN	324	GV	Guinea	Conakry	245857	12414318	AF	.gn	GNF	Franc	224			fr-GN	2420477	LR,SN,SL,CI,GW,ML	
-// GP	GLP	312	GP	Guadeloupe	Basse-Terre	1780	443000	NA	.gp	EUR	Euro	590	#####	^((97|98)\d{3})$	fr-GP	3579143		
-// GQ	GNQ	226	EK	Equatorial Guinea	Malabo	28051	1308974	AF	.gq	XAF	Franc	240			es-GQ,fr,pt	2309096	GA,CM	
-// GR	GRC	300	GR	Greece	Athens	131940	10727668	EU	.gr	EUR	Euro	30	### ##	^(\d{5})$	el-GR,en,fr	390903	AL,MK,TR,BG	
-// GS	SGS	239	SX	South Georgia and the South Sandwich Islands	Grytviken	3903	30	AN	.gs	GBP	Pound				en	3474415		
-// GT	GTM	320	GT	Guatemala	Guatemala City	108890	17247807	NA	.gt	GTQ	Quetzal	502	#####	^(\d{5})$	es-GT	3595528	MX,HN,BZ,SV	
-// GU	GUM	316	GQ	Guam	Hagatna	549	165768	OC	.gu	USD	Dollar	+1-671	969##	^(969\d{2})$	en-GU,ch-GU	4043988		
-// GW	GNB	624	PU	Guinea-Bissau	Bissau	36120	1874309	AF	.gw	XOF	Franc	245	####	^(\d{4})$	pt-GW,pov	2372248	SN,GN	
-// GY	GUY	328	GY	Guyana	Georgetown	214970	779004	SA	.gy	GYD	Dollar	592			en-GY	3378535	SR,BR,VE	
-// HK	HKG	344	HK	Hong Kong	Hong Kong	1092	7491609	AS	.hk	HKD	Dollar	852			zh-HK,yue,zh,en	1819730		
-// HM	HMD	334	HM	Heard Island and McDonald Islands		412	0	AN	.hm	AUD	Dollar	 				1547314		
-// HN	HND	340	HO	Honduras	Tegucigalpa	112090	9587522	NA	.hn	HNL	Lempira	504	@@####	^([A-Z]{2}\d{4})$	es-HN,cab,miq	3608932	GT,NI,SV	
-// HR	HRV	191	HR	Croatia	Zagreb	56542	3871833	EU	.hr	EUR	Euro	385	#####	^(?:HR)*(\d{5})$	hr-HR,sr	3202326	HU,SI,BA,ME,RS	
-// HT	HTI	332	HA	Haiti	Port-au-Prince	27750	11123176	NA	.ht	HTG	Gourde	509	HT####	^(?:HT)*(\d{4})$	ht,fr-HT	3723988	DO	
-// HU	HUN	348	HU	Hungary	Budapest	93030	9768785	EU	.hu	HUF	Forint	36	####	^(\d{4})$	hu-HU	719819	SK,SI,RO,UA,HR,AT,RS	
-// ID	IDN	360	ID	Indonesia	Jakarta	1919440	267663435	AS	.id	IDR	Rupiah	62	#####	^(\d{5})$	id,en,nl,jv	1643084	PG,TL,MY	
-// IE	IRL	372	EI	Ireland	Dublin	70280	4853506	EU	.ie	EUR	Euro	353	@@@ @@@@	^(D6W|[AC-FHKNPRTV-Y][0-9]{2})\s?([AC-FHKNPRTV-Y0-9]{4})	en-IE,ga-IE	2963597	GB	
-// IL	ISR	376	IS	Israel	Jerusalem	20770	8883800	AS	.il	ILS	Shekel	972	#######	^(\d{7}|\d{5})$	he,ar-IL,en-IL,	294640	SY,JO,LB,EG,PS	
-// IM	IMN	833	IM	Isle of Man	Douglas	572	84077	EU	.im	GBP	Pound	+44-1624	@# #@@|@## #@@|@@# #@@|@@## #@@|@#@ #@@|@@#@ #@@|GIR0AA	^((?:(?:[A-PR-UWYZ][A-HK-Y]\d[ABEHMNPRV-Y0-9]|[A-PR-UWYZ]\d[A-HJKPS-UW0-9])\s\d[ABD-HJLNP-UW-Z]{2})|GIR\s?0AA)$	en,gv	3042225		
-// IN	IND	356	IN	India	New Delhi	3287590	1352617328	AS	.in	INR	Rupee	91	######	^(\d{6})$	en-IN,hi,bn,te,mr,ta,ur,gu,kn,ml,or,pa,as,bh,sat,ks,ne,sd,kok,doi,mni,sit,sa,fr,lus,inc	1269750	CN,NP,MM,BT,PK,BD	
-// IO	IOT	086	IO	British Indian Ocean Territory	Diego Garcia	60	4000	AS	.io	USD	Dollar	246			en-IO	1282588		
-// IQ	IRQ	368	IZ	Iraq	Baghdad	437072	38433600	AS	.iq	IQD	Dinar	964	#####	^(\d{5})$	ar-IQ,ku,hy	99237	SY,SA,IR,JO,TR,KW	
-// IR	IRN	364	IR	Iran	Tehran	1648000	81800269	AS	.ir	IRR	Rial	98	##########	^(\d{10})$	fa-IR,ku	130758	TM,AF,IQ,AM,PK,AZ,TR	
-// IS	ISL	352	IC	Iceland	Reykjavik	103000	353574	EU	.is	ISK	Krona	354	###	^(\d{3})$	is,en,de,da,sv,no	2629691		
-// IT	ITA	380	IT	Italy	Rome	301230	60431283	EU	.it	EUR	Euro	39	#####	^(\d{5})$	it-IT,de-IT,fr-IT,sc,ca,co,sl	3175395	CH,VA,SI,SM,FR,AT	
-// JE	JEY	832	JE	Jersey	Saint Helier	116	90812	EU	.je	GBP	Pound	+44-1534	@# #@@|@## #@@|@@# #@@|@@## #@@|@#@ #@@|@@#@ #@@|GIR0AA	^((?:(?:[A-PR-UWYZ][A-HK-Y]\d[ABEHMNPRV-Y0-9]|[A-PR-UWYZ]\d[A-HJKPS-UW0-9])\s\d[ABD-HJLNP-UW-Z]{2})|GIR\s?0AA)$	en,fr,nrf	3042142		
-// JM	JAM	388	JM	Jamaica	Kingston	10991	2934855	NA	.jm	JMD	Dollar	+1-876			en-JM	3489940		
-// JO	JOR	400	JO	Jordan	Amman	92300	9956011	AS	.jo	JOD	Dinar	962	#####	^(\d{5})$	ar-JO,en	248816	SY,SA,IQ,IL,PS	
-// JP	JPN	392	JA	Japan	Tokyo	377835	126529100	AS	.jp	JPY	Yen	81	###-####	^\d{3}-\d{4}$	ja	1861060		
-// KE	KEN	404	KE	Kenya	Nairobi	582650	51393010	AF	.ke	KES	Shilling	254	#####	^(\d{5})$	en-KE,sw-KE	192950	ET,TZ,SS,SO,UG	
-// KG	KGZ	417	KG	Kyrgyzstan	Bishkek	198500	6315800	AS	.kg	KGS	Som	996	######	^(\d{6})$	ky,uz,ru	1527747	CN,TJ,UZ,KZ	
-// KH	KHM	116	CB	Cambodia	Phnom Penh	181040	16249798	AS	.kh	KHR	Riels	855	#####	^(\d{5})$	km,fr,en	1831722	LA,TH,VN	
-// KI	KIR	296	KR	Kiribati	Tarawa	811	115847	OC	.ki	AUD	Dollar	686			en-KI,gil	4030945		
-// KM	COM	174	CN	Comoros	Moroni	2170	832322	AF	.km	KMF	Franc	269			ar,fr-KM	921929		
-// KN	KNA	659	SC	Saint Kitts and Nevis	Basseterre	261	52441	NA	.kn	XCD	Dollar	+1-869			en-KN	3575174		
-// KP	PRK	408	KN	North Korea	Pyongyang	120540	25549819	AS	.kp	KPW	Won	850	###-###	^(\d{6})$	ko-KP	1873107	CN,KR,RU	
-// KR	KOR	410	KS	South Korea	Seoul	98480	51635256	AS	.kr	KRW	Won	82	#####	^(\d{5})$	ko-KR,en	1835841	KP	
-// XK	XKX	0	KV	Kosovo	Pristina	10908	1845300	EU		EUR	Euro				sq,sr	831053	RS,AL,MK,ME	
-// KW	KWT	414	KU	Kuwait	Kuwait City	17820	4137309	AS	.kw	KWD	Dinar	965	#####	^(\d{5})$	ar-KW,en	285570	SA,IQ	
-// KY	CYM	136	CJ	Cayman Islands	George Town	262	64174	NA	.ky	KYD	Dollar	+1-345			en-KY	3580718		
-// KZ	KAZ	398	KZ	Kazakhstan	Nur-Sultan	2717300	18276499	AS	.kz	KZT	Tenge	7	######	^(\d{6})$	kk,ru	1522867	TM,CN,KG,UZ,RU	
-// LA	LAO	418	LA	Laos	Vientiane	236800	7061507	AS	.la	LAK	Kip	856	#####	^(\d{5})$	lo,fr,en	1655842	CN,MM,KH,TH,VN	
-// LB	LBN	422	LE	Lebanon	Beirut	10400	6848925	AS	.lb	LBP	Pound	961	#### ####|####	^(\d{4}(\d{4})?)$	ar-LB,fr-LB,en,hy	272103	SY,IL	
-// LC	LCA	662	ST	Saint Lucia	Castries	616	181889	NA	.lc	XCD	Dollar	+1-758			en-LC	3576468		
-// LI	LIE	438	LS	Liechtenstein	Vaduz	160	37910	EU	.li	CHF	Franc	423	####	^(\d{4})$	de-LI	3042058	CH,AT	
-// LK	LKA	144	CE	Sri Lanka	Colombo	65610	21670000	AS	.lk	LKR	Rupee	94	#####	^(\d{5})$	si,ta,en	1227603		
-// LR	LBR	430	LI	Liberia	Monrovia	111370	4818977	AF	.lr	LRD	Dollar	231	####	^(\d{4})$	en-LR	2275384	SL,CI,GN	
-// LS	LSO	426	LT	Lesotho	Maseru	30355	2108132	AF	.ls	LSL	Loti	266	###	^(\d{3})$	en-LS,st,zu,xh	932692	ZA	
-// LT	LTU	440	LH	Lithuania	Vilnius	65200	2789533	EU	.lt	EUR	Euro	370	LT-#####	^(?:LT)*(\d{5})$	lt,ru,pl	597427	PL,BY,RU,LV	
-// LU	LUX	442	LU	Luxembourg	Luxembourg	2586	607728	EU	.lu	EUR	Euro	352	L-####	^(?:L-)?\d{4}$	lb,de-LU,fr-LU	2960313	DE,BE,FR	
-// LV	LVA	428	LG	Latvia	Riga	64589	1926542	EU	.lv	EUR	Euro	371	LV-####	^(?:LV)*(\d{4})$	lv,ru,lt	458258	LT,EE,BY,RU	
-// LY	LBY	434	LY	Libya	Tripoli	1759540	6678567	AF	.ly	LYD	Dinar	218			ar-LY,it,en	2215636	TD,NE,DZ,SD,TN,EG	
-// MA	MAR	504	MO	Morocco	Rabat	446550	36029138	AF	.ma	MAD	Dirham	212	#####	^(\d{5})$	ar-MA,ber,fr	2542007	DZ,EH,ES	
-// MC	MCO	492	MN	Monaco	Monaco	1.95	38682	EU	.mc	EUR	Euro	377	#####	^(\d{5})$	fr-MC,en,it	2993457	FR	
-// MD	MDA	498	MD	Moldova	Chisinau	33843	3545883	EU	.md	MDL	Leu	373	MD-####	^MD-\d{4}$	ro,ru,gag,tr	617790	RO,UA	
-// ME	MNE	499	MJ	Montenegro	Podgorica	14026	622345	EU	.me	EUR	Euro	382	#####	^(\d{5})$	sr,hu,bs,sq,hr,rom	3194884	AL,HR,BA,RS,XK	
-// MF	MAF	663	RN	Saint Martin	Marigot	53	37264	NA	.gp	EUR	Euro	590	#####	^(\d{5})$	fr	3578421	SX	
-// MG	MDG	450	MA	Madagascar	Antananarivo	587040	26262368	AF	.mg	MGA	Ariary	261	###	^(\d{3})$	fr-MG,mg	1062947		
-// MH	MHL	584	RM	Marshall Islands	Majuro	181.3	58413	OC	.mh	USD	Dollar	692	#####-####	^969\d{2}(-\d{4})$	mh,en-MH	2080185		
-// MK	MKD	807	MK	North Macedonia	Skopje	25333	2082958	EU	.mk	MKD	Denar	389	####	^(\d{4})$	mk,sq,tr,rmm,sr	718075	AL,GR,BG,RS,XK	
-// ML	MLI	466	ML	Mali	Bamako	1240000	19077690	AF	.ml	XOF	Franc	223			fr-ML,bm	2453866	SN,NE,DZ,CI,GN,MR,BF	
-// MM	MMR	104	BM	Myanmar	Nay Pyi Taw	678500	53708395	AS	.mm	MMK	Kyat	95	#####	^(\d{5})$	my	1327865	CN,LA,TH,BD,IN	
-// MN	MNG	496	MG	Mongolia	Ulaanbaatar	1565000	3170208	AS	.mn	MNT	Tugrik	976	######	^(\d{6})$	mn,ru	2029969	CN,RU	
-// MO	MAC	446	MC	Macao	Macao	254	631636	AS	.mo	MOP	Pataca	853			zh,zh-MO,pt	1821275		
-// MP	MNP	580	CQ	Northern Mariana Islands	Saipan	477	56882	OC	.mp	USD	Dollar	+1-670	#####	^9695\d{1}$	fil,tl,zh,ch-MP,en-MP	4041468		
-// MQ	MTQ	474	MB	Martinique	Fort-de-France	1100	432900	NA	.mq	EUR	Euro	596	#####	^(\d{5})$	fr-MQ	3570311		
-// MR	MRT	478	MR	Mauritania	Nouakchott	1030700	4403319	AF	.mr	MRU	Ouguiya	222			ar-MR,fuc,snk,fr,mey,wo	2378080	SN,DZ,EH,ML	
-// MS	MSR	500	MH	Montserrat	Plymouth	102	9341	NA	.ms	XCD	Dollar	+1-664			en-MS	3578097		
-// MT	MLT	470	MT	Malta	Valletta	316	483530	EU	.mt	EUR	Euro	356	@@@ ####	^[A-Z]{3}\s?\d{4}$	mt,en-MT	2562770		
-// MU	MUS	480	MP	Mauritius	Port Louis	2040	1265303	AF	.mu	MUR	Rupee	230			en-MU,bho,fr	934292		
-// MV	MDV	462	MV	Maldives	Male	300	515696	AS	.mv	MVR	Rufiyaa	960	#####	^(\d{5})$	dv,en	1282028		
-// MW	MWI	454	MI	Malawi	Lilongwe	118480	17563749	AF	.mw	MWK	Kwacha	265	######	^(\d{6})$	ny,yao,tum,swk	927384	TZ,MZ,ZM	
-// MX	MEX	484	MX	Mexico	Mexico City	1972550	126190788	NA	.mx	MXN	Peso	52	#####	^(\d{5})$	es-MX	3996063	GT,US,BZ	
-// MY	MYS	458	MY	Malaysia	Kuala Lumpur	329750	31528585	AS	.my	MYR	Ringgit	60	#####	^(\d{5})$	ms-MY,en,zh,ta,te,ml,pa,th	1733045	BN,TH,ID	
-// MZ	MOZ	508	MZ	Mozambique	Maputo	801590	29495962	AF	.mz	MZN	Metical	258	####	^(\d{4})$	pt-MZ,vmw	1036973	ZW,TZ,SZ,ZA,ZM,MW	
-// NA	NAM	516	WA	Namibia	Windhoek	825418	2448255	AF	.na	NAD	Dollar	264			en-NA,af,de,hz,naq	3355338	ZA,BW,ZM,AO	
-// NC	NCL	540	NC	New Caledonia	Noumea	19060	284060	OC	.nc	XPF	Franc	687	#####	^(\d{5})$	fr-NC	2139685		
-// NE	NER	562	NG	Niger	Niamey	1267000	22442948	AF	.ne	XOF	Franc	227	####	^(\d{4})$	fr-NE,ha,kr,dje	2440476	TD,BJ,DZ,LY,BF,NG,ML	
-// NF	NFK	574	NF	Norfolk Island	Kingston	34.6	1828	OC	.nf	AUD	Dollar	672	####	^(\d{4})$	en-NF	2155115		
-// NG	NGA	566	NI	Nigeria	Abuja	923768	195874740	AF	.ng	NGN	Naira	234	######	^(\d{6})$	en-NG,ha,yo,ig,ff	2328926	TD,NE,BJ,CM	
-// NI	NIC	558	NU	Nicaragua	Managua	129494	6465513	NA	.ni	NIO	Cordoba	505	###-###-#	^(\d{7})$	es-NI,en	3617476	CR,HN	
-// NL	NLD	528	NL	The Netherlands	Amsterdam	41526	17231017	EU	.nl	EUR	Euro	31	#### @@	^(\d{4}\s?[a-zA-Z]{2})$	nl-NL,fy-NL	2750405	DE,BE	
-// NO	NOR	578	NO	Norway	Oslo	324220	5314336	EU	.no	NOK	Krone	47	####	^(\d{4})$	no,nb,nn,se,fi	3144096	FI,RU,SE	
-// NP	NPL	524	NP	Nepal	Kathmandu	140800	28087871	AS	.np	NPR	Rupee	977	#####	^(\d{5})$	ne,en	1282988	CN,IN	
-// NR	NRU	520	NR	Nauru	Yaren	21	12704	OC	.nr	AUD	Dollar	674			na,en-NR	2110425		
-// NU	NIU	570	NE	Niue	Alofi	260	2166	OC	.nu	NZD	Dollar	683			niu,en-NU	4036232		
-// NZ	NZL	554	NZ	New Zealand	Wellington	268680	4885500	OC	.nz	NZD	Dollar	64	####	^(\d{4})$	en-NZ,mi	2186224		
-// OM	OMN	512	MU	Oman	Muscat	212460	4829483	AS	.om	OMR	Rial	968	###	^(\d{3})$	ar-OM,en,bal,ur	286963	SA,YE,AE	
-// PA	PAN	591	PM	Panama	Panama City	78200	4176873	NA	.pa	PAB	Balboa	507	#####	^(\d{5})$	es-PA,en	3703430	CR,CO	
-// PE	PER	604	PE	Peru	Lima	1285220	31989256	SA	.pe	PEN	Sol	51	#####	^(\d{5})$	es-PE,qu,ay	3932488	EC,CL,BO,BR,CO	
-// PF	PYF	258	FP	French Polynesia	Papeete	4167	277679	OC	.pf	XPF	Franc	689	#####	^((97|98)7\d{2})$	fr-PF,ty	4030656		
-// PG	PNG	598	PP	Papua New Guinea	Port Moresby	462840	8606316	OC	.pg	PGK	Kina	675	###	^(\d{3})$	en-PG,ho,meu,tpi	2088628	ID	
-// PH	PHL	608	RP	Philippines	Manila	300000	106651922	AS	.ph	PHP	Peso	63	####	^(\d{4})$	tl,en-PH,fil,ceb,ilo,hil,war,pam,bik,bcl,pag,mrw,tsg,mdh,cbk,krj,sgd,msb,akl,ibg,yka,mta,abx	1694008		
-// PK	PAK	586	PK	Pakistan	Islamabad	803940	212215030	AS	.pk	PKR	Rupee	92	#####	^(\d{5})$	ur-PK,en-PK,pa,sd,ps,brh	1168579	CN,AF,IR,IN	
-// PL	POL	616	PL	Poland	Warsaw	312685	37978548	EU	.pl	PLN	Zloty	48	##-###	^\d{2}-\d{3}$	pl	798544	DE,LT,SK,CZ,BY,UA,RU	
-// PM	SPM	666	SB	Saint Pierre and Miquelon	Saint-Pierre	242	7012	NA	.pm	EUR	Euro	508	#####	^(97500)$	fr-PM	3424932		
-// PN	PCN	612	PC	Pitcairn	Adamstown	47	46	OC	.pn	NZD	Dollar	870			en-PN	4030699		
-// PR	PRI	630	RQ	Puerto Rico	San Juan	9104	3195153	NA	.pr	USD	Dollar	+1-787 and 1-939	#####-####	^00[679]\d{2}(?:-\d{4})?$	en-PR,es-PR	4566966		
-// PS	PSE	275	WE	Palestinian Territory	East Jerusalem	5970	4569087	AS	.ps	ILS	Shekel	970			ar-PS	6254930	JO,IL,EG	
-// PT	PRT	620	PO	Portugal	Lisbon	92391	10281762	EU	.pt	EUR	Euro	351	####-###	^\d{4}-\d{3}\s?[a-zA-Z]{0,25}$	pt-PT,mwl	2264397	ES	
-// PW	PLW	585	PS	Palau	Melekeok	458	17907	OC	.pw	USD	Dollar	680	96940	^(96940)$	pau,sov,en-PW,tox,ja,fil,zh	1559582		
-// PY	PRY	600	PA	Paraguay	Asuncion	406750	6956071	SA	.py	PYG	Guarani	595	####	^(\d{4})$	es-PY,gn	3437598	BO,BR,AR	
-// QA	QAT	634	QA	Qatar	Doha	11437	2781677	AS	.qa	QAR	Rial	974			ar-QA,es	289688	SA	
-// RE	REU	638	RE	Reunion	Saint-Denis	2517	776948	AF	.re	EUR	Euro	262	#####	^((97|98)(4|7|8)\d{2})$	fr-RE	935317		
-// RO	ROU	642	RO	Romania	Bucharest	237500	19473936	EU	.ro	RON	Leu	40	######	^(\d{6})$	ro,hu,rom	798549	MD,HU,UA,BG,RS	
-// RS	SRB	688	RI	Serbia	Belgrade	88361	6982084	EU	.rs	RSD	Dinar	381	######	^(\d{6})$	sr,hu,bs,rom	6290252	AL,HU,MK,RO,HR,BA,BG,ME,XK	
-// RU	RUS	643	RS	Russia	Moscow	17100000	144478050	EU	.ru	RUB	Ruble	7	######	^(\d{6})$	ru,tt,xal,cau,ady,kv,ce,tyv,cv,udm,tut,mns,bua,myv,mdf,chm,ba,inh,kbd,krc,av,sah,nog	2017370	GE,CN,BY,UA,KZ,LV,PL,EE,LT,FI,MN,NO,AZ,KP	
-// RW	RWA	646	RW	Rwanda	Kigali	26338	12301939	AF	.rw	RWF	Franc	250			rw,en-RW,fr-RW,sw	49518	TZ,CD,BI,UG	
-// SA	SAU	682	SA	Saudi Arabia	Riyadh	1960582	33699947	AS	.sa	SAR	Rial	966	#####	^(\d{5})$	ar-SA	102358	QA,OM,IQ,YE,JO,AE,KW	
-// SB	SLB	090	BP	Solomon Islands	Honiara	28450	652858	OC	.sb	SBD	Dollar	677			en-SB,tpi	2103350		
-// SC	SYC	690	SE	Seychelles	Victoria	455	96762	AF	.sc	SCR	Rupee	248			en-SC,fr-SC	241170		
-// SD	SDN	729	SU	Sudan	Khartoum	1861484	41801533	AF	.sd	SDG	Pound	249	#####	^(\d{5})$	ar-SD,en,fia	366755	SS,TD,EG,ET,ER,LY,CF	
-// SS	SSD	728	OD	South Sudan	Juba	644329	8260490	AF	.ss	SSP	Pound	211			en	7909807	CD,CF,ET,KE,SD,UG	
-// SE	SWE	752	SW	Sweden	Stockholm	449964	10183175	EU	.se	SEK	Krona	46	### ##	^(?:SE)?\d{3}\s\d{2}$	sv-SE,se,sma,fi-SE	2661886	NO,FI	
-// SG	SGP	702	SN	Singapore	Singapore	692.7	5638676	AS	.sg	SGD	Dollar	65	######	^(\d{6})$	cmn,en-SG,ms-SG,ta-SG,zh-SG	1880251		
-// SH	SHN	654	SH	Saint Helena	Jamestown	410	7460	AF	.sh	SHP	Pound	290	STHL 1ZZ	^(STHL1ZZ)$	en-SH	3370751		
-// SI	SVN	705	SI	Slovenia	Ljubljana	20273	2067372	EU	.si	EUR	Euro	386	####	^(?:SI)*(\d{4})$	sl,sh	3190538	HU,IT,HR,AT	
-// SJ	SJM	744	SV	Svalbard and Jan Mayen	Longyearbyen	62049	2550	EU	.sj	NOK	Krone	47	####	^(\d{4})$	no,ru	607072		
-// SK	SVK	703	LO	Slovakia	Bratislava	48845	5447011	EU	.sk	EUR	Euro	421	### ##	^\d{3}\s?\d{2}$	sk,hu	3057568	PL,HU,CZ,UA,AT	
-// SL	SLE	694	SL	Sierra Leone	Freetown	71740	7650154	AF	.sl	SLL	Leone	232			en-SL,men,tem	2403846	LR,GN	
-// SM	SMR	674	SM	San Marino	San Marino	61.2	33785	EU	.sm	EUR	Euro	378	4789#	^(4789\d)$	it-SM	3168068	IT	
-// SN	SEN	686	SG	Senegal	Dakar	196190	15854360	AF	.sn	XOF	Franc	221	#####	^(\d{5})$	fr-SN,wo,fuc,mnk	2245662	GN,MR,GW,GM,ML	
-// SO	SOM	706	SO	Somalia	Mogadishu	637657	15008154	AF	.so	SOS	Shilling	252	@@  #####	^([A-Z]{2}\d{5})$	so-SO,ar-SO,it,en-SO	51537	ET,KE,DJ	
-// SR	SUR	740	NS	Suriname	Paramaribo	163270	575991	SA	.sr	SRD	Dollar	597			nl-SR,en,srn,hns,jv	3382998	GY,BR,GF	
-// ST	STP	678	TP	Sao Tome and Principe	Sao Tome	1001	197700	AF	.st	STN	Dobra	239			pt-ST	2410758		
-// SV	SLV	222	ES	El Salvador	San Salvador	21040	6420744	NA	.sv	USD	Dollar	503	CP ####	^(?:CP)*(\d{4})$	es-SV	3585968	GT,HN	
-// SX	SXM	534	NN	Sint Maarten	Philipsburg	21	40654	NA	.sx	ANG	Guilder	599			nl,en	7609695	MF	
-// SY	SYR	760	SY	Syria	Damascus	185180	16906283	AS	.sy	SYP	Pound	963			ar-SY,ku,hy,arc,fr,en	163843	IQ,JO,IL,TR,LB	
-// SZ	SWZ	748	WZ	Eswatini	Mbabane	17363	1136191	AF	.sz	SZL	Lilangeni	268	@###	^([A-Z]\d{3})$	en-SZ,ss-SZ	934841	ZA,MZ	
-// TC	TCA	796	TK	Turks and Caicos Islands	Cockburn Town	430	37665	NA	.tc	USD	Dollar	+1-649	TKCA 1ZZ	^(TKCA 1ZZ)$	en-TC	3576916		
-// TD	TCD	148	CD	Chad	N'Djamena	1284000	15477751	AF	.td	XAF	Franc	235			fr-TD,ar-TD,sre	2434508	NE,LY,CF,SD,CM,NG	
-// TF	ATF	260	FS	French Southern Territories	Port-aux-Francais	7829	140	AN	.tf	EUR	Euro				fr	1546748		
-// TG	TGO	768	TO	Togo	Lome	56785	7889094	AF	.tg	XOF	Franc	228			fr-TG,ee,hna,kbp,dag,ha	2363686	BJ,GH,BF	
-// TH	THA	764	TH	Thailand	Bangkok	514000	69428524	AS	.th	THB	Baht	66	#####	^(\d{5})$	th,en	1605651	LA,MM,KH,MY	
-// TJ	TJK	762	TI	Tajikistan	Dushanbe	143100	9100837	AS	.tj	TJS	Somoni	992	######	^(\d{6})$	tg,ru	1220409	CN,AF,KG,UZ	
-// TK	TKL	772	TL	Tokelau		10	1466	OC	.tk	NZD	Dollar	690			tkl,en-TK	4031074		
-// TL	TLS	626	TT	Timor Leste	Dili	15007	1267972	OC	.tl	USD	Dollar	670			tet,pt-TL,id,en	1966436	ID	
-// TM	TKM	795	TX	Turkmenistan	Ashgabat	488100	5850908	AS	.tm	TMT	Manat	993	######	^(\d{6})$	tk,ru,uz	1218197	AF,IR,UZ,KZ	
-// TN	TUN	788	TS	Tunisia	Tunis	163610	11565204	AF	.tn	TND	Dinar	216	####	^(\d{4})$	ar-TN,fr	2464461	DZ,LY	
-// TO	TON	776	TN	Tonga	Nuku'alofa	748	103197	OC	.to	TOP	Pa'anga	676			to,en-TO	4032283		
-// TR	TUR	792	TU	Turkey	Ankara	780580	82319724	AS	.tr	TRY	Lira	90	#####	^(\d{5})$	tr-TR,ku,diq,az,av	298795	SY,GE,IQ,IR,GR,AM,AZ,BG	
-// TT	TTO	780	TD	Trinidad and Tobago	Port of Spain	5128	1389858	NA	.tt	TTD	Dollar	+1-868			en-TT,hns,fr,es,zh	3573591		
-// TV	TUV	798	TV	Tuvalu	Funafuti	26	11508	OC	.tv	AUD	Dollar	688			tvl,en,sm,gil	2110297		
-// TW	TWN	158	TW	Taiwan	Taipei	35980	23451837	AS	.tw	TWD	Dollar	886	#####	^(\d{5})$	zh-TW,zh,nan,hak	1668284		
-// TZ	TZA	834	TZ	Tanzania	Dodoma	945087	56318348	AF	.tz	TZS	Shilling	255			sw-TZ,en,ar	149590	MZ,KE,CD,RW,ZM,BI,UG,MW	
-// UA	UKR	804	UP	Ukraine	Kyiv	603700	44622516	EU	.ua	UAH	Hryvnia	380	#####	^(\d{5})$	uk,ru-UA,rom,pl,hu	690791	PL,MD,HU,SK,BY,RO,RU	
-// UG	UGA	800	UG	Uganda	Kampala	236040	42723139	AF	.ug	UGX	Shilling	256			en-UG,lg,sw,ar	226074	TZ,KE,SS,CD,RW	
-// UM	UMI	581		United States Minor Outlying Islands		0	0	OC	.um	USD	Dollar	1			en-UM	5854968		
-// US	USA	840	US	United States	Washington	9629091	327167434	NA	.us	USD	Dollar	1	#####-####	^\d{5}(-\d{4})?$	en-US,es-US,haw,fr	6252001	CA,MX,CU	
-// UY	URY	858	UY	Uruguay	Montevideo	176220	3449299	SA	.uy	UYU	Peso	598	#####	^(\d{5})$	es-UY	3439705	BR,AR	
-// UZ	UZB	860	UZ	Uzbekistan	Tashkent	447400	32955400	AS	.uz	UZS	Som	998	######	^(\d{6})$	uz,ru,tg	1512440	TM,AF,KG,TJ,KZ	
-// VA	VAT	336	VT	Vatican	Vatican City	0.44	921	EU	.va	EUR	Euro	379	#####	^(\d{5})$	la,it,fr	3164670	IT	
-// VC	VCT	670	VC	Saint Vincent and the Grenadines	Kingstown	389	110211	NA	.vc	XCD	Dollar	+1-784			en-VC,fr	3577815		
-// VE	VEN	862	VE	Venezuela	Caracas	912050	28870195	SA	.ve	VES	Bolivar Soberano	58	####	^(\d{4})$	es-VE	3625428	GY,BR,CO	
-// VG	VGB	092	VI	British Virgin Islands	Road Town	153	29802	NA	.vg	USD	Dollar	+1-284			en-VG	3577718		
-// VI	VIR	850	VQ	U.S. Virgin Islands	Charlotte Amalie	352	106977	NA	.vi	USD	Dollar	+1-340	#####-####	^008\d{2}(?:-\d{4})?$	en-VI	4796775		
-// VN	VNM	704	VM	Vietnam	Hanoi	329560	95540395	AS	.vn	VND	Dong	84	######	^(\d{6})$	vi,en,fr,zh,km	1562822	CN,LA,KH	
-// VU	VUT	548	NH	Vanuatu	Port Vila	12200	292680	OC	.vu	VUV	Vatu	678			bi,en-VU,fr-VU	2134431		
-// WF	WLF	876	WF	Wallis and Futuna	Mata Utu	274	16025	OC	.wf	XPF	Franc	681	#####	^(986\d{2})$	wls,fud,fr-WF	4034749		
-// WS	WSM	882	WS	Samoa	Apia	2944	196130	OC	.ws	WST	Tala	685			sm,en-WS	4034894		
-// YE	YEM	887	YM	Yemen	Sanaa	527970	28498687	AS	.ye	YER	Rial	967			ar-YE	69543	SA,OM	
-// YT	MYT	175	MF	Mayotte	Mamoudzou	374	279471	AF	.yt	EUR	Euro	262	#####	^(\d{5})$	fr-YT	1024031		
-// ZA	ZAF	710	SF	South Africa	Pretoria	1219912	57779622	AF	.za	ZAR	Rand	27	####	^(\d{4})$	zu,xh,af,nso,en-ZA,tn,st,ts,ss,ve,nr	953987	ZW,SZ,MZ,BW,NA,LS	
-// ZM	ZMB	894	ZA	Zambia	Lusaka	752614	17351822	AF	.zm	ZMW	Kwacha	260	#####	^(\d{5})$	en-ZM,bem,loz,lun,lue,ny,toi	895949	ZW,TZ,MZ,CD,NA,MW,AO	
-// ZW	ZWE	716	ZI	Zimbabwe	Harare	390580	14439018	AF	.zw	ZWL	Dollar	263			en-ZW,sn,nr,nd	878675	ZA,MZ,BW,ZM	
-// CS	SCG	891	YI	Serbia and Montenegro	Belgrade	102350	10829175	EU	.cs	RSD	Dinar	381	#####	^(\d{5})$	cu,hu,sq,sr	8505033	AL,HU,MK,RO,HR,BA,BG	
-// AN	ANT	530	NT	Netherlands Antilles	Willemstad	960	300000	NA	.an	ANG	Guilder	599			nl-AN,en,es	8505032	GP	
-
 pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(|| { // Feel free to submit pull requests!
     let region_map = task::block_on(build_region_map());
     let region_map = match region_map {
@@ -342,6 +151,13 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         enterprises: None,
         misc: Some(vec!["azgayin zhoghov".into()]),
     }.get_region_vec(), "Armenia".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "AN"),
+        names: Some(vec!["netherlands antilles".into()]),
+        demonyms: Some(vec!["netherlands antillean".into()]),
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Netherlands Antilles".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "AO"),
         names: Some(vec!["angola".into()]),
@@ -776,21 +592,202 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         enterprises: None,
         misc: Some(vec!["house of federation".into(), "house of people's representatives".into(), "prosperity party".into(), "national movement of amhara".into()]),
     }.get_region_vec(), "Ethiopia".into()));
-
     map.push((RegionKeyphrases {
-        automated: get_automated_keyphrases(&region_map, "KH"),
-        names: Some(vec!["cambodia".into()]),
-        demonyms: Some(vec!["khmer".into()]),
+        automated: get_automated_keyphrases(&region_map, "FI"),
+        names: Some(vec!["finland".into()]),
+        demonyms: Some(vec!["finn".into()]),
         enterprises: None,
-        misc: Some(vec!["funcinpec".into()]),
-    }.get_region_vec(), "Cambodia".into()));
+        misc: Some(vec!["eduskunta".into(), "national coalition party".into(), ]),
+    }.get_region_vec(), "Finland".into()));
     map.push((RegionKeyphrases {
-        automated: get_automated_keyphrases(&region_map, "KM"),
-        names: Some(vec!["comoros".into()]),
-        demonyms: Some(vec!["comorian".into()]),
+        automated: get_automated_keyphrases(&region_map, "FJ"),
+        names: Some(vec!["fiji".into()]),
+        demonyms: Some(vec!["fijian".into()]), // Strings with length 4 or less are processed before substring checking.
         enterprises: None,
-        misc: Some(vec!["orange party".into(), "republican organization for the future of new generations".into()]),
-    }.get_region_vec(), "Comoros".into()));
+        misc: None,
+    }.get_region_vec(), "Fiji".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "FK"),
+        names: Some(vec!["falkland".into(), "malvinas".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Falkland Islands".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "FM"),
+        names: Some(vec!["micronesia".into(), "fsm".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Micronesia".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "FO"),
+        names: Some(vec!["faroe island".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["logting".into()]),
+    }.get_region_vec(), "Faroe Islands".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "FR"),
+        names: Some(vec!["france".into()]),
+        demonyms: Some(vec!["french".into()]),
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "France".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "GA"),
+        names: Some(vec!["gabon".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["pdg".into()]),
+    }.get_region_vec(), "Gabon".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "GB"),
+        names: Some(vec!["united kingdom".into(), "uk".into()]),
+        demonyms: Some(vec!["british".into()]),
+        enterprises: None,
+        misc: Some(vec!["house of commons".into(), "house of lords".into(), "scottish parliament".into(), "welsh parliament".into(), "northern ireland assembly".into()]),
+    }.get_region_vec(), "United Kingdom".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "GD"),
+        names: Some(vec!["grenada".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Grenada".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "GE"),
+        names: Some(vec!["georgia".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["sakartvelo".into(), "dream".into(), "georgian dream".into()]),
+    }.get_region_vec(), "Georgia".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "GF"),
+        names: Some(vec!["french guiana".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "French Guiana".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "GG"),
+        names: Some(vec!["guernsey".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Guernsey".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "GH"),
+        names: Some(vec!["ghana".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["ndc".into(), "npp".into()]),
+    }.get_region_vec(), "Ghana".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "GI"),
+        names: Some(vec!["gibraltar".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Gibraltar".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "GL"),
+        names: Some(vec!["greenland".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Greenland".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "GM"),
+        names: Some(vec!["gambia".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["ndp".into(), "udp".into()]),
+    }.get_region_vec(), "Gambia".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "GN"),
+        names: Some(vec!["guinea".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["rpg".into(), "upr".into()]),
+    }.get_region_vec(), "Guinea".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "GP"),
+        names: Some(vec!["guadeloupe".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Guadeloupe".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "GQ"),
+        names: Some(vec!["equatorial guinea".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["pdge".into()]),
+    }.get_region_vec(), "Equatorial Guinea".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "GR"),
+        names: Some(vec!["greece".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["hellenic parliament".into(), "syriza".into(), "new democracy".into()]),
+    }.get_region_vec(), "Greece".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "GS"),
+        names: Some(vec!["south georgia".into(), "south sandwich".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "South Georgia and the South Sandwich Islands".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "GT"),
+        names: Some(vec!["guatemala".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["congreso de la republica".into(), "ucn".into(), "vamos".into()]),
+    }.get_region_vec(), "Guatemala".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "GU"),
+        names: Some(vec!["guam".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Guam".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "GW"),
+        names: Some(vec!["guinea-bissau".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["paigc".into()]),
+    }.get_region_vec(), "Guinea-Bissau".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "GY"),
+        names: Some(vec!["guyana".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["pnc".into(), "ppp".into()]),
+    }.get_region_vec(), "Guyana".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "HK"),
+        names: Some(vec!["hong kong".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["legco".into(), "demosisto".into(), "dab".into()]),
+    }.get_region_vec(), "Hong Kong".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "HM"),
+        names: Some(vec!["heard island".into(), "mcdonald island".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Heard Island and McDonald Islands".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "HN"),
+        names: Some(vec!["honduras".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["congress of the republic".into(), "national party".into(), "libre".into()]),
+    }.get_region_vec(), "Honduras".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "HR"),
         names: Some(vec!["croatia".into()]),
@@ -799,12 +796,1069 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         misc: Some(vec!["sabor".into(), "banski dvori".into(), "hdz".into()]),
     }.get_region_vec(), "Croatia".into()));
     map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "HT"),
+        names: Some(vec!["haiti".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["senat".into(), "chamber of deputies".into(), "phtk".into(), "fanmi lavalas".into()]),
+    }.get_region_vec(), "Haiti".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "HU"),
+        names: Some(vec!["hungary".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["orszaggyules".into(), "fidesz".into(), "jobbik".into()]),
+    }.get_region_vec(), "Hungary".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "ID"),
+        names: Some(vec!["indonesia".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["dpr".into(), "mpr".into(), "golkar".into(), "pdi-p".into()]),
+    }.get_region_vec(), "Indonesia".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "IE"),
+        names: Some(vec!["ireland".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["dail eireann".into(), "fine gael".into(), "fianna fail".into()]),
+    }.get_region_vec(), "Ireland".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "IL"),
+        names: Some(vec!["israel".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["knesset".into(), "likud".into(), "blue and white".into()]),
+    }.get_region_vec(), "Israel".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "IM"),
+        names: Some(vec!["isle of man".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Isle of Man".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "IN"),
+        names: Some(vec!["india".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["lok sabha".into(), "rajya sabha".into(), "bjp".into(), "inc".into()]),
+    }.get_region_vec(), "India".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "IO"),
+        names: Some(vec!["british indian ocean territory".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "British Indian Ocean Territory".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "IQ"),
+        names: Some(vec!["iraq".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["council of representatives".into(), "krg".into(), "puk".into(), "kdp".into()]),
+    }.get_region_vec(), "Iraq".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "IR"),
+        names: Some(vec!["iran".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["majlis".into(), "guardian council".into(), "principlists".into(), "reformists".into()]),
+    }.get_region_vec(), "Iran".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "IS"),
+        names: Some(vec!["iceland".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["althing".into(), "sja".into(), "samfylkingin".into()]),
+    }.get_region_vec(), "Iceland".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "IT"),
+        names: Some(vec!["italy".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["camera dei deputati".into(), "senato della repubblica".into(), "m5s".into(), "pd".into()]),
+    }.get_region_vec(), "Italy".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "JE"),
+        names: Some(vec!["jersey".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Jersey".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "JM"),
+        names: Some(vec!["jamaica".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["house of representatives".into(), "jlp".into(), "pnp".into()]),
+    }.get_region_vec(), "Jamaica".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "JO"),
+        names: Some(vec!["jordan".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["house of representatives".into(), "house of senate".into(), "hakama".into(), "muslim brotherhood".into()]),
+    }.get_region_vec(), "Jordan".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "JP"),
+        names: Some(vec!["japan".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national diet".into(), "ldp".into(), "dpj".into()]),
+    }.get_region_vec(), "Japan".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "KE"),
+        names: Some(vec!["kenya".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "senate".into(), "jubilee party".into(), "odm".into()]),
+    }.get_region_vec(), "Kenya".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "KG"),
+        names: Some(vec!["kyrgyzstan".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["jogorku kenesh".into(), "sdp".into(), "atambaev".into()]),
+    }.get_region_vec(), "Kyrgyzstan".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "KH"),
+        names: Some(vec!["cambodia".into()]),
+        demonyms: Some(vec!["khmer".into()]),
+        enterprises: None,
+        misc: Some(vec!["funcinpec".into()]),
+    }.get_region_vec(), "Cambodia".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "KI"),
+        names: Some(vec!["kiribati".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["house of assembly".into(), "teberio".into()]),
+    }.get_region_vec(), "Kiribati".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "KM"),
+        names: Some(vec!["comoros".into()]),
+        demonyms: Some(vec!["comorian".into()]),
+        enterprises: None,
+        misc: Some(vec!["orange party".into(), "republican organization for the future of new generations".into()]),
+    }.get_region_vec(), "Comoros".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "KN"),
+        names: Some(vec!["saint kitts".into(), "nevis".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Saint Kitts and Nevis".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "KP"),
+        names: Some(vec!["north korea".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["supreme people's assembly".into(), "kwp".into(), "kpa".into()]),
+    }.get_region_vec(), "North Korea".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "KR"),
+        names: Some(vec!["south korea".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "saenuri".into(), "minjoo".into()]),
+    }.get_region_vec(), "South Korea".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "KW"),
+        names: Some(vec!["kuwait".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "cabinet".into(), "kdp".into(), "pjp".into()]),
+    }.get_region_vec(), "Kuwait".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "KY"),
+        names: Some(vec!["cayman island".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Cayman Islands".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "KZ"),
+        names: Some(vec!["kazakhstan".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["mazhilis".into(), "nur otan".into(), "ak zhol".into()]),
+    }.get_region_vec(), "Kazakhstan".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "LA"),
+        names: Some(vec!["laos".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "lprp".into()]),
+    }.get_region_vec(), "Laos".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "LB"),
+        names: Some(vec!["lebanon".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "march 14 alliance".into(), "march 8 alliance".into()]),
+    }.get_region_vec(), "Lebanon".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "LC"),
+        names: Some(vec!["saint lucia".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Saint Lucia".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "LI"),
+        names: Some(vec!["liechtenstein".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["landtag".into(), "vaterland".into()]),
+    }.get_region_vec(), "Liechtenstein".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "LK"),
+        names: Some(vec!["sri lanka".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "unp".into(), "slfp".into()]),
+    }.get_region_vec(), "Sri Lanka".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "LR"),
+        names: Some(vec!["liberia".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["house of representatives".into(), "senate".into(), "up".into(), "cpp".into()]),
+    }.get_region_vec(), "Liberia".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "LS"),
+        names: Some(vec!["lesotho".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "abc".into(), "bnp".into()]),
+    }.get_region_vec(), "Lesotho".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "LT"),
+        names: Some(vec!["lithuania".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["seimas".into(), "ts-lkd".into(), "lsdp".into()]),
+    }.get_region_vec(), "Lithuania".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "LU"),
+        names: Some(vec!["luxembourg".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["chamber of deputies".into(), "csv".into(), "dp".into()]),
+    }.get_region_vec(), "Luxembourg".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "LV"),
+        names: Some(vec!["latvia".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["saeima".into(), "sdp".into(), "jkp".into()]),
+    }.get_region_vec(), "Latvia".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "LY"),
+        names: Some(vec!["libya".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["house of representatives".into(), "gna".into(), "hoc".into()]),
+    }.get_region_vec(), "Libya".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "MA"),
+        names: Some(vec!["morocco".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "pjd".into(), "rni".into()]),
+    }.get_region_vec(), "Morocco".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "MC"),
+        names: Some(vec!["monaco".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["conseil national".into(), "upr".into()]),
+    }.get_region_vec(), "Monaco".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "MD"),
+        names: Some(vec!["moldova".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "psrm".into(), "pdm".into()]),
+    }.get_region_vec(), "Moldova".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "ME"),
+        names: Some(vec!["montenegro".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "dps".into(), "df".into()]),
+    }.get_region_vec(), "Montenegro".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "MF"),
+        names: Some(vec!["saint martin".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Saint Martin".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "MG"),
+        names: Some(vec!["madagascar".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "hvm".into(), "tim".into()]),
+    }.get_region_vec(), "Madagascar".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "MH"),
+        names: Some(vec!["marshall island".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Marshall Islands".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "MK"),
+        names: Some(vec!["north macedonia".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["sobranie".into(), "vmro-dpmne".into(), "sdsm".into()]),
+    }.get_region_vec(), "North Macedonia".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "ML"),
+        names: Some(vec!["mali".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "rally for mali".into(), "adema".into()]),
+    }.get_region_vec(), "Mali".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "MM"),
+        names: Some(vec!["myanmar".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["pyidaungsu hluttaw".into(), "usdp".into(), "nld".into()]),
+    }.get_region_vec(), "Myanmar".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "MN"),
+        names: Some(vec!["mongolia".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["state great khural".into(), "mpp".into(), "dp".into()]),
+    }.get_region_vec(), "Mongolia".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "MO"),
+        names: Some(vec!["macau".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["legislative assembly".into(), "dab".into(), "adp".into()]),
+    }.get_region_vec(), "Macau".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "MP"),
+        names: Some(vec!["northern mariana island".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Northern Mariana Islands".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "MQ"),
+        names: Some(vec!["martinique".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Martinique".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "MR"),
+        names: Some(vec!["mauritania".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "upr".into(), "rfd".into()]),
+    }.get_region_vec(), "Mauritania".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "MS"),
+        names: Some(vec!["montserrat".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Montserrat".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "MT"),
+        names: Some(vec!["malta".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["house of representatives".into(), "pn".into(), "pl".into()]),
+    }.get_region_vec(), "Malta".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "MU"),
+        names: Some(vec!["mauritius".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into()]),
+    }.get_region_vec(), "Mauritius".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "MV"),
+        names: Some(vec!["maldives".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["people's majlis".into(), "mdp".into(), "ppm".into()]),
+    }.get_region_vec(), "Maldives".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "MW"),
+        names: Some(vec!["malawi".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "dpp".into(), "udf".into()]),
+    }.get_region_vec(), "Malawi".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "MX"),
+        names: Some(vec!["mexico".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["congreso de la union".into(), "morena".into(), "pan".into()]),
+    }.get_region_vec(), "Mexico".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "MY"),
+        names: Some(vec!["malaysia".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "bn".into(), "ph".into()]),
+    }.get_region_vec(), "Malaysia".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "MZ"),
+        names: Some(vec!["mozambique".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["assembly of the republic".into(), "frelimo".into(), "renamo".into()]),
+    }.get_region_vec(), "Mozambique".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "NA"),
+        names: Some(vec!["namibia".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "swapo".into(), "dtc".into()]),
+    }.get_region_vec(), "Namibia".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "NC"),
+        names: Some(vec!["new caledonia".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "New Caledonia".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "NE"),
+        names: Some(vec!["niger".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "pn".into(), "mnsd".into()]),
+    }.get_region_vec(), "Niger".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "NF"),
+        names: Some(vec!["norfolk island".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Norfolk Island".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "NG"),
+        names: Some(vec!["nigeria".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "apc".into(), "pdp".into()]),
+    }.get_region_vec(), "Nigeria".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "NI"),
+        names: Some(vec!["nicaragua".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "fsln".into(), "pli".into()]),
+    }.get_region_vec(), "Nicaragua".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "NL"),
+        names: Some(vec!["netherlands".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["tweede kamer".into()]),
+    }.get_region_vec(), "Netherlands".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "NO"),
+        names: Some(vec!["norway".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["storting".into(), "ap".into(), "h".into()]),
+    }.get_region_vec(), "Norway".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "NP"),
+        names: Some(vec!["nepal".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "ncp".into(), "nc".into()]),
+    }.get_region_vec(), "Nepal".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "NR"),
+        names: Some(vec!["nauru".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "anf".into(), "nlp".into()]),
+    }.get_region_vec(), "Nauru".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "NU"),
+        names: Some(vec!["niue".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Niue".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "NZ"),
+        names: Some(vec!["new zealand".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "nzlp".into(), "nznp".into()]),
+    }.get_region_vec(), "New Zealand".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "OM"),
+        names: Some(vec!["oman".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["consultative council".into(), "shura council".into(), "majlis al-shura".into()]),
+    }.get_region_vec(), "Oman".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "PA"),
+        names: Some(vec!["panama".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "prd".into(), "cd".into()]),
+    }.get_region_vec(), "Panama".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "PE"),
+        names: Some(vec!["peru".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["congress".into(), "fujimorismo".into(), "apra".into()]),
+    }.get_region_vec(), "Peru".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "PF"),
+        names: Some(vec!["french polynesia".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "French Polynesia".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "PG"),
+        names: Some(vec!["papua new guinea".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "pnc".into(), "pangu".into()]),
+    }.get_region_vec(), "Papua New Guinea".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "PH"),
+        names: Some(vec!["philippines".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["congress".into(), "duterte".into(), "aquino".into()]),
+    }.get_region_vec(), "Philippines".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "PK"),
+        names: Some(vec!["pakistan".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "senate".into(), "pti".into(), "pml-n".into()]),
+    }.get_region_vec(), "Pakistan".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "PL"),
+        names: Some(vec!["poland".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["sejm".into(), "pis".into(), "po".into()]),
+    }.get_region_vec(), "Poland".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "PM"),
+        names: Some(vec!["saint pierre".into(), "miquelon".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Saint Pierre and Miquelon".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "PN"),
+        names: Some(vec!["pitcairn island".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Pitcairn Islands".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "PR"),
+        names: Some(vec!["puerto rico".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Puerto Rico".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "PS"),
+        names: Some(vec!["palestine".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["legislative council".into(), "plo".into(), "hamas".into()]),
+    }.get_region_vec(), "Palestine".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "PT"),
+        names: Some(vec!["portugal".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["assembly of the republic".into(), "ps".into(), "psd".into()]),
+    }.get_region_vec(), "Portugal".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "PW"),
+        names: Some(vec!["palau".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["house of delegates".into(), "senate".into(), "pdp".into()]),
+    }.get_region_vec(), "Palau".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "PY"),
+        names: Some(vec!["paraguay".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["congress".into(), "colorado".into(), "plra".into()]),
+    }.get_region_vec(), "Paraguay".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "QA"),
+        names: Some(vec!["qatar".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["advisory council".into(), "shura council".into(), "al thani".into()]),
+    }.get_region_vec(), "Qatar".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "RE"),
+        names: Some(vec!["reunion".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Reunion".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "RO"),
+        names: Some(vec!["romania".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "psd".into(), "pnl".into()]),
+    }.get_region_vec(), "Romania".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "RS"),
+        names: Some(vec!["serbia".into()]), //montenegro
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "sns".into(), "sps".into()]),
+    }.get_region_vec(), "Serbia".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "RU"),
+        names: Some(vec!["russia".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["state duma".into(), "united russia".into()]),
+    }.get_region_vec(), "Russia".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "RW"),
+        names: Some(vec!["rwanda".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "rpf".into(), "fdlr".into()]),
+    }.get_region_vec(), "Rwanda".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "SA"),
+        names: Some(vec!["saudi arabia".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["consultative council".into(), "shura council".into(), "al saud".into()]),
+    }.get_region_vec(), "Saudi Arabia".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "SB"),
+        names: Some(vec!["solomon island".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "sdp".into(), "sipa".into()]),
+    }.get_region_vec(), "Solomon Islands".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "SC"),
+        names: Some(vec!["seycheles".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "ppm".into(), "us".into()]),
+    }.get_region_vec(), "Seychelles".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "SD"),
+        names: Some(vec!["sudan".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "ncp".into(), "splm".into()]),
+    }.get_region_vec(), "Sudan".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "SE"),
+        names: Some(vec!["sweden".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["riksdag".into(), "s".into(), "m".into()]),
+    }.get_region_vec(), "Sweden".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "SG"),
+        names: Some(vec!["singapore".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "pap".into(), "wp".into()]),
+    }.get_region_vec(), "Singapore".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "SH"),
+        names: Some(vec!["saint helena".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Saint Helena".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "SI"),
+        names: Some(vec!["slovenia".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "sds".into(), "sdl".into()]),
+    }.get_region_vec(), "Slovenia".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "SJ"),
+        names: Some(vec!["svalbard".into(), "jan mayen".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Svalbard and Jan Mayen".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "SK"),
+        names: Some(vec!["slovakia".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national council".into(), "smer".into(), "sdku".into()]),
+    }.get_region_vec(), "Slovakia".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "SL"),
+        names: Some(vec!["sieera leone".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "apc".into(), "slpp".into()]),
+    }.get_region_vec(), "Sierra Leone".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "SM"),
+        names: Some(vec!["san marino".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["grand and general council".into(), "pdc".into(), "psd".into()]),
+    }.get_region_vec(), "San Marino".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "SN"),
+        names: Some(vec!["senegal".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "apc".into(), "pds".into()]),
+    }.get_region_vec(), "Senegal".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "SO"),
+        names: Some(vec!["somalia".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "tfg".into(), "tnc".into()]),
+    }.get_region_vec(), "Somalia".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "SR"),
+        names: Some(vec!["suriname".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "ndp".into(), "vhp".into()]),
+    }.get_region_vec(), "Suriname".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "SS"),
+        names: Some(vec!["south sudan".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "splm".into(), "ssla".into()]),
+    }.get_region_vec(), "South Sudan".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "ST"),
+        names: Some(vec!["sao tome".into(), "principe".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "adil".into(), "mlstp".into()]),
+    }.get_region_vec(), "Sao Tome and Principe".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "SV"),
+        names: Some(vec!["el salvador".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["legislative assembly".into(), "arena".into(), "fmln".into()]),
+    }.get_region_vec(), "El Salvador".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "SX"),
+        names: Some(vec!["sint maarten".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Sint Maarten".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "SY"),
+        names: Some(vec!["syria".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["people's council".into(), "ba'ath".into(), "snc".into()]),
+    }.get_region_vec(), "Syria".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "SZ"),
+        names: Some(vec!["swaziland".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "tinkhundla".into(), "sdp".into()]),
+    }.get_region_vec(), "Swaziland".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "TC"),
+        names: Some(vec!["turks".into(), "caicos".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Turks and Caicos Islands".into()));
+    map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "TD"),
-        names: None,
-        demonyms: Some(vec!["chadian".into()]),
+        names: Some(vec!["chad".into()]),
+        demonyms: None,
         enterprises: None,
         misc: Some(vec!["national transitional council".into()]),
     }.get_region_vec(), "Chad".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "TF"),
+        names: Some(vec!["french southern territories".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "French Southern Territories".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "TG"),
+        names: Some(vec!["togo".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "unir".into(), "ufc".into()]),
+    }.get_region_vec(), "Togo".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "TH"),
+        names: Some(vec!["thailand".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "pdp".into(), "dpt".into()]),
+    }.get_region_vec(), "Thailand".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "TJ"),
+        names: Some(vec!["tajikistan".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["supreme assembly".into(), "pdpt".into(), "cprf".into()]),
+    }.get_region_vec(), "Tajikistan".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "TK"),
+        names: Some(vec!["tokelau".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Tokelau".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "TL"),
+        names: Some(vec!["timor-leste".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national parliament".into(), "cnrt".into(), "fretilin".into()]),
+    }.get_region_vec(), "Timor-Leste".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "TM"),
+        names: Some(vec!["turkmenistan".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["assembly".into(), "tdp".into(), "dpt".into()]),
+    }.get_region_vec(), "Turkmenistan".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "TN"),
+        names: Some(vec!["tunisia".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["assembly of the representatives of the people".into(), "nidaa tounes".into(), "ennahda".into()]),
+    }.get_region_vec(), "Tunisia".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "TO"),
+        names: Some(vec!["tonga".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "dpfi".into(), "dpt".into()]),
+    }.get_region_vec(), "Tonga".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "TR"),
+        names: Some(vec!["turkey".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["grand national assembly".into(), "akp".into(), "chp".into()]),
+    }.get_region_vec(), "Turkey".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "TT"),
+        names: Some(vec!["trinidad".into(), "tobago".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "pnm".into(), "unc".into()]),
+    }.get_region_vec(), "Trinidad and Tobago".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "TV"),
+        names: Some(vec!["tuvalu".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "tpp".into(), "tva".into()]),
+    }.get_region_vec(), "Tuvalu".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "TW"),
+        names: Some(vec!["taiwan".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["legislative yuan".into(), "kmt".into(), "dpp".into()]),
+    }.get_region_vec(), "Taiwan".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "TZ"),
+        names: Some(vec!["tanzania".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "ccm".into(), "chadema".into()]),
+    }.get_region_vec(), "Tanzania".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "UA"),
+        names: Some(vec!["ukraine".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["verkhovna rada".into(), "servant of the people".into(), "opposition platform".into()]),
+    }.get_region_vec(), "Ukraine".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "UG"),
+        names: Some(vec!["uganda".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "nrm".into(), "fdc".into()]),
+    }.get_region_vec(), "Uganda".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "UM"),
+        names: Some(vec!["united states minor outlying islands".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "United States Minor Outlying Islands".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "US"),
+        names: Some(vec!["united states".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["congress".into(), "democrats".into(), "republicans".into()]),
+    }.get_region_vec(), "United States".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "UY"),
+        names: Some(vec!["uruguay".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["general assembly".into(), "frente amplio".into(), "pn".into()]),
+    }.get_region_vec(), "Uruguay".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "UZ"),
+        names: Some(vec!["uzbekistan".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["supreme assembly".into(), "ldp".into(), "adolat".into()]),
+    }.get_region_vec(), "Uzbekistan".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "VA"),
+        names: Some(vec!["vatican city".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["college of cardinals".into(), "pope".into(), "vatican".into()]),
+    }.get_region_vec(), "Vatican City".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "VC"),
+        names: Some(vec!["saint vincent".into(), "grenadines".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "ulp".into(), "ndp".into()]),
+    }.get_region_vec(), "Saint Vincent and the Grenadines".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "VE"),
+        names: Some(vec!["venezuela".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "psuv".into(), "mud".into()]),
+    }.get_region_vec(), "Venezuela".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "VG"),
+        names: Some(vec!["british virgin islands".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "British Virgin Islands".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "VI"),
+        names: Some(vec!["united states virgin islands".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "United States Virgin Islands".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "VN"),
+        names: Some(vec!["vietnam".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "cpv".into(), "vdp".into()]),
+    }.get_region_vec(), "Vietnam".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "VU"),
+        names: Some(vec!["vanuatu".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "nup".into(), "vp".into()]),
+    }.get_region_vec(), "Vanuatu".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "WF"),
+        names: Some(vec!["wallis".into(), "futuna".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Wallis and Futuna".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "WS"),
+        names: Some(vec!["samoa".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "hrpp".into(), "tsp".into()]),
+    }.get_region_vec(), "Samoa".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "YE"),
+        names: Some(vec!["yemen".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["house of representatives".into(), "gpc".into(), "houthi".into()]),
+    }.get_region_vec(), "Yemen".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "YT"),
+        names: Some(vec!["mayotte".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Mayotte".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "XK"),
+        names: Some(vec!["kosovo".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: None,
+    }.get_region_vec(), "Kosovo".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "ZA"),
+        names: Some(vec!["south africa".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "anc".into(), "da".into()]),
+    }.get_region_vec(), "South Africa".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "ZM"),
+        names: Some(vec!["zambia".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["national assembly".into(), "pf".into(), "upnd".into()]),
+    }.get_region_vec(), "Zambia".into()));
+    map.push((RegionKeyphrases {
+        automated: get_automated_keyphrases(&region_map, "ZW"),
+        names: Some(vec!["zimbabwe".into()]),
+        demonyms: None,
+        enterprises: None,
+        misc: Some(vec!["parliament".into(), "zanu-pf".into(), "mdc".into()]),
+    }.get_region_vec(), "Zimbabwe".into()));
 
     remove_ambiguities(map, vec!["chad".into(), "georgia".into(), "jordan".into(), "turkey".into()].into_par_iter().collect()) //TODO: look at sqlite db for more
 });

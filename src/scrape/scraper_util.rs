@@ -18,12 +18,7 @@ pub async fn get_regions(text: &[&str]) -> Result<Vec<String>, Box<dyn Error>> {
             .collect();
 
     let mut regions = regions.into_par_iter().filter(|s| match s.as_str() {
-        "Chad" | "Georgia" | "Guinea-Bissau" | "Jordan" => false,
-        "Republic of Congo" => {
-            if (!text.contains("The Republic of the Congo") && !text.contains("The Republic of Congo")) &&
-                    (text.contains("Democratic Republic of") || text.contains("DR Congo") || text.contains("Brazzaville")) { false }
-            else { true }
-        }
+        "Chad" | "Georgia" | "Guinea-Bissau" | "Jordan" | "Republic of Congo" => false,
         _ => true,
     }).collect::<Vec<String>>();
 
