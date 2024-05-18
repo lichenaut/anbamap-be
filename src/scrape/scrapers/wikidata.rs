@@ -324,6 +324,8 @@ fn get_property_from_iso(iso_code: &str) -> Option<&str> {
     }
 }
 
+// You are seeing false values for regions because Anbamap cannot correctly match region ISO codes with Wikidata properties.
+// Perhaps the property number and/or region name has changed?
 async fn print_result(name: &str, code: &str, result: &bool) {
     if !*result { tracing::error!("A Wikidata region code's correctness is false! {}", format!("{}, {}: {}", name, code, result)); }
 }
@@ -611,7 +613,4 @@ pub async fn verify_codes() { // Uses Geonames names by default, but this is ove
     print_result("South Africa", "ZA", &verify_iso_match(&client, "ZA", "South Africa").await).await;
     print_result("Zambia", "ZM", &verify_iso_match(&client, "ZM", "Zambia").await).await;
     print_result("Zimbabwe", "ZW", &verify_iso_match(&client, "ZW", "Zimbabwe").await).await;
-    tracing::info!("Finished verifying ISO codes.");
-    // You are seeing false values for regions because Anbamap cannot correctly match region ISO codes with Wikidata properties.
-    // Perhaps the property number and/or region name has changed?
 }
