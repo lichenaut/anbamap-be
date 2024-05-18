@@ -147,7 +147,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "AE"),
         names: Some(vec!["united arab emirates".into(), "uae".into()]),
         demonyms: Some(vec!["emirati".into()]),
-        enterprises: None,
+        enterprises: Some(vec!["international holding co".into(), "taqa".into(), "adnoc".into(), "emirates telecom".into(), "alpha dhabi".into(), "invest bank".into(), "dewa".into(), "emirates nbd".into(), "emirates pjsc".into(), "borouge".into(), "emaar properties".into(), "q holding".into(), "al dar properties".into(), "pure health holding".into(), "mashreqbank".into()]),
         misc: None,
     }.get_region_vec(), "United Arab Emirates".into()));
     map.push((RegionKeyphrases {
@@ -203,7 +203,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "AR"),
         names: None,
         demonyms: Some(vec!["argentin".into()]),
-        enterprises: Some(vec!["mercadolibre".into(), "mercado libre".into(), "ypf".into(), "yacimientos petroliferos fiscales".into()]),
+        enterprises: Some(vec!["mercadolibre".into(), "ypf".into(), "yacimientos petroliferos".into()]),
         misc: Some(vec!["casa rosada".into(), "union for the homeland".into(), "juntos por el cambio".into(), "cambiemos".into(), "peronis".into(), "kirchneris".into()]),
     }.get_region_vec(), "Argentina".into()));
     map.push((RegionKeyphrases {
@@ -217,14 +217,14 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "AT"),
         names: Some(vec!["austria".into(), "oesterreich".into()]),
         demonyms: None,
-        enterprises: Some(vec!["verbund".into(), "erste group".into(), "omv".into()]),
+        enterprises: Some(vec!["verbund".into(), "erste group".into(), "erste bank".into(), "omv".into()]),
         misc: None,
     }.get_region_vec(), "Austria".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "AU"),
         names: Some(vec!["australia".into()]),
         demonyms: Some(vec!["aussie".into()]),
-        enterprises: Some(vec!["bhp group".into(), "commonwealth bank".into(), "csl".into(), "nab limited".into(), "anz bank".into(), "fortescue".into(), "wesfarmers".into(), "macquarie".into(), "atlassian".into(), "goodman group".into(), "woodside".into(), "telstra".into(), "transurban".into(), "woolworths".into(), "wisetech".into(), "qbe insurance".into(), "santos limited".into(), "aristocrat leisure".into(), "rea group".into(), "coles group".into(), "cochlear".into(), "suncorp".into(), "brambles limited".into(), "reece group".into(), "origin energy".into(), "northern star resources".into(), "scentre group".into(), "south32".into(), "computershare".into()]),
+        enterprises: Some(vec!["bhp group".into(), "commonwealth bank".into(), "csl".into(), "westpac bank".into(), "anz bank".into(), "fortescue".into(), "wesfarmers".into(), "macquarie".into(), "atlassian".into(), "goodman group".into(), "woodside".into(), "telstra".into(), "transurban".into(), "woolworths".into(), "wisetech".into(), "qbe".into(), "santos inc".into(), "aristocrat inc".into(), "rea".into(), "coles group".into(), "cochlear".into(), "suncorp".into(), "brambles limited".into(), "reece group".into(), "origin energy".into(), "northern star inc".into(), "scentre group".into(), "south32".into(), "computershare".into(), "mineral resources inc".into(), "seven group".into(), "sgh".into()]),
         misc: Some(vec!["aborigin".into()]),
     }.get_region_vec(), "Australia".into()));
     map.push((RegionKeyphrases {
@@ -273,7 +273,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "BE"),
         names: Some(vec!["belgium".into()]),
         demonyms: Some(vec!["belgian".into()]),
-        enterprises: None,
+        enterprises: Some(vec!["anheuser-busch".into(), "kbc".into(), "ucb".into(), "d'leteren".into(), "gbl".into()]),
         misc: Some(vec!["flemish".into(), "walloon".into()]),
     }.get_region_vec(), "Belgium".into()));
     map.push((RegionKeyphrases {
@@ -294,7 +294,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "BH"),
         names: Some(vec!["bahrain".into()]),
         demonyms: None,
-        enterprises: Some(vec!["ahli united".into()]),
+        enterprises: Some(vec!["ahli united".into(), "ahli bank".into()]),
         misc: Some(vec!["shura council".into(), "asalah".into(), "progressive democratic tribune".into(), "bchr".into()]),
     }.get_region_vec(), "Bahrain".into()));
     map.push((RegionKeyphrases {
@@ -350,7 +350,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "BR"),
         names: Some(vec!["brazil".into(), "brasil".into()]),
         demonyms: None,
-        enterprises: None,
+        enterprises: Some(vec!["petrobras".into(), "itau unibanco".into(), "nu holding".into(), "vale inc".into(), "ambev".into(), "btg pactual".into(), "weg on".into(), "bradesco".into(), "klabin".into(), "itausa".into(), "rede d'or sao luiz".into(), "bb seguridade".into(), "seguridade participacoes".into(), "suzano".into(), "jbs".into(), "b3".into(), "xp inc".into(), "sabesp".into(), "localiza".into()]),
         misc: Some(vec!["planalto".into()]),
     }.get_region_vec(), "Brazil".into()));
     map.push((RegionKeyphrases {
@@ -434,7 +434,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "CH"),
         names: Some(vec!["switzerland".into()]),
         demonyms: Some(vec!["swiss".into()]),
-        enterprises: None,
+        enterprises: Some(vec!["nestle".into(), "roche".into(), "novartis".into(), "chubb inc".into(), "ubs".into(), "abb".into(), "richemont".into(), "glencore".into(), "zurich insurance".into(), "sika".into(), "holcim".into(), "te connectivity".into(), "alcon".into(), "givaudan".into(), "lonza".into(), "stmicroelectronics".into(), "partners group".into(), "swiss re".into(), "garmin".into(), "kuhne + nagel".into(), "dsm-firmenich".into(), "schindler group".into(), "lindt".into(), "straumann".into(), "geberit".into(), "ems-chemie".into(), "sonova".into(), "sgs".into(), "vat group".into(), "sandoz".into(), "amcor".into(), "logitech".into(), "julius bar".into(), "on holding inc".into(), "swatch".into()]),
         misc: None,
     }.get_region_vec(), "Switzerland".into()));
     map.push((RegionKeyphrases {
@@ -455,7 +455,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "CL"),
         names: Some(vec!["chile".into()]),
         demonyms: None,
-        enterprises: None,
+        enterprises: Some(vec!["quimica y minera".into(), "enel americas".into(), "empresas copec".into()]),
         misc: None,
     }.get_region_vec(), "Chile".into()));
     map.push((RegionKeyphrases {
@@ -469,7 +469,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "CN"),
         names: Some(vec!["china".into(), "prc".into()]),
         demonyms: Some(vec!["chinese".into()]),
-        enterprises: Some(vec!["tencent".into(), "kweichow moutai".into(), "icbc".into(), "alibaba".into(), "pinduoduo".into(), "cm bank".into(), "catl inc".into(), "cnooc".into(), "ping an".into(), "shenhua energy".into(), "sinopec".into(), "meituan".into(), "byd".into(), "foxconn".into(), "netease".into(), "zijin mining".into(), "nongfu spring".into(), "midea inc".into(), "xiaomi".into(), "jingdong mall".into(), "mindray".into(), "industrial bank inc".into(), "citic".into(), "hikvision".into(), "jiangsu hengrui".into(), "haier smart home".into(), "haier home".into(), "wanhua chem".into(), "baidu".into(), "luzhou laojiao".into(), "trip.com".into(), "muyuan foods".into(), "pudong".into(), "gree electric".into(), "gree appliances".into(), "anta sports".into(), "kuaishou tech".into(), "luxshare".into(), "the people's insurance co".into(), "picc".into(), "cosco shipping".into(), "east money information".into(), "great wall motors".into(), "crrc".into(), "s.f. express".into(), "sf express".into(), "li auto".into(), "yili group".into(), "smic".into(), "ke holdings".into(), "saic motor".into(), "didi".into(), "boe tech".into(), "minsheng bank".into(), "yankuang energy".into(), "yanzhou coal".into(), "yanzhou mining".into(), "bank of jiangsu".into(), "sungrow power".into(), "yanghe".into(), "zto".into(), "weichai".into(), "sany heavy industry".into(), "sany industry".into(), "beigene".into(), "longi ".into(), "seres group".into(), "anhui conch".into(), "zte".into(), "shandong gold".into(), "shandong mining".into(), "huaneng".into(), "aier eye".into(), "aier hospital".into(), "huatai securities".into(), "guotai junan".into(), "longyuan power".into(), "hua xia".into(), "hai di lao".into(), "shekou industrial".into(), "hansoh pharma".into(), "tsingtao".into(), "new oriental inc".into(), "longfor group".into(), "geely".into(), "huazhu hotels".into(), "jd health".into(), "vanke".into(), "avinex".into(), "nio".into(), "amec".into(), "enn".into(), "eve energy".into(), "zheshang bank".into(), "gac".into()]),
+        enterprises: Some(vec!["tencent".into(), "kweichow moutai".into(), "icbc".into(), "alibaba".into(), "pinduoduo".into(), "cm bank".into(), "catl inc".into(), "cnooc".into(), "ping an".into(), "shenhua energy".into(), "sinopec".into(), "meituan".into(), "byd".into(), "foxconn industrial".into(), "foxconn internet".into(), "netease".into(), "zijin mining".into(), "nongfu spring".into(), "midea inc".into(), "xiaomi".into(), "jingdong mall".into(), "mindray".into(), "industrial bank inc".into(), "citic".into(), "hikvision".into(), "jiangsu hengrui".into(), "haier smart home".into(), "haier home".into(), "wanhua chem".into(), "baidu".into(), "luzhou laojiao".into(), "trip.com".into(), "muyuan foods".into(), "pudong".into(), "gree electric".into(), "gree appliances".into(), "anta sports".into(), "kuaishou tech".into(), "luxshare".into(), "the people's insurance co".into(), "picc".into(), "cosco shipping".into(), "east money information".into(), "great wall motors".into(), "crrc".into(), "s.f. express".into(), "sf express".into(), "li auto".into(), "yili group".into(), "smic".into(), "ke holding".into(), "saic motor".into(), "didi".into(), "boe tech".into(), "minsheng bank".into(), "yankuang energy".into(), "yanzhou coal".into(), "yanzhou mining".into(), "bank of jiangsu".into(), "sungrow power".into(), "yanghe".into(), "zto".into(), "weichai".into(), "sany heavy industry".into(), "sany industry".into(), "beigene".into(), "longi ".into(), "seres group".into(), "anhui conch".into(), "zte".into(), "shandong gold".into(), "shandong mining".into(), "huaneng".into(), "aier eye".into(), "aier hospital".into(), "huatai securities".into(), "guotai junan".into(), "longyuan power".into(), "hua xia".into(), "hai di lao".into(), "shekou industrial".into(), "hansoh pharma".into(), "tsingtao".into(), "new oriental inc".into(), "longfor group".into(), "geely".into(), "huazhu hotels".into(), "jd health".into(), "vanke".into(), "avinex".into(), "nio".into(), "amec".into(), "enn".into(), "eve energy".into(), "zheshang bank".into(), "gac".into()]),
         misc: Some(vec!["national people's congress".into(), "cppcc".into(), "kuomintang".into(), "guomindang".into(), "yangtze".into()]),
     }.get_region_vec(), "China".into()));
     map.push((RegionKeyphrases {
@@ -525,14 +525,14 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "CZ"),
         names: None,
         demonyms: Some(vec!["czech".into()]),
-        enterprises: None,
+        enterprises: Some(vec!["cez".into()]),
         misc: Some(vec!["spolu".into(), "ano 2011".into()]),
     }.get_region_vec(), "Czech Republic".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "DE"),
         names: None,
-        demonyms: Some(vec!["german".into()]),
-        enterprises: None,
+        demonyms: Some(vec!["german".into(), "deutsche".into()]),
+        enterprises: Some(vec!["sap inc".into(), "siemens".into(), "allianz".into(), "porsche".into(), "mercedes-benz".into(), "merck kgaa".into(), "volkswagen".into(), "munchener ruck".into(), "bmw".into(), "infineon".into(), "dhl".into(), "basf".into(), "adidas".into(), "e.on".into(), "beiersdorf".into(), "henkel".into(), "daimler".into(), "hapag-lloyd".into(), "bayer".into(), "hannover ruck".into(), "rwe".into(), "vonovia".into(), "rheinmetall".into(), "uniper inc".into(), "biontech".into(), "talanx".into(), "commerzbank".into(), "enbw energ".into(), "heidelberg".into(), "sartorius".into(), "traton".into(), "fresenius".into(), "symrise".into(), "continental inc".into(), "mtu aero".into(), "mtu engines".into(), "fresenius".into(), "knorr-bremse".into(), "brenntag".into(), "nemetschek".into(), "hella inc".into(), "evonik".into()]),
         misc: Some(vec!["bundestag".into(), "cdu".into()]),
     }.get_region_vec(), "Germany".into()));
     map.push((RegionKeyphrases {
@@ -546,7 +546,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "DK"),
         names: Some(vec!["denmark".into()]),
         demonyms: Some(vec!["danish".into(), "dane".into()]),
-        enterprises: None,
+        enterprises: Some(vec!["novo nordisk".into(), "dsv".into(), "novozymes".into(), "vestas wind".into(), "vestas systems".into(), "coloplast".into(), "orsted".into(), "maersk".into(), "danske bank".into(), "carlsberg".into(), "genmab".into(), "pandora inc".into(), "tryg".into(), "demant".into()]),
         misc: Some(vec!["folketing".into()]),
     }.get_region_vec(), "Denmark".into()));
     map.push((RegionKeyphrases {
@@ -609,7 +609,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "ES"),
         names: Some(vec!["spain".into()]),
         demonyms: Some(vec!["spaniard".into()]),
-        enterprises: None,
+        enterprises: Some(vec!["inditex".into(), "iberdrola".into(), "santander".into(), "bilbao vizcaya".into(), "caixabank".into(), "amadeus it".into(), "ferrovial".into(), "aena".into(), "cellnex".into(), "naturgy".into(), "telefonica".into(), "endesa".into(), "repsol".into(), "edp renovaveis".into(), "international consolidated airlines".into(), "sabadell".into(), "grupo acs".into()]),
         misc: Some(vec!["cortes generales".into(), "psoe".into(), "sumar".into()]),
     }.get_region_vec(), "Spain".into()));
     map.push((RegionKeyphrases {
@@ -623,7 +623,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "FI"),
         names: Some(vec!["finland".into()]),
         demonyms: Some(vec!["finn".into()]),
-        enterprises: None,
+        enterprises: Some(vec!["nordea bank".into(), "kone".into(), "sampo".into(), "nokia".into(), "upm-kymmene".into(), "neste".into(), "fortum".into(), "wartsila".into(), "stora enso".into(), "metso".into()]),
         misc: Some(vec!["eduskunta".into(), "national coalition party".into(), ]),
     }.get_region_vec(), "Finland".into()));
     map.push((RegionKeyphrases {
@@ -672,7 +672,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "GB"),
         names: Some(vec!["united kingdom".into(), "uk".into(), "britain".into(), "england".into(), "scotland".into(), "wales".into(), "northern ireland".into()]),
         demonyms: Some(vec!["british".into(), "scottish".into(), "welsh".into(), "northern irish".into()]),
-        enterprises: Some(vec!["astrazeneca".into(), "shell oil".into(), "shell inc".into(), "linde".into(), "hsbc".into(), "unilever".into(), "rio tonto".into(), "arm holdings".into(), "bp".into(), "glaxosmithkline".into(), "relx".into(), "diageo".into(), "aon".into(), "national grid inc".into(), "bae systems".into(), "compass group".into(), "anglo american inc".into(), "rolls-royce".into(), "lloyds bank".into(), "ferguson inc".into(), "barclays".into(), "reckitt benckiser".into(), "haleon".into(), "natwest".into(), "3i group".into(), "ashtead".into(), "antofagasta".into(), "prudential inc".into(), "tesco".into(), "vodafone inc".into(), "willis towers watson".into(), "sse".into(), "standard chartered".into(), "imperial brands inc".into(), "legal & general".into(), "bt group".into(), "intercontinental hotels group".into(), "royalty pharma".into(), "segro".into(), "next plc".into(), "informa plc".into(), "cnh".into(), "sage group".into(), "pentair".into(), "rentokil".into(), "nvent electric inc".into(), "bunzi".into(), "wpp".into(), "technipfmc".into(), "smith & nephew".into(), "halma".into(), "wise plc".into(), "intertek".into(), "melrose industries".into(), "admiral group".into(), "severn trent".into()]),
+        enterprises: Some(vec!["astrazeneca".into(), "shell oil".into(), "shell inc".into(), "linde".into(), "hsbc".into(), "unilever".into(), "rio tonto".into(), "arm holding".into(), "bp".into(), "glaxosmithkline".into(), "relx".into(), "diageo".into(), "aon".into(), "national grid inc".into(), "bae systems".into(), "compass group".into(), "anglo american inc".into(), "rolls-royce".into(), "lloyds bank".into(), "ferguson inc".into(), "barclays".into(), "reckitt benckiser".into(), "haleon".into(), "natwest".into(), "3i group".into(), "ashtead".into(), "antofagasta".into(), "prudential inc".into(), "tesco".into(), "vodafone inc".into(), "willis towers watson".into(), "sse".into(), "standard chartered".into(), "imperial brands inc".into(), "legal & general".into(), "bt group".into(), "intercontinental hotels group".into(), "royalty pharma".into(), "segro".into(), "next plc".into(), "informa plc".into(), "cnh".into(), "sage group".into(), "pentair".into(), "rentokil".into(), "nvent electric inc".into(), "bunzi".into(), "wpp".into(), "technipfmc".into(), "smith & nephew".into(), "halma".into(), "wise plc".into(), "intertek".into(), "melrose industries".into(), "admiral group".into(), "severn trent".into()]),
         misc: Some(vec!["house of lords".into(), "stormont".into()]),
     }.get_region_vec(), "United Kingdom".into()));
     map.push((RegionKeyphrases {
@@ -794,11 +794,11 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         enterprises: None,
         misc: None,
     }.get_region_vec(), "Guyana".into()));
-    map.push((RegionKeyphrases {
+    map.push((RegionKeyphrases { // I am not including "... China ..." keyphrases for this region, as I value the 'China" keyphrase more for the China region.
         automated: get_automated_keyphrases(&region_map, "HK"),
         names: Some(vec!["hong kong".into()]),
         demonyms: Some(vec!["hongkong".into()]),
-        enterprises: None,
+        enterprises: Some(vec!["aia".into(), "sun hung kai".into(), "jardine matheson".into(), "hang seng".into(), "techtronic".into(), "mtr".into(), "galaxy entertainment".into(), "clp".into(), "ck hutchison".into(), "budweiser apac".into(), "lenovo".into(), "ck asset".into(), "ck holding".into(), "ck infrastructure".into(), "chow tai fook".into(), "power assets inc".into(), "link reit".into(), "swire".into(), "orient overseas".into(), "futu holding".into(), "wharf reic".into(), "wharf holding".into(), "sino land".into()]),
         misc: Some(vec!["legco".into()]),
     }.get_region_vec(), "Hong Kong".into()));
     map.push((RegionKeyphrases {
@@ -840,21 +840,21 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "ID"),
         names: Some(vec!["indonesia".into()]),
         demonyms: None,
-        enterprises: None,
+        enterprises: Some(vec!["bank central asia".into(), "chandra asri".into(), "raykat".into(), "bayan resources".into(), "mandiri".into(), "astra international".into()]),
         misc: Some(vec!["pdi-p".into(), "golkar".into(), "prosperous justice party".into()]),
     }.get_region_vec(), "Indonesia".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "IE"),
-        names: Some(vec!["ireland".into()]),
+        names: None,
         demonyms: Some(vec!["irish".into()]),
-        enterprises: None,
+        enterprises: Some(vec!["accenture".into(), "eaton".into(), "medtronic".into(), "trane tech".into(), "cement roadstone".into(), "johnson controls".into(), "experian".into(), "ingersoll".into(), "flutter entertainment".into(), "ryanair".into(), "icon plc".into(), "steris".into(), "aptiv".into(), "seagate".into(), "aercap".into(), "kingspan".into(), "james hardie".into(), "kerry group".into(), "aib".into(), "smurfit kappa".into(), "bank of ireland".into(), "allegion".into()]),
         misc: Some(vec!["oireachtas".into(), "fianna fail".into(), "fine gael".into(), "sinn fein".into()]),
     }.get_region_vec(), "Ireland".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "IL"),
         names: Some(vec!["israel".into()]),
         demonyms: None,
-        enterprises: None,
+        enterprises: Some(vec!["mobileye".into(), "teva".into(), "check point software".into(), "nice inc".into(), "leumi".into(), "hapoalim".into(), "monday.com".into(), "cyberark".into()]),
         misc: Some(vec!["knesset".into(), "likud".into(), "shas".into(), "united torah judaism".into(), "mafdal".into(), "otzma".into(), "yesh atid".into(), "haaretz".into()]),
     }.get_region_vec(), "Israel".into()));
     map.push((RegionKeyphrases {
@@ -903,7 +903,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "IT"),
         names: Some(vec!["italy".into()]),
         demonyms: Some(vec!["italian".into()]),
-        enterprises: None,
+        enterprises: Some(vec!["ferrari".into(), "enel inc".into(), "intesa sanpaolo".into(), "unicredit".into(), "eni".into(), "generali".into(), "prada".into(), "moncler".into(), "terna".into(), "prysmian".into(), "snam".into(), "leonardo inc".into(), "mediobanca".into(), "davide campari".into(), "campari-milano".into(), "recordati".into(), "banco bpm".into(), "inwit".into(), "finecobank".into()]),
         misc: Some(vec!["lega".into(), "pd-idp".into()]),
     }.get_region_vec(), "Italy".into()));
     map.push((RegionKeyphrases {
@@ -931,7 +931,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "JP"),
         names: Some(vec!["japan".into(), "nippon".into()]),
         demonyms: None,
-        enterprises: Some(vec!["toyota".into(), "mitsubishi".into(), "keyence".into(), "sony".into(), "hitachi".into(), "ntt".into(), "sumitomo".into(), "mitsui".into(), "fast retailing inc".into(), "softbank".into(), "recruit inc".into(), "shin-etsu".into(), "daiichi".into(), "sankyo".into(), "itochu".into(), "shoji".into(), "nintendo".into(), "kddi".into(), "honda".into(), "chugai pharma".into(), "mizuho".into(), "denso".into(), "oriental land inc".into(), "daikin".into(), "hoya".into(), "takeda pharma".into(), "disco corp".into(), "murata".into(), "7-eleven".into(), "smc corp".into(), "marubeni".into(), "renesas".into(), "bridgestone".into(), "ms&ad".into(), "komatsu".into(), "fanuc".into(), "fujitsu".into(), "canon inc".into(), "nidec".into(), "terumo".into(), "fujifilm".into(), "advantest".into(), "orix".into(), "lasertec".into(), "dai-ichi".into(), "otsuka".into(), "suzuki motor".into(), "kao".into(), "sompo".into(), "panasonic".into(), "ajinomoto".into(), "unicharm".into(), "asahi group".into(), "inpex".into(), "olympus inc".into(), "z holdings".into(), "nec".into(), "aeon inc".into(), "kubota".into(), "nomura".into(), "tdk".into(), "astellas pharma".into(), "daiwa".into(), "kyocera".into(), "subaru".into(), "shimano".into(), "resona holdings".into(), "pan pacific international holdings".into(), "sekisui".into(), "nexon".into(), "eneos".into(), "kepco".into(), "secom".into(), "nitori".into(), "nissan".into(), "bandai namco".into(), "shionogi".into(), "eisai".into(), "shiseido".into(), "obic".into(), "kirin holdings".into(), "suntory".into(), "shinkin".into(), "nitto denko".into(), "kikkoman".into(), "sysmex".into(), "rakuten".into(), "yaskawa".into(), "\"k\" line".into()]),
+        enterprises: Some(vec!["toyota".into(), "mitsubishi".into(), "keyence".into(), "sony".into(), "hitachi".into(), "ntt".into(), "sumitomo".into(), "mitsui".into(), "fast retailing inc".into(), "softbank".into(), "recruit inc".into(), "shin-etsu".into(), "daiichi".into(), "sankyo".into(), "itochu".into(), "shoji".into(), "nintendo".into(), "kddi".into(), "honda".into(), "chugai pharma".into(), "mizuho".into(), "denso".into(), "oriental land inc".into(), "daikin".into(), "hoya".into(), "takeda pharma".into(), "disco corp".into(), "murata".into(), "7-eleven".into(), "smc corp".into(), "marubeni".into(), "renesas".into(), "bridgestone".into(), "ms&ad".into(), "komatsu".into(), "fanuc".into(), "fujitsu".into(), "canon inc".into(), "nidec".into(), "terumo".into(), "fujifilm".into(), "advantest".into(), "orix".into(), "lasertec".into(), "dai-ichi".into(), "otsuka".into(), "suzuki motor".into(), "kao".into(), "sompo".into(), "panasonic".into(), "ajinomoto".into(), "unicharm".into(), "asahi group".into(), "inpex".into(), "olympus inc".into(), "z holding".into(), "nec".into(), "aeon inc".into(), "kubota".into(), "nomura".into(), "tdk".into(), "astellas pharma".into(), "daiwa".into(), "kyocera".into(), "subaru".into(), "shimano".into(), "resona holding".into(), "pan pacific international holding".into(), "sekisui".into(), "nexon".into(), "eneos".into(), "kepco".into(), "secom".into(), "nitori".into(), "nissan".into(), "bandai namco".into(), "shionogi".into(), "eisai".into(), "shiseido".into(), "obic".into(), "kirin holding".into(), "suntory".into(), "shinkin".into(), "nitto denko".into(), "kikkoman".into(), "sysmex".into(), "rakuten".into(), "yaskawa".into(), "\"k\" line".into()]),
         misc: Some(vec!["komeito".into(), "tokio".into()]),
     }.get_region_vec(), "Japan".into()));
     map.push((RegionKeyphrases {
@@ -987,7 +987,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "KR"),
         names: Some(vec!["south korea".into()]),
         demonyms: None,
-        enterprises: None,
+        enterprises: Some(vec!["samsung".into(), "sk hynix".into(), "lg".into(), "hyundai".into(), "coupang".into(), "kia".into(), "celltrion".into(), "kb financial".into(), "kb group".into(), "posco".into(), "naver".into(), "shinhan".into(), "kakao".into(), "hana financial".into(), "hana group".into()]),
         misc: Some(vec!["people power party".into()]),
     }.get_region_vec(), "South Korea".into()));
     map.push((RegionKeyphrases {
@@ -1071,7 +1071,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "LU"),
         names: Some(vec!["luxembourg".into()]),
         demonyms: None,
-        enterprises: None,
+        enterprises: Some(vec!["arcelormittal".into(), "tenaris".into(), "eurofins".into()]),
         misc: Some(vec!["christian social people's party".into(), "lsap".into()]),
     }.get_region_vec(), "Luxembourg".into()));
     map.push((RegionKeyphrases {
@@ -1232,14 +1232,14 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "MX"),
         names: Some(vec!["mexic".into()]),
         demonyms: None,
-        enterprises: None,
+        enterprises: Some(vec!["walmex".into(), "america movil".into(), "banorte".into(), "femsa".into(), "grupo carso".into(), "grupo bimbo".into(), "financiero inbursa".into(), "arca continental".into(), "grupo elektra".into(), "cemex".into(), "aeroportuario del sureste".into()]),
         misc: None,
     }.get_region_vec(), "Mexico".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "MY"),
         names: Some(vec!["malaysia".into()]),
         demonyms: None,
-        enterprises: None,
+        enterprises: Some(vec!["maybank".into(), "pbbank".into(), "bank bhd".into(), "tenaga".into(), "cimb".into(), "pchem".into(), "ihh".into(), "celcomdigi".into()]),
         misc: None,
     }.get_region_vec(), "Malaysia".into()));
     map.push((RegionKeyphrases {
@@ -1293,16 +1293,16 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     }.get_region_vec(), "Nicaragua".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "NL"),
-        names: Some(vec!["netherlands".into()]),
+        names: Some(vec!["netherlands".into(), "nederland".into()]),
         demonyms: Some(vec!["dutch".into()]),
-        enterprises: None,
+        enterprises: Some(vec!["asml".into(), "prosus".into(), "airbus".into(), "nxp".into(), "stellantis".into(), "heineken".into(), "ing".into(), "universal music group".into(), "umg".into(), "adyen".into(), "exor".into(), "wolters kluwer".into(), "asm international".into(), "ahold delhaize".into(), "philips".into(), "argenx".into(), "yandex".into(), "kpn".into(), "abn amro".into(), "nn group".into(), "aegon".into(), "akzonobel".into(), "jde peet".into(), "be semiconductor".into(), "euronext".into(), "qiagen".into()]),
         misc: Some(vec!["vvd".into(), "d66".into(), "pvv".into()]),
     }.get_region_vec(), "Netherlands".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "NO"),
         names: Some(vec!["norway".into()]),
         demonyms: Some(vec!["norwegian".into()]),
-        enterprises: None,
+        enterprises: Some(vec!["equinor".into(), "dnb inc".into(), "telenor".into(), "aker bp".into(), "kongsberg gruppen".into(), "adevinta".into(), "norsk hydro".into()]),
         misc: Some(vec!["storting".into()]),
     }.get_region_vec(), "Norway".into()));
     map.push((RegionKeyphrases {
@@ -1330,7 +1330,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "NZ"),
         names: Some(vec!["new zealand".into()]),
         demonyms: Some(vec!["kiwi".into()]),
-        enterprises: None,
+        enterprises: Some(vec!["xero".into(), "fisher & paykel".into()]),
         misc: Some(vec!["parliament".into(), "nzlp".into()]),
     }.get_region_vec(), "New Zealand".into()));
     map.push((RegionKeyphrases {
@@ -1372,7 +1372,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "PH"),
         names: Some(vec!["philippine".into()]),
         demonyms: Some(vec!["filipin".into(), "pinoy".into()]),
-        enterprises: None,
+        enterprises: Some(vec!["sm investments".into(), "sm corp".into(), "sm prime".into(), "sm holding".into(), "bdo".into(), "international container terminal services".into(), "ayala".into()]),
         misc: Some(vec!["uniteam alliance".into(), "tropa".into()]),
     }.get_region_vec(), "Philippines".into()));
     map.push((RegionKeyphrases {
@@ -1384,9 +1384,9 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     }.get_region_vec(), "Pakistan".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "PL"),
-        names: Some(vec!["poland".into()]),
+        names: Some(vec!["poland".into(), "polsk".into()]),
         demonyms: Some(vec!["polish".into()]),
-        enterprises: None,
+        enterprises: Some(vec!["pkn".into(), "orlen".into(), "pko".into(), "powszechny".into(), "zaklad".into(), "ubezpieczen".into(), "pekao".into(), "allegro.eu".into()]),
         misc: Some(vec!["sejm".into()]),
     }.get_region_vec(), "Poland".into()));
     map.push((RegionKeyphrases {
@@ -1421,7 +1421,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "PT"),
         names: Some(vec!["portugal".into()]),
         demonyms: Some(vec!["portuguese".into()]),
-        enterprises: None,
+        enterprises: Some(vec!["edp group".into(), "galp energ".into(), "jeronimo martins".into()]),
         misc: None,
     }.get_region_vec(), "Portugal".into()));
     map.push((RegionKeyphrases {
@@ -1442,7 +1442,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "QA"),
         names: Some(vec!["qatar".into()]),
         demonyms: None,
-        enterprises: None,
+        enterprises: Some(vec!["qnb inc".into()]),
         misc: Some(vec!["house of thani".into()]),
     }.get_region_vec(), "Qatar".into()));
     map.push((RegionKeyphrases {
@@ -1470,7 +1470,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "RU"),
         names: Some(vec!["russia".into()]),
         demonyms: None,
-        enterprises: None,
+        enterprises: Some(vec!["sberbank".into(), "rosneft".into(), "lukoil".into(), "novatek inc".into(), "gazprom".into(), "nornickel".into(), "polyus".into(), "severstal".into(), "tatneft".into(), "novolipetsk".into(), "surgutneftegas".into()]),
         misc: Some(vec!["state duma".into(), "ldpr".into()]),
     }.get_region_vec(), "Russia".into()));
     map.push((RegionKeyphrases {
@@ -1512,14 +1512,14 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "SE"),
         names: None,
         demonyms: Some(vec!["swedish".into(), "swede".into()]),
-        enterprises: None,
+        enterprises: Some(vec!["atlas copco".into(), "investor ab".into(), "spotify".into(), "volvo".into(), "eqt".into(), "assa abloy".into(), "hexgon inc".into(), "skandinaviska".into(), "enskilda banken".into(), "h&m".into(), "sandvik".into(), "epiroc".into(), "evolution gaming".into(), "swedbank".into(), "ericsson".into(), "alfa laval".into(), "svenska".into(), "handelsbanken".into(), "essity".into(), "industrivarden".into(), "lundbergforetagen".into(), "saab".into(), "lifco".into(), "autoliv".into(), "nibe".into(), "telia".into()]),
         misc: Some(vec!["riksdag".into()]),
     }.get_region_vec(), "Sweden".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "SG"),
         names: Some(vec!["singapore".into()]),
         demonyms: None,
-        enterprises: None,
+        enterprises: Some(vec!["dbs".into(), "ocbc".into(), "garena".into(), "uob".into(), "singtel".into(), "grab holding".into(), "wilmar international".into(), "flex inc".into(), "capitaland".into()]),
         misc: Some(vec!["people's action party".into()]),
     }.get_region_vec(), "Singapore".into()));
     map.push((RegionKeyphrases {
@@ -1659,7 +1659,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "TH"),
         names: None,
         demonyms: Some(vec!["thai".into()]),
-        enterprises: None,
+        enterprises: Some(vec!["ptt".into(), "advanced info service inc".into(), "cp all".into(), "gulf energy development public co".into(), "bdms".into(), "siam commercial".into(), "siam bank".into()]),
         misc: Some(vec!["bhumjaithai".into(), "palang pracharath".into()]),
     }.get_region_vec(), "Thailand".into()));
     map.push((RegionKeyphrases {
@@ -1704,11 +1704,11 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         enterprises: None,
         misc: None,
     }.get_region_vec(), "Tonga".into()));
-    map.push((RegionKeyphrases {
+    map.push((RegionKeyphrases { // I did not add "Ford Otosan", as I value the 'Ford' keyphrase more for the United States region.
         automated: get_automated_keyphrases(&region_map, "TR"),
-        names: Some(vec!["turkey".into()]),
+        names: Some(vec!["turkey".into(), "turkiye".into()]),
         demonyms: Some(vec!["turkish".into()]),
-        enterprises: None,
+        enterprises: Some(vec!["qnb finansbank".into(), "koc".into(), "garantibank".into(), "akbank".into()]),
         misc: Some(vec!["grand national assembly".into()]),
     }.get_region_vec(), "Turkey".into()));
     map.push((RegionKeyphrases {
@@ -1725,12 +1725,12 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         enterprises: None,
         misc: None,
     }.get_region_vec(), "Tuvalu".into()));
-    map.push((RegionKeyphrases {
+    map.push((RegionKeyphrases { // I am not including "China Steel", as I value the 'China" keyphrase more for the China region.
         automated: get_automated_keyphrases(&region_map, "TW"),
         names: Some(vec!["taiwan".into()]),
         demonyms: None,
-        enterprises: None,
-        misc: Some(vec!["legislative yuan".into(), "kuomintang".into(), "guomindang".into(),]),
+        enterprises: Some(vec!["tsmc".into(), "foxconn inc".into(), "hon hai".into(), "mediatek".into(), "quanta computer".into(), "chunghwa telecom".into(), "fubon".into(), "delta electronics".into(), "cathay financial".into(), "cathay holding".into(), "ctbc".into(), "ase group".into(), "united microelectronics".into(), "mfhc".into(), "wiwynn".into(), "e.sun bank".into(), "uni-president enterprise".into(), "nan ya".into(), "evergreen marine".into(), "yuanta".into(), "asus".into(), "first financial holding inc".into(), "novatek microelectronics".into(), "hua nan".into(), "hotai motor".into(), "wistron corp".into()]),
+        misc: Some(vec!["legislative yuan".into(), "kuomintang".into(), "guomindang".into(), "formosa".into()]),
     }.get_region_vec(), "Taiwan".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "TZ"),
@@ -1764,7 +1764,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "US"),
         names: Some(vec!["united states".into(), "usa".into(), "u.s.a.".into()]),
         demonyms: None,
-        enterprises: Some(vec!["microsoft".into(), "apple inc".into(), "nvidia".into(), "alphabet inc".into(), "amazon inc".into(), "meta platforms".into(), "berksire hathaway".into(), "eli lilly".into(), "broadcom".into(), "jpmorgan chase".into(), "visa inc".into(), "tesla".into(), "exxon mobil".into(), "walmart".into(), "unitedhealth".into(), "mastercard".into(), "proctor & gamble".into(), "johnson & johnson".into(), "costco".into(), "home depot".into(), "oracle inc".into(), "merck".into(), "bank of america".into(), "chevron".into(), "abbvie".into(), "salesforce".into(), "coca-cola".into(), "netflix".into(), "amd".into(), "pepsico".into(), "thermo fisher".into(), "adobe".into(), "qualcomm".into(), "wells fargo".into(), "danaher".into(), "mcdonald's".into(), "cisco".into(), "t-mobile".into(), "walt disney".into(), "intuit ".into(), "abbott lab".into(), "texas instruments".into(), "applied materials inc".into(), "general electric".into(), "american express".into(), "caterpillar inc".into(), "verizon".into(), "amgen".into(), "morgan stanley".into(), "pfizer".into(), "servicenow".into(), "nextera energy".into(), "ibm".into(), "philip morris".into(), "comcast".into(), "goldman sachs".into(), "union pacific corp".into(), "charles schwab".into(), "conocophillips".into(), "intuitive surgical".into(), "nike".into(), "micron technology".into(), "raytheon".into(), "s&p global".into(), "uber inc".into(), "intel inc".into(), "honeywell".into(), "lowe's".into(), "ups".into(), "stryker corp".into(), "elevance health".into(), "booking holdings".into(), "booking.com".into(), "at&t".into(), "progressive inc".into(), "citigroup".into(), "blackrock".into(), "lam research".into(), "vertex pharma".into(), "tjx co".into(), "boeing".into(), "lockheed martin".into(), "deere".into(), "boston scientific".into(), "regeneron pharma".into(), "dell".into(), "analog devices inc".into(), "marsh & mclennan".into(), "automatic data processing inc".into(), "prologis".into(), "palo alto".into(), "kla".into(), "arista networks".into(), "southern copper inc".into(), "kkr".into(), "cigna".into(), "mondelez".into(), "airbnb".into(), "fiserv".into(), "american tower inc".into(), "blackstone".into(), "bristol-meyers".into(), "chipotle".into(), "starbucks".into(), "southern company inc".into(), "synopsys".into(), "hca health".into(), "waste management inc".into(), "gilead science".into(), "crowdstrike".into(), "general dynamics".into(), "duke energy".into(), "zoetis".into(), "intercontinental exchange inc".into(), "amphenol".into(), "sherwin-williams".into(), "altria group".into(), "cadence design".into(), "freeport-mcmoran".into(), "colgate-palmolive".into(), "cme group".into(), "equinix".into(), "moody's".into(), "illinois tool works".into(), "eog resources".into(), "target inc".into(), "mckesson".into(), "cvs".into(), "transdigm".into(), "cintas".into(), "parker-hannifin".into(), "northrop".into(), "schlumberger".into(), "workday".into(), "becton dickinson".into(), "marriott".into(), "paypal".into(), "constellation energy".into(), "ecolab".into(), "csx corp".into(), "bancorp".into(), "emerson inc".into(), "apollo global".into(), "pnc financial".into(), "fedex".into(), "marathon petro".into(), "pioneer natural resources".into(), "phillips 66".into(), "marvell tech".into(), "enterprise products inc".into(), "motorola".into(), "welltower".into(), "o'reilly auto".into(), "republic services inc".into(), "carrier inc".into(), "air products and chemicals inc".into(), "3m".into(), "roper tech".into(), "monster beverage".into(), "arthur j. gallagher".into(), "occidental petro".into(), "simon property".into(), "paccar".into(), "valero".into(), "capital one".into(), "snowflake inc".into(), "energy transfer partners inc".into(), "edwards lifesciences".into(), "truist financial".into(), "american international group".into(), "metlife".into(), "copart".into(), "norfolk southern".into(), "dexcom".into(), "general motors".into(), "supermicro".into(), "interactive brokers inc".into(), "hilton world".into(), "coinbase".into(), "microchip technology inc".into(), "moderna".into(), "public storage inc".into(), "autozone".into(), "newmont".into(), "the travelers companies".into(), "williams companies".into(), "aflac".into(), "d. r. horton".into(), "sempra".into(), "american electric power".into(), "ford".into(), "hess".into(), "pacific gas and electric".into(), "palantir".into(), "estee lauder".into(), "oneok".into(), "doordash".into(), "realty income inc".into(), "autodesk".into(), "fortinet".into(), "constellation brands".into(), "w. w. grainger".into(), "the trade desk inc".into(), "united rentals".into(), "keurig".into(), "dr pepper".into(), "lennar inc".into(), "paychex".into(), "kimberly-clark".into(), "agilent tech".into(), "ares management".into(), "idexx lab".into(), "dominion energy".into(), "allstate".into(), "crown castle".into(), "block inc".into(), "bank of new york mellon".into(), "ross stores".into(), "cencora".into(), "kinder morgan".into(), "kraft".into(), "heinz".into(), "fidelity national".into(), "prudential financial".into(), "waste connections inc".into(), "ameriprise financial".into(), "humana".into(), "l3harris".into(), "iqvia".into(), "hershey".into(), "centene".into(), "dow inc".into(), "grayscale bitcoin".into(), "mplx".into(), "nucor".into(), "general mills".into(), "datadog".into(), "msci".into(), "yum! brands".into(), "old dominion freight".into(), "kroger".into(), "corteva".into(), "charter comm".into(), "kenvue".into(), "otis world".into(), "cummins".into(), "quanta services".into(), "ametek".into(), "exelon corp".into(), "fastenal".into(), "sysco".into(), "ge health".into(), "pseg".into(), "cheniere".into(), "royal caribbean".into(), "vertiv".into(), "nasdaq".into(), "verisk".into(), "martin marietta".into(), "costar group".into(), "monolithic power systems inc".into(), "diamondback energy".into(), "las vegas sands".into(), "gartner inc".into(), "fico".into(), "xylem".into(), "vulcan materials".into(), "cognizant technology solutions".into(), "electronic arts".into(), "delta air".into(), "veeva".into(), "howmet aero".into(), "bakar hughes".into(), "consolidated edison".into(), "biogen inc".into(), "halliburton".into(), "extra space storage inc".into(), "dupont de nemours".into(), "lyondellbasell".into(), "vistra".into(), "mettler-toledo".into(), "resmed".into(), "vici properties".into(), "ppg industries".into(), "on semiconductor inc".into(), "discover financial".into(), "devon energy".into(), "hubspot".into(), "dollar general".into(), "xcel energy".into(), "tractor supply".into(), "rockwell auto".into(), "equifax".into(), "hp".into(), "the hartford".into(), "archer daniels".into(), "corning".into(), "cdw corp".into(), "globalfoundries".into(), "wabtec".into(), "edison international".into(), "pinterest".into(), "ansys".into(), "avalonbay".into(), "microstrategy".into(), "rocket companies".into(), "cbre group".into(), "global payments inc".into(), "keysight".into(), "fortive".into(), "blue owl capital".into(), "applovin".into(), "mongodb".into(), "wec energy".into(), "zscaler".into(), "splunk".into(), "fifth third bank".into(), "snap inc".into(), "heico".into(), "raymond james".into(), "targa resources".into(), "t. rowe price".into(), "ebay".into(), "american water works inc".into(), "west pharma".into(), "church & dwight".into(), "symbiotic inc".into(), "m&t bank".into(), "brown & brown".into(), "dollar tree".into(), "cloudflare".into(), "first citizens banc".into(), "international flavors & fragrances".into(), "equity residential".into(), "dover".into(), "take 2 interactive".into(), "pultegroup".into(), "zimmer biomet".into(), "tradeweb".into(), "entergy".into(), "cardinal health".into(), "dte energy".into(), "broadridge financial".into(), "nvr".into(), "iron mountain".into(), "cheniere energy".into(), "western digital inc".into(), "state street corp".into(), "hewlett packard".into(), "brown forman".into(), "firstenergy".into(), "deckers brands".into(), "netapp".into(), "weyerhaeuser".into(), "samsara".into(), "live nation inc".into(), "rollins".into(), "ptc".into(), "ppl".into(), "axon enterprise".into(), "fleetcor".into(), "ball corp".into(), "alexandria real estate".into(), "invitation homes".into(), "celsius holdings".into(), "markel".into(), "eversource".into(), "tyson foods".into(), "sba comm".into(), "genuine parts co".into(), "first solar inc".into(), "waters corp".into(), "hubbell".into(), "roblox".into(), "draftkings".into(), "kellogg".into(), "steel dynamics inc".into(), "coterra".into(), "carvana".into(), "tyler tech".into(), "erie indemnity".into(), "huntington banc".into(), "teradyne".into(), "freddie mac".into(), "align tech".into(), "builders firstsource".into(), "molina health".into(), "westlake chem".into(), "w. r. berkley".into(), "leidos".into(), "lpl financial".into(), "principal inc".into(), "ameren".into(), "zoom".into(), "hormel foods".into(), "williams-sonoma".into(), "mccormick".into(), "carlisle companies".into(), "ventas".into(), "booz allen".into(), "carnival corporation inc".into(), "entegris".into(), "warner bros".into(), "cooper companies".into(), "cboe".into(), "ulta".into(), "teledyne".into(), "centerpoint".into(), "pure storage inc".into(), "godaddy".into(), "watsco".into(), "corebridge".into(), "alnylam pharma".into(), "cms energy".into(), "omnicom".into(), "cincinnati financial".into(), "regions financial".into(), "darden restaurants".into(), "avery dennison".into(), "eqt corp".into(), "united airlines".into(), "baxter".into(), "atmos energy".into(), "domino's".into(), "emcor".into(), "labcorp".into(), "essex property".into(), "illumina inc".into(), "robinhood".into(), "synchrony".into(), "hologic".into(), "northern trust inc".into(), "lennox".into(), "okta".into(), "loews corp".into(), "celanese".into(), "abiomed".into(), "nutanix".into(), "nrg energy".into(), "reliance steel".into(), "factset".into(), "jacobs engineering".into(), "j. b. hunt".into(), "verisign".into(), "textron".into(), "avantor".into(), "bentley systems".into(), "citizens financial group".into(), "clorox".into(), "idex".into(), "formula one".into(), "southwest airlines".into(), "expeditors inc".into(), "warner music".into(), "mid-america apartment communities inc".into(), "packaging corporation of america".into(), "zebra tech".into(), "quest diagnostics".into(), "dick's sporting".into(), "sun communities".into(), "best buy inc".into(), "ss&c tech".into(), "walgreens".into(), "gen digital".into(), "tpg capital".into(), "enphase energy".into(), "nordson".into(), "carlyle".into(), "masco".into(), "albemarie".into(), "amh".into(), "american homes 4 rent".into(), "owens corning".into(), "aes".into(), "news corp".into(), "expedia".into(), "transunion".into(), "hyatt".into(), "skyworks".into(), "toast inc".into(), "udr apartments".into(), "fox corp".into(), "marathon oil".into(), "biomarin pharma".into(), "snap-on inc".into(), "conagra".into(), "rpm international".into(), "bunge inc".into(), "keycorp".into(), "keybank".into(), "akamai".into(), "western midstream".into(), "neurocrine bio".into(), "dynatrace".into(), "international paper inc".into(), "ryan specialty".into(), "manhattan associates".into(), "poolcorp".into(), "aspentech".into(), "graco".into(), "texas pacific land trust".into(), "physicians realty".into(), "reinsurance group of america".into(), "trimble".into(), "cf industries".into(), "jabil".into(), "black & decker".into(), "avangrid".into(), "campbell soup".into(), "westrock".into(), "toll brothers".into(), "revvity".into(), "us foods inc".into(), "advanced drainage systems inc".into(), "alliant energy".into(), "permian resources".into(), "ovintiv".into(), "equitable holdings inc".into(), "bio-techne".into(), "host hotels & resorts".into(), "w. p. carey".into(), "insulet".into(), "nisource".into(), "viatris".into(), "natera".into(), "amerco".into(), "kimco realty".into(), "ares hospital".into(), "lincoln electric".into(), "mgm resorts".into(), "topbuild".into(), "incyte".into(), "xpo logistics".into(), "morningstar".into(), "franklin resources".into(), "floor & decor inc".into(), "evergy".into(), "equity lifestyle".into(), "karuna".into(), "a. o. smith".into(), "tenet health".into(), "lamb western".into(), "gaming and leisure properties".into(), "sarepta".into(), "casey's general".into(), "shockwave".into(), "burlington".into(), "docusign".into(), "jack henry".into(), "cna financial".into(), "davita".into(), "lamar advertising".into(), "smucker".into(), "aecom".into(), "ally inc".into(), "medspace".into(), "plains all american pipeline".into(), "united therapeutics".into(), "core & main".into(), "interpublic".into(), "chesapeake energy".into(), "molson coors".into(), "lkq corp".into(), "albertsons".into(), "universal health services inc".into(), "eastman chem".into(), "tetra tech".into(), "uipath".into(), "sirius xm".into(), "performance food".into(), "clean harbors inc".into(), "itt".into(), "apache corp".into(), "carmax".into(), "uwm holdings".into(), "charles river lab".into(), "camden property".into(), "wingstop".into(), "texas roadhouse".into(), "regency centers".into(), "comfort systems inc".into(), "astera lab".into(), "juniper networks".into(), "sinclair".into(), "bath & body works".into(), "pershing square".into(), "american financial group inc".into(), "boston properties inc".into(), "elastic nv".into(), "onto innovation".into(), "woodward".into(), "bruker".into(), "zoominfo".into(), "epam systems".into(), "antero resources".into(), "essential utilities inc".into(), "wynn resorts".into(), "td synnex".into(), "east west bancorp".into(), "ralph lauren".into(), "curtiss-wright".into(), "twilio".into(), "regal rexnord".into(), "bj's wholesale".into(), "paycom".into(), "saia".into(), "affirm inc".into(), "rivian".into(), "penske auto".into(), "skechers".into(), "sharkninja".into(), "zillow".into(), "rexford industrial".into(), "service corporation international".into(), "crown holdings".into(), "teleflex".into(), "confluent inc".into(), "guidewire".into(), "f5".into(), "annaly capital".into(), "procore".into(), "reddit".into(), "huntington ingalls".into(), "unum".into(), "cubesmart".into(), "lattice semiconductor".into(), "jefferies financial".into(), "catalent".into()]),
+        enterprises: Some(vec!["microsoft".into(), "apple inc".into(), "nvidia".into(), "alphabet inc".into(), "amazon inc".into(), "meta platforms".into(), "berksire hathaway".into(), "eli lilly".into(), "broadcom".into(), "jpmorgan chase".into(), "visa inc".into(), "tesla".into(), "exxon mobil".into(), "walmart".into(), "unitedhealth".into(), "mastercard".into(), "proctor & gamble".into(), "johnson & johnson".into(), "costco".into(), "home depot".into(), "oracle inc".into(), "merck".into(), "bank of america".into(), "chevron".into(), "abbvie".into(), "salesforce".into(), "coca-cola".into(), "netflix".into(), "amd".into(), "pepsico".into(), "thermo fisher".into(), "adobe".into(), "qualcomm".into(), "wells fargo".into(), "danaher".into(), "mcdonald's".into(), "cisco".into(), "t-mobile".into(), "walt disney".into(), "intuit ".into(), "abbott lab".into(), "texas instruments".into(), "applied materials inc".into(), "general electric".into(), "american express".into(), "caterpillar inc".into(), "verizon".into(), "amgen".into(), "morgan stanley".into(), "pfizer".into(), "servicenow".into(), "nextera energy".into(), "ibm".into(), "philip morris".into(), "comcast".into(), "goldman sachs".into(), "union pacific corp".into(), "charles schwab".into(), "conocophillips".into(), "intuitive surgical".into(), "nike".into(), "micron technology".into(), "raytheon".into(), "s&p global".into(), "uber inc".into(), "intel inc".into(), "honeywell".into(), "lowe's".into(), "ups".into(), "stryker corp".into(), "elevance health".into(), "booking holding".into(), "booking.com".into(), "at&t".into(), "progressive inc".into(), "citigroup".into(), "blackrock".into(), "lam research".into(), "vertex pharma".into(), "tjx co".into(), "boeing".into(), "lockheed martin".into(), "deere".into(), "boston scientific".into(), "regeneron pharma".into(), "dell".into(), "analog devices inc".into(), "marsh & mclennan".into(), "automatic data processing inc".into(), "prologis".into(), "palo alto".into(), "kla".into(), "arista networks".into(), "southern copper inc".into(), "kkr".into(), "cigna".into(), "mondelez".into(), "airbnb".into(), "fiserv".into(), "american tower inc".into(), "blackstone".into(), "bristol-meyers".into(), "chipotle".into(), "starbucks".into(), "southern company inc".into(), "synopsys".into(), "hca health".into(), "waste management inc".into(), "gilead science".into(), "crowdstrike".into(), "general dynamics".into(), "duke energy".into(), "zoetis".into(), "intercontinental exchange inc".into(), "amphenol".into(), "sherwin-williams".into(), "altria group".into(), "cadence design".into(), "freeport-mcmoran".into(), "colgate-palmolive".into(), "cme group".into(), "equinix".into(), "moody's".into(), "illinois tool works".into(), "eog resources".into(), "target inc".into(), "mckesson".into(), "cvs".into(), "transdigm".into(), "cintas".into(), "parker-hannifin".into(), "northrop".into(), "schlumberger".into(), "workday".into(), "becton dickinson".into(), "marriott".into(), "paypal".into(), "constellation energy".into(), "ecolab".into(), "csx corp".into(), "bancorp".into(), "emerson inc".into(), "apollo global".into(), "pnc financial".into(), "fedex".into(), "marathon petro".into(), "pioneer natural resources".into(), "phillips 66".into(), "marvell tech".into(), "enterprise products inc".into(), "motorola".into(), "welltower".into(), "o'reilly auto".into(), "republic services inc".into(), "carrier inc".into(), "air products and chemicals inc".into(), "3m".into(), "roper tech".into(), "monster beverage".into(), "arthur j. gallagher".into(), "occidental petro".into(), "simon property".into(), "paccar".into(), "valero".into(), "capital one".into(), "snowflake inc".into(), "energy transfer partners inc".into(), "edwards lifesciences".into(), "truist financial".into(), "american international group".into(), "metlife".into(), "copart".into(), "norfolk southern".into(), "dexcom".into(), "general motors".into(), "supermicro".into(), "interactive brokers inc".into(), "hilton world".into(), "coinbase".into(), "microchip technology inc".into(), "moderna".into(), "public storage inc".into(), "autozone".into(), "newmont".into(), "the travelers companies".into(), "williams companies".into(), "aflac".into(), "d. r. horton".into(), "sempra".into(), "american electric power".into(), "ford".into(), "hess".into(), "pacific gas and electric".into(), "palantir".into(), "estee lauder".into(), "oneok".into(), "doordash".into(), "realty income inc".into(), "autodesk".into(), "fortinet".into(), "constellation brands".into(), "w. w. grainger".into(), "the trade desk inc".into(), "united rentals".into(), "keurig".into(), "dr pepper".into(), "lennar inc".into(), "paychex".into(), "kimberly-clark".into(), "agilent tech".into(), "ares management".into(), "idexx lab".into(), "dominion energy".into(), "allstate".into(), "crown castle".into(), "block inc".into(), "bank of new york mellon".into(), "ross stores".into(), "cencora".into(), "kinder morgan".into(), "kraft".into(), "heinz".into(), "fidelity national".into(), "prudential financial".into(), "waste connections inc".into(), "ameriprise financial".into(), "humana".into(), "l3harris".into(), "iqvia".into(), "hershey".into(), "centene".into(), "dow inc".into(), "grayscale bitcoin".into(), "mplx".into(), "nucor".into(), "general mills".into(), "datadog".into(), "msci".into(), "yum! brands".into(), "old dominion freight".into(), "kroger".into(), "corteva".into(), "charter comm".into(), "kenvue".into(), "otis world".into(), "cummins".into(), "quanta services".into(), "ametek".into(), "exelon corp".into(), "fastenal".into(), "sysco".into(), "ge health".into(), "pseg".into(), "cheniere".into(), "royal caribbean".into(), "vertiv".into(), "nasdaq".into(), "verisk".into(), "martin marietta".into(), "costar group".into(), "monolithic power systems inc".into(), "diamondback energy".into(), "las vegas sands".into(), "gartner inc".into(), "fico".into(), "xylem".into(), "vulcan materials".into(), "cognizant technology solutions".into(), "electronic arts".into(), "delta air".into(), "veeva".into(), "howmet aero".into(), "bakar hughes".into(), "consolidated edison".into(), "biogen inc".into(), "halliburton".into(), "extra space storage inc".into(), "dupont de nemours".into(), "lyondellbasell".into(), "vistra".into(), "mettler-toledo".into(), "resmed".into(), "vici properties".into(), "ppg industries".into(), "on semiconductor inc".into(), "discover financial".into(), "devon energy".into(), "hubspot".into(), "dollar general".into(), "xcel energy".into(), "tractor supply".into(), "rockwell auto".into(), "equifax".into(), "hp".into(), "the hartford".into(), "archer daniels".into(), "corning".into(), "cdw corp".into(), "globalfoundries".into(), "wabtec".into(), "edison international".into(), "pinterest".into(), "ansys".into(), "avalonbay".into(), "microstrategy".into(), "rocket companies".into(), "cbre group".into(), "global payments inc".into(), "keysight".into(), "fortive".into(), "blue owl capital".into(), "applovin".into(), "mongodb".into(), "wec energy".into(), "zscaler".into(), "splunk".into(), "fifth third bank".into(), "snap inc".into(), "heico".into(), "raymond james".into(), "targa resources".into(), "t. rowe price".into(), "ebay".into(), "american water works inc".into(), "west pharma".into(), "church & dwight".into(), "symbiotic inc".into(), "m&t bank".into(), "brown & brown".into(), "dollar tree".into(), "cloudflare".into(), "first citizens banc".into(), "international flavors & fragrances".into(), "equity residential".into(), "dover".into(), "take 2 interactive".into(), "pultegroup".into(), "zimmer biomet".into(), "tradeweb".into(), "entergy".into(), "cardinal health".into(), "dte energy".into(), "broadridge financial".into(), "nvr".into(), "iron mountain".into(), "cheniere energy".into(), "western digital inc".into(), "state street corp".into(), "hewlett packard".into(), "brown forman".into(), "firstenergy".into(), "deckers brands".into(), "netapp".into(), "weyerhaeuser".into(), "samsara".into(), "live nation inc".into(), "rollins".into(), "ptc".into(), "ppl".into(), "axon enterprise".into(), "fleetcor".into(), "ball corp".into(), "alexandria real estate".into(), "invitation homes".into(), "celsius holding".into(), "markel".into(), "eversource".into(), "tyson foods".into(), "sba comm".into(), "genuine parts co".into(), "first solar inc".into(), "waters corp".into(), "hubbell".into(), "roblox".into(), "draftkings".into(), "kellogg".into(), "steel dynamics inc".into(), "coterra".into(), "carvana".into(), "tyler tech".into(), "erie indemnity".into(), "huntington banc".into(), "teradyne".into(), "freddie mac".into(), "align tech".into(), "builders firstsource".into(), "molina health".into(), "westlake chem".into(), "w. r. berkley".into(), "leidos".into(), "lpl financial".into(), "principal inc".into(), "ameren".into(), "zoom".into(), "hormel foods".into(), "williams-sonoma".into(), "mccormick".into(), "carlisle companies".into(), "ventas".into(), "booz allen".into(), "carnival corporation inc".into(), "entegris".into(), "warner bros".into(), "cooper companies".into(), "cboe".into(), "ulta".into(), "teledyne".into(), "centerpoint".into(), "pure storage inc".into(), "godaddy".into(), "watsco".into(), "corebridge".into(), "alnylam pharma".into(), "cms energy".into(), "omnicom".into(), "cincinnati financial".into(), "regions financial".into(), "darden restaurants".into(), "avery dennison".into(), "eqt corp".into(), "united airlines".into(), "baxter".into(), "atmos energy".into(), "domino's".into(), "emcor".into(), "labcorp".into(), "essex property".into(), "illumina inc".into(), "robinhood".into(), "synchrony".into(), "hologic".into(), "northern trust inc".into(), "lennox".into(), "okta".into(), "loews corp".into(), "celanese".into(), "abiomed".into(), "nutanix".into(), "nrg energy".into(), "reliance steel".into(), "factset".into(), "jacobs engineering".into(), "j. b. hunt".into(), "verisign".into(), "textron".into(), "avantor".into(), "bentley systems".into(), "citizens financial group".into(), "clorox".into(), "idex".into(), "formula one".into(), "southwest airlines".into(), "expeditors inc".into(), "warner music".into(), "mid-america apartment communities inc".into(), "packaging corporation of america".into(), "zebra tech".into(), "quest diagnostics".into(), "dick's sporting".into(), "sun communities".into(), "best buy inc".into(), "ss&c tech".into(), "walgreens".into(), "gen digital".into(), "tpg capital".into(), "enphase energy".into(), "nordson".into(), "carlyle".into(), "masco".into(), "albemarie".into(), "amh".into(), "american homes 4 rent".into(), "owens corning".into(), "aes".into(), "news corp".into(), "expedia".into(), "transunion".into(), "hyatt".into(), "skyworks".into(), "toast inc".into(), "udr apartments".into(), "fox corp".into(), "marathon oil".into(), "biomarin pharma".into(), "snap-on inc".into(), "conagra".into(), "rpm international".into(), "bunge inc".into(), "keycorp".into(), "keybank".into(), "akamai".into(), "western midstream".into(), "neurocrine bio".into(), "dynatrace".into(), "international paper inc".into(), "ryan specialty".into(), "manhattan associates".into(), "poolcorp".into(), "aspentech".into(), "graco".into(), "texas pacific land trust".into(), "physicians realty".into(), "reinsurance group of america".into(), "trimble".into(), "cf industries".into(), "jabil".into(), "black & decker".into(), "avangrid".into(), "campbell soup".into(), "westrock".into(), "toll brothers".into(), "revvity".into(), "us foods inc".into(), "advanced drainage systems inc".into(), "alliant energy".into(), "permian resources".into(), "ovintiv".into(), "equitable holding inc".into(), "bio-techne".into(), "host hotels & resorts".into(), "w. p. carey".into(), "insulet".into(), "nisource".into(), "viatris".into(), "natera".into(), "amerco".into(), "kimco realty".into(), "ares hospital".into(), "lincoln electric".into(), "mgm resorts".into(), "topbuild".into(), "incyte".into(), "xpo logistics".into(), "morningstar".into(), "franklin resources".into(), "floor & decor inc".into(), "evergy".into(), "equity lifestyle".into(), "karuna".into(), "a. o. smith".into(), "tenet health".into(), "lamb western".into(), "gaming and leisure properties".into(), "sarepta".into(), "casey's general".into(), "shockwave".into(), "burlington".into(), "docusign".into(), "jack henry".into(), "cna financial".into(), "davita".into(), "lamar advertising".into(), "smucker".into(), "aecom".into(), "ally inc".into(), "medspace".into(), "plains all american pipeline".into(), "united therapeutics".into(), "core & main".into(), "interpublic".into(), "chesapeake energy".into(), "molson coors".into(), "lkq corp".into(), "albertsons".into(), "universal health services inc".into(), "eastman chem".into(), "tetra tech".into(), "uipath".into(), "sirius xm".into(), "performance food".into(), "clean harbors inc".into(), "itt".into(), "apache corp".into(), "carmax".into(), "uwm holding".into(), "charles river lab".into(), "camden property".into(), "wingstop".into(), "texas roadhouse".into(), "regency centers".into(), "comfort systems inc".into(), "astera lab".into(), "juniper networks".into(), "sinclair".into(), "bath & body works".into(), "pershing square".into(), "american financial group inc".into(), "boston properties inc".into(), "elastic nv".into(), "onto innovation".into(), "woodward".into(), "bruker".into(), "zoominfo".into(), "epam systems".into(), "antero resources".into(), "essential utilities inc".into(), "wynn resorts".into(), "td synnex".into(), "east west bancorp".into(), "ralph lauren".into(), "curtiss-wright".into(), "twilio".into(), "regal rexnord".into(), "bj's wholesale".into(), "paycom".into(), "saia".into(), "affirm inc".into(), "rivian".into(), "penske auto".into(), "skechers".into(), "sharkninja".into(), "zillow".into(), "rexford industrial".into(), "service corporation international".into(), "crown holding".into(), "teleflex".into(), "confluent inc".into(), "guidewire".into(), "f5".into(), "annaly capital".into(), "procore".into(), "reddit".into(), "huntington ingalls".into(), "unum".into(), "cubesmart".into(), "lattice semiconductor".into(), "jefferies financial".into(), "catalent".into()]),
         misc: None,
     }.get_region_vec(), "United States".into()));
     map.push((RegionKeyphrases {
@@ -1869,7 +1869,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "ZA"),
         names: Some(vec!["south africa".into()]),
         demonyms: None,
-        enterprises: None,
+        enterprises: Some(vec!["naspers".into(), "firstrand".into(), "standard bank group inc".into(), "gold fields inc".into(), "capitec".into(), "anglogold".into(), "vodacom".into()]),
         misc: Some(vec!["african national congress".into()]),
     }.get_region_vec(), "South Africa".into()));
     map.push((RegionKeyphrases {
