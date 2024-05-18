@@ -25,15 +25,12 @@ pub async fn get_region_db_pool() -> Result<SqlitePool, sqlx::Error> {
 
 pub async fn gen_keyphrase_db() -> Result<(), Box<dyn std::error::Error>> {
     let current_dir = std::env::current_dir()?;
-    let all_countries_path = format!("{}/src/db/allCountries.txt", current_dir.display()); // https://download.geonames.org/export/dump/allCountries.zip
-    let all_countries_path = Path::new(&all_countries_path);
-    let country_info_path = format!("{}/src/db/countryInfo.txt", current_dir.display()); // https://download.geonames.org/export/dump/countryInfo.txt
-    let country_info_path = Path::new(&country_info_path);
-    if !all_countries_path.exists() || !country_info_path.exists() {
-        tracing::info!("allCountries.txt and/or countryInfo.txt not found in src/db/ directory. Skipping keyphrase database generation.");
+    let db_path = format!("{}/region_db.sqlite", current_dir.display());
+    if Path::new(&db_path).exists() {
+        tracing::info!("region_db.sqlite found. Skipping keyphrase database generation.");
         return Ok(())
     }
-
+    
     for entry in fs::read_dir(&current_dir)? {
         let entry = entry?;
         let path = entry.path();
@@ -54,7 +51,8 @@ pub async fn gen_keyphrase_db() -> Result<(), Box<dyn std::error::Error>> {
         )"
     ).await?;
     
-    let reader = io::BufReader::new(File::open(all_countries_path)?);
+    let all_countries_path = format!("{}/src/db/allCountries.txt", current_dir.display()); // https://download.geonames.org/export/dump/allCountries.zip
+    let reader = io::BufReader::new(File::open(Path::new(&all_countries_path))?);
     for line in reader.lines() {
         let line = line?;
         let mut fields = line.split("\t");
@@ -107,7 +105,8 @@ pub async fn gen_keyphrase_db() -> Result<(), Box<dyn std::error::Error>> {
         }).await?;
     }
 
-    let reader = io::BufReader::new(File::open(country_info_path)?);
+    let country_info_path = format!("{}/src/db/countryInfo.txt", current_dir.display()); // https://download.geonames.org/export/dump/countryInfo.txt
+    let reader = io::BufReader::new(File::open(Path::new(&country_info_path))?);
     for line in reader.lines() {
         let line = line?;
         let mut fields = line.split("\t");

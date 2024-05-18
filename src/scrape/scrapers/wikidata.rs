@@ -30,7 +30,12 @@ pub async fn region_code_to_figures(client: &Client, iso_code: &str) -> Result<V
     let response = client.get(&url).send().await?;
     let json2: Value = response.json().await?;
     match json2["entities"][figure_id]["labels"]["en"]["value"].as_str() {
-        Some(figure_name) => figures.push(figure_name.to_string()),
+        Some(figure_name) => {
+            match figure_name.split(" ").last() {
+                Some(figure_name) => figures.push(figure_name.to_string()),
+                None => figures.push(figure_name.to_string()),
+            }
+        },
         None => return Ok(figures),
     };
     
@@ -52,7 +57,12 @@ pub async fn region_code_to_figures(client: &Client, iso_code: &str) -> Result<V
     let response = client.get(&url).send().await?;
     let json2: Value = response.json().await?;
     match json2["entities"][figure_id]["labels"]["en"]["value"].as_str() {
-        Some(figure_name) => figures.push(figure_name.to_string()),
+        Some(figure_name) => {
+            match figure_name.split(" ").last() {
+                Some(figure_name) => figures.push(figure_name.to_string()),
+                None => figures.push(figure_name.to_string()),
+            }
+        },
         None => return Ok(figures),
     };
 

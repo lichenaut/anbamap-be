@@ -1,7 +1,5 @@
 target
 keys
-allCountries.txt
-countryInfo.txt
 src/db/allCountries.txt
 src/db/countryInfo.txt
 region_db.sqlite
