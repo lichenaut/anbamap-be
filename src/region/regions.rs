@@ -17,13 +17,13 @@ struct RegionKeyphrases {
 impl RegionKeyphrases {
     pub fn get_region_vec(self) -> Vec<String> {
         let mut region_vec = Vec::new();
-        // First-order administrative regions ≥ 490k population, capitals, cities ≥ 290k population, and heads of state and government.
+        // First-order administrative regions ≥ 490k population, capitals, cities ≥ 290k population, heads of state and government, largest private enterprises, and billionaires.
         if let Some(automated) = self.automated { region_vec.extend(automated); }
         if let Some(names) = self.names { region_vec.extend(names); }
         if let Some(demonyms) = self.demonyms { region_vec.extend(demonyms); }
-        // ≥ 9.9B market cap USD
+        // Public enterprises ≥ 9.9B market cap USD.
         if let Some(enterprises) = self.enterprises { region_vec.extend(enterprises); }
-        // Positions of power, legislative bodies, institutions, buildings, political groups, ideologies, ethnic groups, cultural regions, billionaires ≥ 9.9B net worth, etc.
+        // Positions of power, legislative bodies, institutions, buildings, political groups, ideologies, ethnic groups, cultural regions, etc.
         if let Some(misc) = self.misc { region_vec.extend(misc); }
 
         let mut short_strings = Vec::new();

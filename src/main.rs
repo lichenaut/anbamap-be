@@ -1,5 +1,6 @@
 mod scrape {
     pub mod scrapers {
+        pub mod forbes400;
         pub mod wikidata;
         pub mod wikimedia;
         pub mod youtube;
@@ -21,7 +22,7 @@ use std::{error::Error, process::Command, str};
 #[actix_web::main]
 async fn main() -> Result<(), Box<dyn Error>> { 
     //look for rayon uses in the codebase
-    //tracing_subscriber::fmt().with_max_level(tracing::Level::TRACE).init();
+    tracing_subscriber::fmt().with_max_level(tracing::Level::TRACE).init();
     gen_keyphrase_db().await?;
     //let flashgeotext_update = Command::new("bash").arg("-c").arg("source /home/lichenaut/p3env/bin/activate && pip install flashgeotext").output()?;
     //tracing::info!("{}", str::from_utf8(&flashgeotext_update.stdout)?.trim().to_string());
