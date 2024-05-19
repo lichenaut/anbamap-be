@@ -7,6 +7,7 @@ use std::path::Path;
 use std::{fs::File, io, io::BufRead};
 use unidecode::unidecode;
 use crate::scrape::scrapers::wikidata::region_code_to_figures;
+use crate::scrape::scrapers::wikimedia::get_private_enterprises_map;
 
 
 struct Region {
@@ -129,7 +130,7 @@ pub async fn gen_keyphrase_db() -> Result<(), Box<dyn std::error::Error>> {
     // crate::scrape::scrapers::wikidata::verify_codes().await;
     let region_codes = vec!["AD", "AE", "AF", "AG", "AI", "AL", "AM", "AO", "AQ", "AR", "AS", "AT", "AU", "AW", "AX", "AZ", "BA", "BB", "BD", "BE", "BF", "BG", "BH", "BI", "BJ", "BL", "BM", "BN", "BO", "BQ", "BR", "BS", "BT", "BV", "BW", "BY", "BZ", "CA", "CC", "CD", "CF", "CG", "CH", "CI", "CK", "CL", "CM", "CN", "CO", "CR", "CU", "CV", "CW", "CX", "CY", "CZ", "DE", "DJ", "DK", "DM", "DO", "DZ", "EC", "EE", "EG", "EH", "ER", "ES", "ET", "FI", "FJ", "FK", "FM", "FO", "FR", "GA", "GB", "GD", "GE", "GF", "GG", "GH", "GI", "GL", "GM", "GN", "GP", "GQ", "GR", "GS", "GT", "GU", "GW", "GY", "HK", "HM", "HN", "HR", "HT", "HU", "ID", "IE", "IL", "IM", "IN", "IO", "IQ", "IR", "IS", "IT", "JE", "JM", "JO", "JP", "KE", "KG", "KH", "KI", "KM", "KN", "KP", "KR", "KW", "KY", "KZ", "LA", "LB", "LC", "LI", "LK", "LR", "LS", "LT", "LU", "LV", "LY", "MA", "MC", "MD", "ME", "MF", "MG", "MH", "MK", "ML", "MM", "MN", "MO", "MP", "MQ", "MR", "MS", "MT", "MU", "MV", "MW", "MX", "MY", "MZ", "NA", "NC", "NE", "NF", "NG", "NI", "NL", "NO", "NP", "NR", "NU", "NZ", "OM", "PA", "PE", "PF", "PG", "PH", "PK", "PL", "PM", "PN", "PR", "PS", "PT", "PW", "PY", "QA", "RE", "RO", "RS", "RU", "RW", "SA", "SB", "SC", "SD", "SE", "SG", "SH", "SI", "SJ", "SK", "SL", "SM", "SN", "SO", "SR", "SS", "ST", "SV", "SX", "SY", "SZ", "TC", "TD", "TF", "TG", "TH", "TJ", "TK", "TL", "TM", "TN", "TO", "TR", "TT", "TV", "TW", "TZ", "UA", "UG", "UM", "US", "UY", "UZ", "VA", "VC", "VE", "VG", "VI", "VN", "VU", "WF", "WS", "YE", "YT", "ZA", "ZM", "ZW"];
     let client = reqwest::Client::new();
-    for region_code in region_codes {
+    for region_code in &region_codes {
         let heads_of_state = region_code_to_figures(&client, region_code).await?;
         for head_of_state in heads_of_state {
             update_region(&pool, Region {
@@ -138,6 +139,18 @@ pub async fn gen_keyphrase_db() -> Result<(), Box<dyn std::error::Error>> {
             }).await?;
         }
     }
+    
+    let largest_private_enterprises = get_private_enterprises_map(&client).await?;
+    for (calculated_code, largest_private_enterprise) in largest_private_enterprises {
+        for keyphrase in largest_private_enterprise {
+            update_region(&pool, Region {
+                region_code: calculated_code.to_string(),
+                keyphrases: keyphrase,
+            }).await?;
+        }
+    }
+
+    // https://github.com/komed3/rtb-api/tree/main/api/filter/country/
 
     Ok(())
 }

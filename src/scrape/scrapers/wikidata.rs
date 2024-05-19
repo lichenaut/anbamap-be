@@ -6,9 +6,12 @@ pub async fn region_code_to_figures(client: &Client, iso_code: &str) -> Result<V
     let mut figures = Vec::new();
     let property = match get_property_from_iso(iso_code) {
         Some(property) => format!("Q{}", property),
-        None => return Ok(figures),
+        None => {
+            tracing::error!("No Wikidata property found for ISO code: {}", iso_code);
+            return Ok(figures)
+        },
     };
-
+    
     let url = format!("https://www.wikidata.org/w/api.php?action=wbgetentities&ids={}&props=claims&format=json", property);
     let response = client.get(&url).send().await?;
     let json: Value = response.json().await?;

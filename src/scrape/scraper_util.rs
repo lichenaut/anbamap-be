@@ -8,7 +8,7 @@ use crate::KEYPHRASE_REGION_MAP;
 pub async fn get_regions(text: &[&str]) -> Result<Vec<String>, Box<dyn Error>> {
     let text = text.join(" ").replace("&#39;", "'").replace("'s ", " ").replace("s' ", " ");
     let regions = Command::new("bash").arg("-c").arg(format!("source /home/lichenaut/p3env/bin/activate && python -c 'import sys; sys.path.append(\".\"); from src.region.media_to_regions import get_regions; print(get_regions(\"{}\"))'", text)).output()?;
-    let regions = str::from_utf8(&regions.stdout)?.trim().to_string();
+    let regions = str::from_utf8(&regions.stdout)?.trim();
     let regions: Vec<String> = regions
             .replace("[", "")
             .replace("]", "")
@@ -37,4 +37,5 @@ pub async fn get_regions(text: &[&str]) -> Result<Vec<String>, Box<dyn Error>> {
     Ok(regions)
 }
 
-//fn that tests every name into AI
+//fn that tests every name into AI?
+
