@@ -24,7 +24,7 @@ impl RegionKeyphrases {
         if let Some(demonyms) = self.demonyms { region_vec.extend(demonyms); }
         // Public enterprises ≥ 9.9B market cap USD.
         if let Some(enterprises) = self.enterprises { region_vec.extend(enterprises); }
-        // Positions of power, legislative bodies, institutions, buildings, political groups, ideologies, ethnic groups, cultural regions, identifier last names, etc.
+        // Positions of power, legislative bodies, institutions, buildings, political groups, ideologies, ethnic groups, cultural regions, identifier names, etc.
         if let Some(misc) = self.misc { region_vec.extend(misc); }
 
         region_vec.retain(|s| s != "");
@@ -1922,9 +1922,9 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     ].into_iter().collect();
 
     remove_ambiguities(map, blacklist)
-    //TODO temporary overrides: like gaza and rafah
 });
 
+#[allow(dead_code)]
 pub async fn show_region_map() -> Result<(), Box<dyn Error>> {
     let mut regions_iter = KEYPHRASE_REGION_MAP.iter();
     let mut current_region = regions_iter.next();

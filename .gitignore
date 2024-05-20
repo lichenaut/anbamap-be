@@ -1,5 +1,6 @@
 target
 keys
 src/region/__pycache__
+src/db/region_db.sqlite
 src/db/region_db.sqlite-shm
 src/db/region_db.sqlite-wal
