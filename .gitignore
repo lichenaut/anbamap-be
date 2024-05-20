@@ -1,8 +1,6 @@
 target
 keys
-src/db/allCountries.txt
-src/db/countryInfo.txt
-region_db.sqlite
-region_db.sqlite-shm
-region_db.sqlite-wal
+src/db/region_db.sqlite
+src/db/region_db.sqlite-shm
+src/db/region_db.sqlite-wal
 src/region/__pycache__

@@ -1,8 +1,8 @@
 use reqwest::Client;
 use serde_json::Value;
-use std::error;
+use std::error::Error;
 
-pub async fn region_code_to_figures(client: &Client, iso_code: &str) -> Result<Vec<String>, Box<dyn error::Error>> {
+pub async fn region_code_to_figures(client: &Client, iso_code: &str) -> Result<Vec<String>, Box<dyn Error>> {
     let mut figures = Vec::new();
     let property = match get_property_from_iso(iso_code) {
         Some(property) => format!("Q{}", property),
@@ -33,12 +33,7 @@ pub async fn region_code_to_figures(client: &Client, iso_code: &str) -> Result<V
     let response = client.get(&url).send().await?;
     let json2: Value = response.json().await?;
     match json2["entities"][figure_id]["labels"]["en"]["value"].as_str() {
-        Some(figure_name) => {
-            match figure_name.split(" ").last() {
-                Some(figure_name) => figures.push(figure_name.to_string()),
-                None => figures.push(figure_name.to_string()),
-            }
-        },
+        Some(figure_name) => push_to_figures(figure_name, &mut figures)?,
         None => return Ok(figures),
     };
     
@@ -60,16 +55,21 @@ pub async fn region_code_to_figures(client: &Client, iso_code: &str) -> Result<V
     let response = client.get(&url).send().await?;
     let json2: Value = response.json().await?;
     match json2["entities"][figure_id]["labels"]["en"]["value"].as_str() {
-        Some(figure_name) => {
-            match figure_name.split(" ").last() {
-                Some(figure_name) => figures.push(figure_name.to_string()),
-                None => figures.push(figure_name.to_string()),
-            }
-        },
+        Some(figure_name) => push_to_figures(figure_name, &mut figures)?,
         None => return Ok(figures),
     };
 
     Ok(figures)
+}
+
+fn push_to_figures(mut figure_name: &str, figures: &mut Vec<String>) -> Result<(), Box<dyn Error>> {
+    if figure_name == "Frederik X of Denmark" { figure_name = "frederik x"; }
+    else if figure_name == "Willem-Alexander of the Netherlands" { figure_name = "willem-alexander"; }
+    else if figure_name == "Charles III of the United Kingdom" { figure_name = "charles iii,king charles"; }
+
+    figures.push(figure_name.to_string());
+
+    Ok(())
 }
 
 fn get_property_from_iso(iso_code: &str) -> Option<&str> {

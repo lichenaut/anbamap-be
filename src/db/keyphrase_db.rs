@@ -8,16 +8,17 @@ use std::{fs::File, io, io::BufRead};
 use unidecode::unidecode;
 use crate::scrape::scrapers::forbes400::get_largest_billionaires_map;
 use crate::scrape::scrapers::wikidata::region_code_to_figures;
-use crate::scrape::scrapers::wikimedia::get_private_enterprises_map;
+use crate::scrape::scrapers::wikipedia::get_private_enterprises_map;
+use crate::scrape::scrapers::wikidata::verify_codes;
 
 struct Region {
     region_code: String,
     keyphrases: String,
 }
 
-pub async fn get_region_db_pool() -> Result<SqlitePool, sqlx::Error> {
+pub async fn get_region_db_pool(db_path: &Path) -> Result<SqlitePool, sqlx::Error> {
     Ok(SqlitePool::connect_with(SqliteConnectOptions::new()
-        .filename("region_db.sqlite")
+        .filename(db_path)
         .create_if_missing(true)
         .journal_mode(sqlx::sqlite::SqliteJournalMode::Wal)
         .shared_cache(true)
@@ -26,25 +27,14 @@ pub async fn get_region_db_pool() -> Result<SqlitePool, sqlx::Error> {
 
 pub async fn gen_keyphrase_db() -> Result<(), Box<dyn std::error::Error>> {
     let current_dir = std::env::current_dir()?;
-    let db_path = format!("{}/region_db.sqlite", current_dir.display());
-    if Path::new(&db_path).exists() {
+    let db_path = format!("{}/src/db/region_db.sqlite", current_dir.display());
+    let db_path = Path::new(&db_path);
+    if db_path.exists() {
         tracing::info!("region_db.sqlite found. Skipping keyphrase database generation.");
         return Ok(())
     }
-    
-    for entry in fs::read_dir(&current_dir)? {
-        let entry = entry?;
-        let path = entry.path();
-        if !path.is_file() { continue; }
 
-        if let Some(filename) = path.file_name() {
-            if let Some(filename) = filename.to_str() {
-                if filename.starts_with("region_db") { fs::remove_file(path)?; }
-            }
-        }
-    }
-
-    let pool = get_region_db_pool().await?;
+    let pool = get_region_db_pool(&db_path).await?;
     pool.execute(
         "CREATE TABLE IF NOT EXISTS regions (
             region_code TEXT PRIMARY KEY,
@@ -72,11 +62,13 @@ pub async fn gen_keyphrase_db() -> Result<(), Box<dyn std::error::Error>> {
             None => continue,
         };
 
+        if feature_code.contains('H') { continue; }
+
         let region_code = match fields.nth(0) {
             Some(region_code) => region_code,
             None => continue,
         };
-
+        
         let population = match fields.nth(5) {
             Some(population) => {
                 match population.parse::<u32>() {
@@ -87,15 +79,13 @@ pub async fn gen_keyphrase_db() -> Result<(), Box<dyn std::error::Error>> {
             None => continue,
         };
 
-        if feature_code.contains('H') { continue; }
-
         match feature_class {
             "A" =>  {
                 if population < 490000 { continue; }
             },
             "P" => {
                 match feature_code {
-                    "PPLC" => {},
+                    "PPLC" => (),
                     _ => {
                         if population < 290000 { continue; }
                     },
@@ -131,8 +121,7 @@ pub async fn gen_keyphrase_db() -> Result<(), Box<dyn std::error::Error>> {
         }).await?;
     }
 
-    // Wikidata property verifying is only necessary when running for the first time or when it's been a long time since the previous verification.
-    // crate::scrape::scrapers::wikidata::verify_codes().await;
+    //verify_codes().await;
     let region_codes = vec!["AD", "AE", "AF", "AG", "AI", "AL", "AM", "AO", "AQ", "AR", "AS", "AT", "AU", "AW", "AX", "AZ", "BA", "BB", "BD", "BE", "BF", "BG", "BH", "BI", "BJ", "BL", "BM", "BN", "BO", "BQ", "BR", "BS", "BT", "BV", "BW", "BY", "BZ", "CA", "CC", "CD", "CF", "CG", "CH", "CI", "CK", "CL", "CM", "CN", "CO", "CR", "CU", "CV", "CW", "CX", "CY", "CZ", "DE", "DJ", "DK", "DM", "DO", "DZ", "EC", "EE", "EG", "EH", "ER", "ES", "ET", "FI", "FJ", "FK", "FM", "FO", "FR", "GA", "GB", "GD", "GE", "GF", "GG", "GH", "GI", "GL", "GM", "GN", "GP", "GQ", "GR", "GS", "GT", "GU", "GW", "GY", "HK", "HM", "HN", "HR", "HT", "HU", "ID", "IE", "IL", "IM", "IN", "IO", "IQ", "IR", "IS", "IT", "JE", "JM", "JO", "JP", "KE", "KG", "KH", "KI", "KM", "KN", "KP", "KR", "KW", "KY", "KZ", "LA", "LB", "LC", "LI", "LK", "LR", "LS", "LT", "LU", "LV", "LY", "MA", "MC", "MD", "ME", "MF", "MG", "MH", "MK", "ML", "MM", "MN", "MO", "MP", "MQ", "MR", "MS", "MT", "MU", "MV", "MW", "MX", "MY", "MZ", "NA", "NC", "NE", "NF", "NG", "NI", "NL", "NO", "NP", "NR", "NU", "NZ", "OM", "PA", "PE", "PF", "PG", "PH", "PK", "PL", "PM", "PN", "PR", "PS", "PT", "PW", "PY", "QA", "RE", "RO", "RS", "RU", "RW", "SA", "SB", "SC", "SD", "SE", "SG", "SH", "SI", "SJ", "SK", "SL", "SM", "SN", "SO", "SR", "SS", "ST", "SV", "SX", "SY", "SZ", "TC", "TD", "TF", "TG", "TH", "TJ", "TK", "TL", "TM", "TN", "TO", "TR", "TT", "TV", "TW", "TZ", "UA", "UG", "UM", "US", "UY", "UZ", "VA", "VC", "VE", "VG", "VI", "VN", "VU", "WF", "WS", "YE", "YT", "ZA", "ZM", "ZW"];
     let client = reqwest::Client::new();
     for region_code in &region_codes {
@@ -179,8 +168,8 @@ async fn update_region(pool: &sqlx::Pool<sqlx::Sqlite>, region: Region) -> Resul
         Some((existing_keyphrases,)) => {
             let mut keyphrases = existing_keyphrases.split(",").collect::<Vec<&str>>();
             keyphrases.extend(region_keyphrases.split(","));
-            let keyphrases: HashSet<&str> = keyphrases.into_par_iter().collect();
-            let keyphrases = keyphrases.into_par_iter().collect::<Vec<&str>>().join(",");
+            let keyphrases: HashSet<&str> = keyphrases.into_iter().collect();
+            let keyphrases = keyphrases.into_iter().collect::<Vec<&str>>().join(",");
             sqlx::query("UPDATE regions SET keyphrases = $1 WHERE region_code = $2")
                 .bind(keyphrases)
                 .bind(region.region_code)

@@ -2,7 +2,7 @@ mod scrape {
     pub mod scrapers {
         pub mod forbes400;
         pub mod wikidata;
-        pub mod wikimedia;
+        pub mod wikipedia;
         pub mod youtube;
     }
     pub mod scraper_util;
@@ -14,18 +14,21 @@ mod db {
 mod region {
     pub mod regions;
 }
-use db::keyphrase_db::gen_keyphrase_db;
+use db::{db_service, keyphrase_db::gen_keyphrase_db};
 use scrape::scrapers::youtube::scrape_youtube_channel;
-use region::regions::KEYPHRASE_REGION_MAP;
+use region::regions::{self, KEYPHRASE_REGION_MAP};
 use std::{error::Error, process::Command, str};
 
 #[actix_web::main]
-async fn main() -> Result<(), Box<dyn Error>> { 
+async fn main() -> Result<(), Box<dyn Error>> {
     //look for rayon uses in the codebase
     tracing_subscriber::fmt().with_max_level(tracing::Level::TRACE).init();
     gen_keyphrase_db().await?;
     //let flashgeotext_update = Command::new("bash").arg("-c").arg("source /home/lichenaut/p3env/bin/activate && pip install flashgeotext").output()?;
     //tracing::info!("{}", str::from_utf8(&flashgeotext_update.stdout)?.trim().to_string());
-    scrape_youtube_channel("UCNye-wNBqNL5ZzHSJj3l8Bg").await?;
+    //scrape_youtube_channel("UCNye-wNBqNL5ZzHSJj3l8Bg").await?;
+    //db_service::schedule_scrapers().await?;
+    //regions::show_region_map().await?;
+
     Ok(())
 }

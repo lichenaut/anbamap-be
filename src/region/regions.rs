@@ -1,4 +1,4 @@
-use std::{collections::HashSet, error::Error, vec};
+use std::{collections::HashSet, error::Error, io::stdin, path::Path, vec};
 use async_std::task;
 use rayon::iter::{IntoParallelIterator, IntoParallelRefMutIterator, ParallelIterator};
 use crate::db::keyphrase_db::get_region_db_pool;
@@ -17,13 +17,14 @@ struct RegionKeyphrases {
 impl RegionKeyphrases {
     pub fn get_region_vec(self) -> Vec<String> {
         let mut region_vec = Vec::new();
-        // First-order administrative regions ≥ 490k population, capitals, cities ≥ 290k population, heads of state and government, largest private enterprises, and billionaires.
+        // First-order administrative regions ≥ 490k population, capitals, cities ≥ 290k population...
+        // ...heads of state and government, largest private enterprises, and billionaires ≥ 9.9B final worth USD.
         if let Some(automated) = self.automated { region_vec.extend(automated); }
         if let Some(names) = self.names { region_vec.extend(names); }
         if let Some(demonyms) = self.demonyms { region_vec.extend(demonyms); }
         // Public enterprises ≥ 9.9B market cap USD.
         if let Some(enterprises) = self.enterprises { region_vec.extend(enterprises); }
-        // Positions of power, legislative bodies, institutions, buildings, political groups, ideologies, ethnic groups, cultural regions, etc.
+        // Positions of power, legislative bodies, institutions, buildings, political groups, ideologies, ethnic groups, cultural regions, identifier last names, etc.
         if let Some(misc) = self.misc { region_vec.extend(misc); }
 
         region_vec.retain(|s| s != "");
@@ -49,11 +50,15 @@ impl RegionKeyphrases {
         }
 
         let mut short_strings = Vec::new();
-        region_vec.iter_mut().for_each(|s| if s.len() < 4 { short_strings.push(format!("'{}'", s)); });
-        region_vec.iter_mut().for_each(|s| if s.len() < 4 { short_strings.push(format!("\"{}\"", s)); });
-        region_vec.iter_mut().for_each(|s| if s.len() < 4 { *s = format!("{}.", s); });
-        region_vec.iter_mut().for_each(|s| if s.len() < 4 { *s = format!("{},", s); });
-        region_vec.par_iter_mut().for_each(|s| if s.len() < 4 { *s = format!(" {} ", s); });
+        region_vec.iter_mut().for_each(|s| {
+            if s.len() < 4 {
+                short_strings.push(format!("'{}'", s));
+                short_strings.push(format!("\"{}\"", s));
+                short_strings.push(format!("{}.", s));
+                short_strings.push(format!("{},", s));
+                *s = format!(" {} ", s);
+            }
+        });
         region_vec.extend(short_strings);
 
         // " inc" is a catch-all for other types here, where I include this string when the enterprise name is ambiguous (ex. 'apple' -> 'apple inc').
@@ -77,7 +82,10 @@ impl RegionKeyphrases {
 }
 
 async fn build_region_map() -> Result<HashMap<String, Vec<String>>, Box<dyn Error>> {
-    let pool = get_region_db_pool().await?;
+    let current_dir = std::env::current_dir()?;
+    let db_path = format!("{}/src/db/region_db.sqlite", current_dir.display());
+    let db_path = Path::new(&db_path);
+    let pool = get_region_db_pool(&db_path).await?;
     let mut region_map = HashMap::new();
     let rows = sqlx::query("SELECT * FROM regions").fetch_all(&pool).await?;
     for row in &rows { region_map.insert(row.get(0), vec![row.get(1)]); }
@@ -92,7 +100,7 @@ fn get_automated_keyphrases(region_map: &HashMap<String, Vec<String>>, region_co
         g.iter()
             .flat_map(|s| s.split(',').map(|s| s.trim().to_string()))
             .collect::<Vec<_>>()
-            .into_par_iter()
+            .into_iter()
             .collect()
     })
 }
@@ -109,7 +117,11 @@ fn remove_ambiguities(vec: Vec<(Vec<String>, String)>, blacklist: HashSet<String
     //     }
     // }
 
-    let mut all_strings: HashSet<String> = vec.iter().flat_map(|(keys, _)| keys.clone()).collect(); // Exact duplicates become one element.
+    let vec: Vec<(Vec<String>, String)> = vec.iter().map(|(keys, value)| { // Removes duplicate strings.
+        let unique_keys: Vec<String> = keys.clone().into_iter().collect::<HashSet<_>>().into_iter().collect();
+        (unique_keys, value.clone())
+    }).collect();
+    let mut all_strings: Vec<String> = vec.iter().flat_map(|(keys, _)| keys.clone()).collect();
     let all_strings_copy = all_strings.clone(); 
     let mut to_remove = blacklist;
 
@@ -187,7 +199,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     }.get_region_vec(), "Albania".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "AM"),
-        names: Some(vec!["armenia".into()]),
+        names: Some(vec!["armenia ".into(), "armenia'".into(), "armenia\"".into(), "armenia.".into(), "armenia,".into()]),
         demonyms: None,
         enterprises: None,
         misc: Some(vec!["azgayin zhoghov".into()]),
@@ -334,7 +346,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     }.get_region_vec(), "Bermuda".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "BN"),
-        names: Some(vec!["brunei".into()]),
+        names: None, // Name comes from database.
         demonyms: None,
         enterprises: None,
         misc: None,
@@ -358,7 +370,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         names: Some(vec!["brazil".into(), "brasil".into()]),
         demonyms: None,
         enterprises: Some(vec!["petrobras".into(), "itau unibanco".into(), "nu holding".into(), "vale inc".into(), "ambev".into(), "btg pactual".into(), "weg on".into(), "bradesco".into(), "klabin".into(), "itausa".into(), "rede d'or sao luiz".into(), "bb seguridade".into(), "seguridade participacoes".into(), "suzano".into(), "jbs".into(), "b3".into(), "xp inc".into(), "sabesp".into(), "localiza".into()]),
-        misc: Some(vec!["planalto".into()]),
+        misc: Some(vec!["planalto".into(), "lula".into()]),
     }.get_region_vec(), "Brazil".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "BS"),
@@ -404,10 +416,10 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     }.get_region_vec(), "Belize".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "CA"),
-        names: Some(vec!["canada".into()]),
+        names: None, // Name comes from database.
         demonyms: Some(vec!["canadian".into()]),
         enterprises: Some(vec!["enbridge".into(), "reuters".into(), "shopify".into(), "brookfield".into(), "scotiabank".into(), "constellation software".into(), "alimentation".into(), "couche-tard".into(), "suncor energy".into(), "manulife".into(), "cibc".into(), "lululemon".into(), "tc energy".into(), "cenovus".into(), "imperial oil inc".into(), "loblaw".into(), "agnico eagle".into(), "restaurant brands international".into(), "barrick gold".into(), "bce inc".into(), "sun life financial".into(), "intact financial inc".into(), "great-west lifeco".into(), "nutrien inc".into(), "teck resources".into(), "fairfax".into(), "wheaton precious".into(), "wheaton metals".into(), "dollarama".into(), "franco-nevada".into(), "telus".into(), "cgi inc".into(), "cameco".into(), "rogers comm".into(), "pembina".into(), "fortis".into(), "ivanhoe".into(), "wsp global".into(), "george weston".into(), "hydro one".into(), "tourmaline oil".into(), "ritchie bros".into(), "magna international".into(), "power financial inc".into(), "metro inc".into(), "gfl".into(), "first quantum minerals".into(), "arc resources".into(), "tfi international".into(), "emera".into(), "lundin mining".into()]),
-        misc: Some(vec!["parliament hill".into(), "rcmp".into(), "ndp".into(), "quebecois".into(), "metis".into(), "first nations".into()]),
+        misc: Some(vec!["parliament hill".into(), "rcmp".into(), "ndp".into(), "quebecois".into(), "metis".into(), "first nations".into(), "trudeau".into()]),
     }.get_region_vec(), "Canada".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "CC"),
@@ -477,7 +489,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         names: Some(vec!["china".into(), "prc".into()]),
         demonyms: Some(vec!["chinese".into()]),
         enterprises: Some(vec!["tencent".into(), "kweichow moutai".into(), "icbc".into(), "alibaba".into(), "pinduoduo".into(), "cm bank".into(), "catl inc".into(), "cnooc".into(), "ping an".into(), "shenhua energy".into(), "sinopec".into(), "meituan".into(), "byd".into(), "foxconn industrial".into(), "foxconn internet".into(), "netease".into(), "zijin mining".into(), "nongfu spring".into(), "midea inc".into(), "xiaomi".into(), "jingdong mall".into(), "mindray".into(), "industrial bank inc".into(), "citic".into(), "hikvision".into(), "jiangsu hengrui".into(), "haier smart home".into(), "haier home".into(), "wanhua chem".into(), "baidu".into(), "luzhou laojiao".into(), "trip.com".into(), "muyuan foods".into(), "pudong".into(), "gree electric".into(), "gree appliances".into(), "anta sports".into(), "kuaishou tech".into(), "luxshare".into(), "the people's insurance co".into(), "picc".into(), "cosco shipping".into(), "east money information".into(), "great wall motors".into(), "crrc".into(), "s.f. express".into(), "sf express".into(), "li auto".into(), "yili group".into(), "smic".into(), "ke holding".into(), "saic motor".into(), "didi".into(), "boe tech".into(), "minsheng bank".into(), "yankuang energy".into(), "yanzhou coal".into(), "yanzhou mining".into(), "bank of jiangsu".into(), "sungrow power".into(), "yanghe".into(), "zto".into(), "weichai".into(), "sany heavy industry".into(), "sany industry".into(), "beigene".into(), "longi ".into(), "seres group".into(), "anhui conch".into(), "zte".into(), "shandong gold".into(), "shandong mining".into(), "huaneng".into(), "aier eye".into(), "aier hospital".into(), "huatai securities".into(), "guotai junan".into(), "longyuan power".into(), "hua xia".into(), "hai di lao".into(), "shekou industrial".into(), "hansoh pharma".into(), "tsingtao".into(), "new oriental inc".into(), "longfor group".into(), "geely".into(), "huazhu hotels".into(), "jd health".into(), "vanke".into(), "avinex".into(), "nio".into(), "amec".into(), "enn".into(), "eve energy".into(), "zheshang bank".into(), "gac".into()]),
-        misc: Some(vec!["national people's congress".into(), "cppcc".into(), "kuomintang".into(), "guomindang".into(), "yangtze".into()]),
+        misc: Some(vec!["national people's congress".into(), "cppcc".into(), "kuomintang".into(), "guomindang".into(), "yangtze".into(), "xi".into()]),
     }.get_region_vec(), "China".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "CO"),
@@ -540,7 +552,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         names: None,
         demonyms: Some(vec!["german".into(), "deutsche".into()]),
         enterprises: Some(vec!["sap inc".into(), "siemens".into(), "allianz".into(), "porsche".into(), "mercedes-benz".into(), "merck kgaa".into(), "volkswagen".into(), "munchener ruck".into(), "bmw".into(), "infineon".into(), "dhl".into(), "basf".into(), "adidas".into(), "e.on".into(), "beiersdorf".into(), "henkel".into(), "daimler".into(), "hapag-lloyd".into(), "bayer".into(), "hannover ruck".into(), "rwe".into(), "vonovia".into(), "rheinmetall".into(), "uniper inc".into(), "biontech".into(), "talanx".into(), "commerzbank".into(), "enbw energ".into(), "heidelberg".into(), "sartorius".into(), "traton".into(), "fresenius".into(), "symrise".into(), "continental inc".into(), "mtu aero".into(), "mtu engines".into(), "fresenius".into(), "knorr-bremse".into(), "brenntag".into(), "nemetschek".into(), "hella inc".into(), "evonik".into()]),
-        misc: Some(vec!["bundestag".into(), "cdu".into()]),
+        misc: Some(vec!["bundestag".into(), "cdu".into(), "scholz".into()]),
     }.get_region_vec(), "Germany".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "DJ"),
@@ -558,7 +570,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     }.get_region_vec(), "Denmark".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "DM"),
-        names: Some(vec!["dominica ".into(), "dominica'".into(), "dominica\"".into()]),
+        names: Some(vec!["dominica ".into(), "dominica'".into(), "dominica\"".into(), "dominica.".into(), "dominica,".into()]),
         demonyms: None,
         enterprises: None,
         misc: None,
@@ -666,7 +678,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         names: Some(vec!["france".into()]),
         demonyms: None,
         enterprises: Some(vec!["lvmh".into(), "hermes inc".into(), "l'oreal".into(), "totalenergies".into(), "dior".into(), "schneider electric".into(), "sanofi".into(), "air liquide".into(), "essilorluxottica".into(), "safran".into(), "bnp paribas".into(), "axa".into(), "vinci".into(), "dassault".into(), "credit agricole".into(), "compagnie de saint-gobain".into(), "kering".into(), "danone".into(), "engie".into(), "pernod ricard".into(), "capgemini".into(), "thales".into(), "orange inc".into(), "michelin".into(), "legrand".into(), "publicis group".into(), "veolia".into(), "societe generale".into(), "bollore".into(), "renault".into(), "amundi".into(), "bouygues".into(), "sodexo".into(), "bureau veritas".into(), "edenred".into(), "carrefour".into(), "biomerieux".into(), "unibail-rodamco".into(), "rodamco-westfield".into(), "vivendi".into(), "accor inc".into(), "ipsen".into(), "eiffage".into()]),
-        misc: None,
+        misc: Some(vec!["macron".into()]),
     }.get_region_vec(), "France".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "GA"),
@@ -680,14 +692,14 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         names: Some(vec!["united kingdom".into(), "uk".into(), "britain".into(), "england".into(), "scotland".into(), "wales".into(), "northern ireland".into()]),
         demonyms: Some(vec!["british".into(), "scottish".into(), "welsh".into(), "northern irish".into()]),
         enterprises: Some(vec!["astrazeneca".into(), "shell oil".into(), "shell inc".into(), "linde".into(), "hsbc".into(), "unilever".into(), "rio tonto".into(), "arm holding".into(), "bp".into(), "glaxosmithkline".into(), "relx".into(), "diageo".into(), "aon".into(), "national grid inc".into(), "bae systems".into(), "compass group".into(), "anglo american inc".into(), "rolls-royce".into(), "lloyds bank".into(), "ferguson inc".into(), "barclays".into(), "reckitt benckiser".into(), "haleon".into(), "natwest".into(), "3i group".into(), "ashtead".into(), "antofagasta".into(), "prudential inc".into(), "tesco".into(), "vodafone inc".into(), "willis towers watson".into(), "sse".into(), "standard chartered".into(), "imperial brands inc".into(), "legal & general".into(), "bt group".into(), "intercontinental hotels group".into(), "royalty pharma".into(), "segro".into(), "next plc".into(), "informa plc".into(), "cnh".into(), "sage group".into(), "pentair".into(), "rentokil".into(), "nvent electric inc".into(), "bunzi".into(), "wpp".into(), "technipfmc".into(), "smith & nephew".into(), "halma".into(), "wise plc".into(), "intertek".into(), "melrose industries".into(), "admiral group".into(), "severn trent".into()]),
-        misc: Some(vec!["house of lords".into(), "stormont".into()]),
+        misc: Some(vec!["house of lords".into(), "stormont".into(), "sunak".into()]),
     }.get_region_vec(), "United Kingdom".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "GD"),
         names: Some(vec!["grenada".into()]),
         demonyms: Some(vec!["grenadian".into()]),
         enterprises: None,
-        misc: None,
+        misc: Some(vec!["rgpf".into()]),
     }.get_region_vec(), "Grenada".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "GE"),
@@ -719,7 +731,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     }.get_region_vec(), "Ghana".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "GI"),
-        names: Some(vec!["gibraltar".into()]),
+        names: None, // Name comes from database.
         demonyms: Some(vec!["llanito".into()]),
         enterprises: None,
         misc: Some(vec!["gslp".into()]),
@@ -841,7 +853,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         names: Some(vec!["hungar".into()]),
         demonyms: None,
         enterprises: None,
-        misc: Some(vec!["fidesz".into()]),
+        misc: Some(vec!["fidesz".into(), "orban".into()]),
     }.get_region_vec(), "Hungary".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "ID"),
@@ -862,7 +874,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         names: Some(vec!["israel".into()]),
         demonyms: None,
         enterprises: Some(vec!["mobileye".into(), "teva".into(), "check point software".into(), "nice inc".into(), "leumi".into(), "hapoalim".into(), "monday.com".into(), "cyberark".into()]),
-        misc: Some(vec!["knesset".into(), "likud".into(), "shas".into(), "united torah judaism".into(), "mafdal".into(), "otzma".into(), "yesh atid".into(), "haaretz".into()]),
+        misc: Some(vec!["knesset".into(), "likud".into(), "shas".into(), "united torah judaism".into(), "mafdal".into(), "otzma".into(), "yesh atid".into(), "haaretz".into(), "netanyahu".into()]),
     }.get_region_vec(), "Israel".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "IM"),
@@ -894,10 +906,10 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     }.get_region_vec(), "Iraq".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "IR"),
-        names: Some(vec!["iran".into()]),
+        names: Some(vec!["iran ".into(), "iran'".into(), "iran\"".into(), "iran.".into(), "iran,".into()]),
         demonyms: None,
         enterprises: None,
-        misc: Some(vec!["guardian council".into()]),
+        misc: Some(vec!["guardian council".into(), "khomeini".into()]),
     }.get_region_vec(), "Iran".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "IS"),
@@ -922,7 +934,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     }.get_region_vec(), "Jersey".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "JM"),
-        names: Some(vec!["jamaica".into()]),
+        names: None, // Name comes from database.
         demonyms: None,
         enterprises: None,
         misc: None,
@@ -978,7 +990,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     }.get_region_vec(), "Comoros".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "KN"),
-        names: Some(vec!["saint kitts".into(), "nevis".into()]),
+        names: Some(vec!["kitts".into(), "nevis".into()]),
         demonyms: Some(vec!["kittitian".into(), "nevisian".into()]),
         enterprises: None,
         misc: Some(vec!["concerned citizens' movement".into()]),
@@ -1006,8 +1018,8 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     }.get_region_vec(), "Kuwait".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "KY"),
-        names: Some(vec!["cayman island".into()]),
-        demonyms: Some(vec!["caymanian".into()]),
+        names: Some(vec!["cayman".into()]),
+        demonyms: None,
         enterprises: None,
         misc: None,
     }.get_region_vec(), "Cayman Islands".into()));
@@ -1062,7 +1074,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     }.get_region_vec(), "Liberia".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "LS"),
-        names: Some(vec!["lesotho".into()]),
+        names: None, // Name comes from database.
         demonyms: Some(vec!["mosotho".into(), "basotho".into()]),
         enterprises: None,
         misc: Some(vec!["revolution for prosperity".into()]),
@@ -1076,7 +1088,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     }.get_region_vec(), "Lithuania".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "LU"),
-        names: Some(vec!["luxembourg".into()]),
+        names: None, // Name comes from database.
         demonyms: None,
         enterprises: Some(vec!["arcelormittal".into(), "tenaris".into(), "eurofins".into()]),
         misc: Some(vec!["christian social people's party".into(), "lsap".into()]),
@@ -1090,7 +1102,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     }.get_region_vec(), "Latvia".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "LY"),
-        names: Some(vec!["libya".into()]),
+        names: None, // Name comes from database.
         demonyms: None,
         enterprises: None,
         misc: Some(vec!["government of national".into()]),
@@ -1104,7 +1116,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     }.get_region_vec(), "Morocco".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "MC"),
-        names: Some(vec!["monaco".into()]),
+        names: None, // Name comes from database.
         demonyms: Some(vec!["monegasque".into(), "monacan".into()]),
         enterprises: None,
         misc: None,
@@ -1146,7 +1158,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     }.get_region_vec(), "Marshall Islands".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "MK"),
-        names: Some(vec!["macedonia".into()]),
+        names: Some(vec!["north macedonia".into()]),
         demonyms: None,
         enterprises: None,
         misc: Some(vec!["sobranie".into(), "sdsm".into(), "vmro-dpmne".into()]),
@@ -1422,7 +1434,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         names: Some(vec!["palestin".into()]),
         demonyms: None,
         enterprises: None,
-        misc: Some(vec!["plo".into(), "hamas".into(), "fatah".into()]),
+        misc: Some(vec!["plo".into(), "hamas".into(), "fatah".into(), "gaza".into(), "rafah".into(), "west bank".into()]),
     }.get_region_vec(), "Palestine".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "PT"),
@@ -1478,7 +1490,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         names: Some(vec!["russia".into()]),
         demonyms: None,
         enterprises: Some(vec!["sberbank".into(), "rosneft".into(), "lukoil".into(), "novatek inc".into(), "gazprom".into(), "nornickel".into(), "polyus".into(), "severstal".into(), "tatneft".into(), "novolipetsk".into(), "surgutneftegas".into()]),
-        misc: Some(vec!["state duma".into(), "ldpr".into()]),
+        misc: Some(vec!["state duma".into(), "ldpr".into(), "putin".into()]),
     }.get_region_vec(), "Russia".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "RW"),
@@ -1751,7 +1763,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         names: Some(vec!["ukrain".into()]),
         demonyms: None,
         enterprises: None,
-        misc: Some(vec!["verkhovna rada".into()]),
+        misc: Some(vec!["verkhovna rada".into(), "zelensky".into()]),
     }.get_region_vec(), "Ukraine".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "UG"),
@@ -1779,7 +1791,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         names: Some(vec!["uruguay".into()]),
         demonyms: None,
         enterprises: None,
-        misc: None,
+        misc: Some(vec!["biden".into(), "nuland".into(), "blinken".into()]),
     }.get_region_vec(), "Uruguay".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "UZ"),
@@ -1894,6 +1906,40 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         misc: Some(vec!["zanu-pf".into(), "citizens coalition for change".into()]),
     }.get_region_vec(), "Zimbabwe".into()));
 
-    remove_ambiguities(map, vec!["chad".into(), "georgia".into(), "jordan".into(), "turkey".into(), "northern province".into(), "eastern province".into(), "southern province".into(), "western province".into(), "central province".into(), "northern region".into(), "eastern region".into(), "southern region".into(), "western region".into(), "central region".into()].into_par_iter().collect()) //TODO: look at sqlite db for more
+    let blacklist = vec!["chad".into(), "georgia".into(), "jordan".into(), "turkey".into(),
+            "north east".into(), "north west".into(), "south east".into(), "south west".into(), "north central".into(), "south central".into(), "east central".into(), "west central".into(),
+            "northern coast".into(), "eastern coast".into(), "southern coast".into(), "western coast".into(), "central coast".into(),
+            "north coast".into(), "east coast".into(), "south coast".into(), "west coast".into(), 
+            "northern province".into(), "eastern province".into(), "southern province".into(), "western province".into(), "central province".into(),
+            "north province".into(), "east province".into(), "south province".into(), "west province".into(), "centre province".into(), 
+            "northern region".into(), "eastern region".into(), "southern region".into(), "western region".into(), "central region".into(), 
+            "north region".into(), "east region".into(), "south region".into(), "west region".into(), "centre region".into(),
+            "northern territory".into(), "eastern territory".into(), "southern territory".into(), "western territory".into(), "central territory".into(),
+            "north territory".into(), "east territory".into(), "south territory".into(), "west territory".into(), "centre territory".into(),
+            "northern island".into(), "eastern island".into(), "southern island".into(), "western island".into(), "central island".into(),
+            "north island".into(), "east island".into(), "south island".into(), "west island".into(), "centre island".into(), 
+            "georgetown".into(), "saint john's".into(), "st. john's".into(), "wien".into(), "gard".into(), 
+    ].into_iter().collect();
+
+    remove_ambiguities(map, blacklist)
     //TODO temporary overrides: like gaza and rafah
 });
+
+pub async fn show_region_map() -> Result<(), Box<dyn Error>> {
+    let mut regions_iter = KEYPHRASE_REGION_MAP.iter();
+    let mut current_region = regions_iter.next();
+    let mut next_region = regions_iter.next();
+    let mut input = String::new();
+    while let Some(region) = current_region {
+        tracing::info!("Region: {}", region.1);
+        tracing::info!("Keyphrases: {:?}", region.0);
+        tracing::info!("Press enter to go to the next region");
+        stdin().read_line(&mut input)?;
+        current_region = next_region;
+        next_region = regions_iter.next();
+    }
+
+    tracing::info!("Finished showing all regions");
+
+    Ok(())
+}
