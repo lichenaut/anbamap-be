@@ -43,7 +43,13 @@ pub async fn gen_keyphrase_db() -> Result<(), Box<dyn std::error::Error>> {
     ).await?;
     
     let all_countries_path = format!("{}/src/db/allCountries.txt", current_dir.display()); // https://download.geonames.org/export/dump/allCountries.zip
-    let reader = io::BufReader::new(File::open(Path::new(&all_countries_path))?);
+    let all_countries_path = Path::new(&all_countries_path);
+    if !all_countries_path.exists() {
+        tracing::error!("src/db/allCountries.txt not found. You can download it from https://download.geonames.org/export/dump/allCountries.zip to place it in the src/db folder.");
+        return Ok(())
+    }
+
+    let reader = io::BufReader::new(File::open(all_countries_path)?);
     for line in reader.lines() {
         let line = line?;
         let mut fields = line.split("\t");
