@@ -1,16 +1,16 @@
 use chrono::Utc;
 use serde_json::Value;
 use super::super::scraper_util;
-use std::{error::Error, fs, str};
+use std::{error::Error, fs::read_to_string, str};
 
 pub async fn scrape_youtube_channel(channel_id: &str) -> Result<Vec<(String, String, String, Vec<String>)>, Box<dyn Error>> {
     let mut videos: Vec<(String, String, String, Vec<String>)> = Vec::new();
-    let api_key = fs::read_to_string("keys/youtube.txt")?;
+    let api_key = read_to_string("keys/youtube.txt")?;
     let url =
             format!("https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&channelId={}&type=video&order=date&key={}", channel_id, api_key);
     let response = reqwest::get(&url).await?;
     if !response.status().is_success() {
-        tracing::error!("Failed to get data from Youtube: {}", response.status());
+        tracing::error!("Non-success response from Youtube: {}", response.status());
         return Ok(videos)
     }
     
@@ -46,7 +46,7 @@ pub async fn scrape_youtube_channel(channel_id: &str) -> Result<Vec<(String, Str
             };
 
             let regions = scraper_util::get_regions(&[&title, &description]).await?;
-            videos.push((url, title, description, regions));
+            videos.push((url, title, description, regions));            
         }
     }
 

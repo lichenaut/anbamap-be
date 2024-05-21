@@ -7,6 +7,11 @@ pub async fn get_largest_billionaires_map(client: &Client) -> Result<HashMap<Str
     let mut billionaires: HashMap<String, Vec<String>> = HashMap::new();
     let url = format!("https://forbes400.onrender.com/api/forbes400/getAllBillionaires");
     let response = client.get(&url).send().await?;
+    if !response.status().is_success() {
+        tracing::error!("Non-success response from Forbes400: {}", response.status());
+        return Ok(billionaires)
+    }
+    
     let json: Value = response.json().await?;
     let data = match json.as_array() {
         Some(data) => data,

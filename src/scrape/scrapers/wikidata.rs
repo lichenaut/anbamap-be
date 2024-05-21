@@ -14,6 +14,11 @@ pub async fn region_code_to_figures(client: &Client, iso_code: &str) -> Result<V
     
     let url = format!("https://www.wikidata.org/w/api.php?action=wbgetentities&ids={}&props=claims&format=json", property);
     let response = client.get(&url).send().await?;
+    if !response.status().is_success() {
+        tracing::error!("Non-success response from Wikidata: {}", response.status());
+        return Ok(figures)
+    }
+
     let json: Value = response.json().await?;
     let claims = &json["entities"][&property]["claims"]["P6"];
     let last_claim = match claims.as_array() {

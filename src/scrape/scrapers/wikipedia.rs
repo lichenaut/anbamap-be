@@ -1,4 +1,4 @@
-use std::{collections::HashMap, error::Error, str};
+use std::{collections::HashMap, error::Error};
 use reqwest::Client;
 use wikitext_table_parser::parser::{Event, WikitextTableParser};
 use serde_json::{Value, from_str};
@@ -9,7 +9,7 @@ pub async fn get_private_enterprises_map(client: &Client) -> Result<HashMap<Stri
     let url = "https://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&rvslots=main&format=json&titles=List_of_largest_private_non-governmental_companies_by_revenue";
     let response = client.get(url).send().await?;
     if !response.status().is_success() {
-        tracing::error!("Failed to get data from Wikipedia: {}", response.status());
+        tracing::error!("Non-success response from Wikipedia: {}", response.status());
         return Ok(region_to_companies)
     }
 
