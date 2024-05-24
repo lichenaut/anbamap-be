@@ -1,7 +1,3 @@
 target
 .env
 src/region/__pycache__
-src/db/allCountries.txt
-src/db/region_db.sqlite
-src/db/region_db.sqlite-shm
-src/db/region_db.sqlite-wal
