@@ -1,0 +1,4 @@
+PY_ENV_ACTIVATE_PATH=/home/user/env-name/bin/activate
+YOUTUBE_API_KEY=myyoutubeapikey
+UPSTASH_REDIS_ENDPOINT=us1-adjective-animal...
+UPSTASH_REDIS_PASSWORD=12345

@@ -1,10 +1,9 @@
-use std::{collections::HashSet, error::Error, io::stdin, path::Path, vec};
 use async_std::task;
-use rayon::iter::{IntoParallelIterator, IntoParallelRefMutIterator, ParallelIterator};
 use crate::db::keyphrase_db::get_region_db_pool;
-use sqlx::Row;
 use once_cell::sync::Lazy;
-use std::collections::HashMap;
+use rayon::iter::{IntoParallelIterator, ParallelIterator};
+use sqlx::Row;
+use std::{collections::{HashMap, HashSet}, error::Error, io::stdin, path::Path, vec};
 
 struct RegionKeyphrases {
     pub automated: Option<Vec<String>>, // src/db/keyphrase_db.rs
@@ -100,8 +99,6 @@ fn get_automated_keyphrases(region_map: &HashMap<String, Vec<String>>, region_co
         g.iter()
             .flat_map(|s| s.split(',').map(|s| s.trim().to_string()))
             .collect::<Vec<_>>()
-            .into_iter()
-            .collect()
     })
 }
 
@@ -117,11 +114,11 @@ fn remove_ambiguities(vec: Vec<(Vec<String>, String)>, blacklist: HashSet<String
     //     }
     // }
 
-    let vec: Vec<(Vec<String>, String)> = vec.iter().map(|(keys, value)| { // Removes duplicate strings.
-        let unique_keys: Vec<String> = keys.clone().into_iter().collect::<HashSet<_>>().into_iter().collect();
+    let vec: Vec<(Vec<String>, String)> = vec.into_par_iter().map(|(keys, value)| { // Removes duplicate strings.
+        let unique_keys: Vec<String> = keys.clone().into_par_iter().collect::<HashSet<_>>().into_par_iter().collect();
         (unique_keys, value.clone())
     }).collect();
-    let mut all_strings: Vec<String> = vec.iter().flat_map(|(keys, _)| keys.clone()).collect();
+    let mut all_strings: Vec<String> = vec.clone().into_par_iter().flat_map(|(keys, _)| keys.clone()).collect();
     let all_strings_copy = all_strings.clone(); 
     let mut to_remove = blacklist;
 
@@ -138,8 +135,8 @@ fn remove_ambiguities(vec: Vec<(Vec<String>, String)>, blacklist: HashSet<String
 
     all_strings.retain(|string| !to_remove.contains(string));
 
-    vec.iter().map(|(keys, value)| {
-        let new_keys = keys.iter().filter(|key| all_strings.contains(*key)).cloned().collect();
+    vec.into_par_iter().map(|(keys, value)| {
+        let new_keys = keys.into_par_iter().filter(|key| all_strings.contains(key)).collect();
         (new_keys, value.clone())
     }).collect()
 }
@@ -244,7 +241,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         names: Some(vec!["australia".into()]),
         demonyms: Some(vec!["aussie".into()]),
         enterprises: Some(vec!["bhp group".into(), "commonwealth bank".into(), "csl".into(), "westpac bank".into(), "anz bank".into(), "fortescue".into(), "wesfarmers".into(), "macquarie".into(), "atlassian".into(), "goodman group".into(), "woodside".into(), "telstra".into(), "transurban".into(), "woolworths".into(), "wisetech".into(), "qbe".into(), "santos inc".into(), "aristocrat inc".into(), "rea".into(), "coles group".into(), "cochlear".into(), "suncorp".into(), "brambles limited".into(), "reece group".into(), "origin energy".into(), "northern star inc".into(), "scentre group".into(), "south32".into(), "computershare".into(), "mineral resources inc".into(), "seven group".into(), "sgh".into()]),
-        misc: Some(vec!["aborigin".into()]),
+        misc: Some(vec!["aborigin".into(), "assange".into()]),
     }.get_region_vec(), "Australia".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "AW"),
@@ -874,7 +871,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         names: Some(vec!["israel".into()]),
         demonyms: None,
         enterprises: Some(vec!["mobileye".into(), "teva".into(), "check point software".into(), "nice inc".into(), "leumi".into(), "hapoalim".into(), "monday.com".into(), "cyberark".into()]),
-        misc: Some(vec!["knesset".into(), "likud".into(), "shas".into(), "united torah judaism".into(), "mafdal".into(), "otzma".into(), "yesh atid".into(), "haaretz".into(), "netanyahu".into()]),
+        misc: Some(vec!["knesset".into(), "likud".into(), "shas".into(), "united torah judaism".into(), "mafdal".into(), "otzma".into(), "yesh atid".into(), "haaretz".into(), "netanyahu".into(), "yoav gallant".into()]),
     }.get_region_vec(), "Israel".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "IM"),
@@ -1434,7 +1431,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         names: Some(vec!["palestin".into()]),
         demonyms: None,
         enterprises: None,
-        misc: Some(vec!["plo".into(), "hamas".into(), "fatah".into(), "gaza".into(), "rafah".into(), "west bank".into()]),
+        misc: Some(vec!["plo".into(), "hamas".into(), "fatah".into(), "gaza".into(), "rafah".into()]),
     }.get_region_vec(), "Palestine".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "PT"),
@@ -1918,8 +1915,8 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
             "north territory".into(), "east territory".into(), "south territory".into(), "west territory".into(), "centre territory".into(),
             "northern island".into(), "eastern island".into(), "southern island".into(), "western island".into(), "central island".into(),
             "north island".into(), "east island".into(), "south island".into(), "west island".into(), "centre island".into(), 
-            "georgetown".into(), "saint john's".into(), "st. john's".into(), "wien".into(), "gard".into(), 
-    ].into_iter().collect();
+            "arges".into(), "gard".into(), "georgetown".into(), "saint john's".into(), "st. john's".into(), "stanley".into(), "wien".into(), 
+    ].into_par_iter().collect();
 
     remove_ambiguities(map, blacklist)
 });

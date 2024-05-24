@@ -1,7 +1,7 @@
-use std::{collections::HashMap, error::Error};
 use reqwest::Client;
-use serde_json::Value;
 use super::super::scraper_util::get_iso_from_name;
+use serde_json::Value;
+use std::{collections::HashMap, error::Error};
 
 pub async fn get_largest_billionaires_map(client: &Client) -> Result<HashMap<String, Vec<String>>, Box<dyn Error>> {
     let mut billionaires: HashMap<String, Vec<String>> = HashMap::new();

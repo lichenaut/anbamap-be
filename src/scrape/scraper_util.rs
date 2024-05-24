@@ -1,13 +1,33 @@
-use std::{error::Error, str};
-use std::process::Command;
-use rayon::iter::IntoParallelIterator;
-use unidecode::unidecode;
-use rayon::prelude::*;
+use crate::db::upstash::update_db;
 use crate::KEYPHRASE_REGION_MAP;
+use rayon::prelude::*;
+use super::scrapers::youtube::scrape_youtube_channel;
+use std::{env, error::Error, process::Command, str, sync::{Arc, Mutex}};
+use tokio::time::{Duration, interval};
+use unidecode::unidecode;
+
+pub async fn schedule_scrapers() -> Result<(), Box<dyn Error>> {
+    let mut interval = interval(Duration::from_secs(7200));
+    
+    loop {
+        interval.tick().await;
+        run_scrapers().await?;
+    }
+}
+
+pub async fn run_scrapers() -> Result<(), Box<dyn Error>> {
+    let mut media = Vec::new();
+
+    media.extend(scrape_youtube_channel("UCNye-wNBqNL5ZzHSJj3l8Bg").await?);
+    
+    update_db(media).await?;
+
+    Ok(())
+}
 
 pub async fn get_regions(text: &[&str]) -> Result<Vec<String>, Box<dyn Error>> {
     let text = text.join(" ").replace("&#39;", "'").replace("'s ", " ").replace("s' ", " ");
-    let regions = Command::new("bash").arg("-c").arg(format!("source /home/lichenaut/p3env/bin/activate && python -c 'import sys; sys.path.append(\".\"); from src.region.media_to_regions import get_regions; print(get_regions(\"{}\"))'", text)).output()?;
+    let regions = Command::new("bash").arg("-c").arg(format!("source {} && python -c 'import sys; sys.path.append(\".\"); from src.region.media_to_regions import get_regions; print(get_regions(\"{}\"))'", env::var("PY_ENV_ACTIVATE_PATH")?, text)).output()?;
     let regions = str::from_utf8(&regions.stdout)?.trim();
     let regions: Vec<String> = regions
             .replace("[", "")
@@ -17,27 +37,43 @@ pub async fn get_regions(text: &[&str]) -> Result<Vec<String>, Box<dyn Error>> {
             .map(|s| s.to_string())
             .collect();
 
-    let mut regions = regions.into_iter().filter(|s| match s.as_str() {
+    let regions = regions.into_iter().filter(|s| match s.as_str() {
         "Chad" | "Georgia" | "Guinea-Bissau" | "Jordan" | "Republic of Congo" => false,
         _ => true,
     }).collect::<Vec<String>>();
 
     let text = unidecode(&text.to_lowercase());
-    for (keyphrases, region) in KEYPHRASE_REGION_MAP.iter() {
-        if regions.contains(&region.to_string()) { continue; }
-        
+    let regions = Arc::new(Mutex::new(regions));
+    KEYPHRASE_REGION_MAP.par_iter().for_each(|(keyphrases, region)| {
+        let regions = Arc::clone(&regions);
+        let mut regions_locked = match regions.lock() {
+            Ok(regions) => regions,
+            Err(poisoned) => {
+                tracing::error!("Poisoned lock: {:?}", poisoned);
+                return;
+            }
+        };
+
+        if regions_locked.contains(&region.to_string()) { return; }
+
         for keyphrase in keyphrases.iter() {
             if text.contains(keyphrase) {
-                regions.push(region.to_string());
+                regions_locked.push(region.to_string());
                 break;
             }
         }
-    }
+    });
+
+    let regions = match regions.lock() {
+        Ok(regions) => regions.clone(),
+        Err(poisoned) => {
+            tracing::error!("Poisoned lock: {:?}", poisoned);
+            Vec::new()
+        }
+    };
 
     Ok(regions)
 }
-
-//fn that tests every name into AI?
 
 // pub fn get_name_from_iso(iso_code: &str) -> Option<&str> {
 //     match iso_code {

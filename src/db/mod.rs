@@ -1,2 +1,2 @@
-pub mod db_service;
-pub mod phrase_gen;
+pub mod keyphrase_db;
+pub mod upstash;

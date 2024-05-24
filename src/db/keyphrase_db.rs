@@ -1,15 +1,13 @@
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
-use sqlx::sqlite::{SqliteConnectOptions, SqliteQueryResult};
+use crate::scrape::scrapers::forbes400::get_largest_billionaires_map;
+use crate::scrape::scrapers::wikidata::{region_code_to_figures, verify_codes};
+use crate::scrape::scrapers::wikipedia::get_private_enterprises_map;
 use sqlx::{Executor, SqlitePool};
+use sqlx::sqlite::{SqliteConnectOptions, SqliteQueryResult};
 use std::collections::HashSet;
-use std::fs;
 use std::path::Path;
 use std::{fs::File, io, io::BufRead};
 use unidecode::unidecode;
-use crate::scrape::scrapers::forbes400::get_largest_billionaires_map;
-use crate::scrape::scrapers::wikidata::region_code_to_figures;
-use crate::scrape::scrapers::wikipedia::get_private_enterprises_map;
-use crate::scrape::scrapers::wikidata::verify_codes;
 
 struct Region {
     region_code: String,
@@ -74,6 +72,8 @@ pub async fn gen_keyphrase_db() -> Result<(), Box<dyn std::error::Error>> {
             Some(region_code) => region_code,
             None => continue,
         };
+
+        if region_code == "MZ" && ascii_name.contains("aza") { continue; } // "Gaza" is a better keyphrase for Palestine.
         
         let population = match fields.nth(5) {
             Some(population) => {
@@ -153,8 +153,8 @@ async fn update_region(pool: &sqlx::Pool<sqlx::Sqlite>, region: Region) -> Resul
         Some((existing_keyphrases,)) => {
             let mut keyphrases = existing_keyphrases.split(",").collect::<Vec<&str>>();
             keyphrases.extend(region_keyphrases.split(","));
-            let keyphrases: HashSet<&str> = keyphrases.into_iter().collect();
-            let keyphrases = keyphrases.into_iter().collect::<Vec<&str>>().join(",");
+            let keyphrases: HashSet<&str> = keyphrases.into_par_iter().collect();
+            let keyphrases = keyphrases.into_par_iter().collect::<Vec<&str>>().join(",");
             sqlx::query("UPDATE regions SET keyphrases = $1 WHERE region_code = $2")
                 .bind(keyphrases)
                 .bind(region.region_code)

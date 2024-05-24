@@ -1,5 +1,5 @@
 target
-keys
+.env
 src/region/__pycache__
 src/db/allCountries.txt
 src/db/region_db.sqlite

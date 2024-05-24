@@ -1,8 +1,8 @@
-use std::{collections::HashMap, error::Error};
 use reqwest::Client;
-use wikitext_table_parser::parser::{Event, WikitextTableParser};
-use serde_json::{Value, from_str};
 use super::super::scraper_util::get_iso_from_name;
+use serde_json::{Value, from_str};
+use std::{collections::HashMap, error::Error};
+use wikitext_table_parser::parser::{Event, WikitextTableParser};
 
 pub async fn get_private_enterprises_map(client: &Client) -> Result<HashMap<String, Vec<String>>, Box<dyn Error>> {
     let mut region_to_companies: HashMap<String, Vec<String>> = HashMap::new();
