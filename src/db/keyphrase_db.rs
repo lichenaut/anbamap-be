@@ -1,14 +1,13 @@
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
+use reqwest::Client;
 use crate::scrape::scrapers::forbes400::get_largest_billionaires_map;
 use crate::scrape::scrapers::wikidata::{region_code_to_figures, verify_codes};
 use crate::scrape::scrapers::wikipedia::get_private_enterprises_map;
+use crate::util::zip_service::{unzip_files_to, zip_from_url};
 use sqlx::{Executor, SqlitePool};
 use sqlx::sqlite::{SqliteConnectOptions, SqliteQueryResult};
-use std::collections::HashSet;
-use std::path::Path;
-use std::{fs::File, io, io::BufRead};
+use std::{collections::HashSet, io::BufRead, path::Path};
 use unidecode::unidecode;
-
 struct Region {
     region_code: String,
     keyphrases: String,
@@ -23,13 +22,27 @@ pub async fn get_region_db_pool(db_path: &Path) -> Result<SqlitePool, sqlx::Erro
         .synchronous(sqlx::sqlite::SqliteSynchronous::Normal)).await?)
 }
 
-pub async fn gen_keyphrase_db() -> Result<(), Box<dyn std::error::Error>> {
-    let current_dir = std::env::current_dir()?;
-    let db_path = format!("{}/src/db/region_db.sqlite", current_dir.display());
+pub async fn gen_keyphrase_db(exe_parent: String) -> Result<(), Box<dyn std::error::Error>> {
+    let db_path = format!("{}/region_db.sqlite", exe_parent);
     let db_path = Path::new(&db_path);
     if db_path.exists() {
         tracing::info!("region_db.sqlite found. Skipping keyphrase database generation.");
         return Ok(())
+    }
+
+    let client = Client::new();
+    let all_countries_path = format!("{}/allCountries.txt", exe_parent);
+    let all_countries_path = Path::new(&all_countries_path);
+    if all_countries_path.exists() {
+        tracing::info!("allCountries.txt found. Skipping download and decompression.");
+    } else {
+        let zip_path = format!("{}/allCountries.zip", exe_parent);
+        if !Path::new(&zip_path).exists() {
+            tracing::info!("allCountries.zip not found. Downloading allCountries.zip.");
+            zip_from_url(&client, "https://download.geonames.org/export/dump/allCountries.zip", &zip_path).await?;
+        }
+        tracing::info!("Decompressing allCountries.zip.");
+        unzip_files_to(&zip_path, &exe_parent).await?;
     }
 
     let pool = get_region_db_pool(&db_path).await?;
@@ -39,15 +52,8 @@ pub async fn gen_keyphrase_db() -> Result<(), Box<dyn std::error::Error>> {
             keyphrases TEXT
         )"
     ).await?;
-    
-    let all_countries_path = format!("{}/src/db/allCountries.txt", current_dir.display()); // https://download.geonames.org/export/dump/allCountries.zip
-    let all_countries_path = Path::new(&all_countries_path);
-    if !all_countries_path.exists() {
-        tracing::error!("src/db/allCountries.txt not found. You can download it from https://download.geonames.org/export/dump/allCountries.zip to place it in the src/db folder.");
-        return Ok(())
-    }
 
-    let reader = io::BufReader::new(File::open(all_countries_path)?);
+    let reader = std::io::BufReader::new(std::fs::File::open(all_countries_path)?);
     for line in reader.lines() {
         let line = line?;
         let mut fields = line.split("\t");
@@ -108,7 +114,6 @@ pub async fn gen_keyphrase_db() -> Result<(), Box<dyn std::error::Error>> {
 
     verify_codes().await;
     let region_codes = vec!["AD", "AE", "AF", "AG", "AI", "AL", "AM", "AO", "AQ", "AR", "AS", "AT", "AU", "AW", "AX", "AZ", "BA", "BB", "BD", "BE", "BF", "BG", "BH", "BI", "BJ", "BL", "BM", "BN", "BO", "BQ", "BR", "BS", "BT", "BV", "BW", "BY", "BZ", "CA", "CC", "CD", "CF", "CG", "CH", "CI", "CK", "CL", "CM", "CN", "CO", "CR", "CU", "CV", "CW", "CX", "CY", "CZ", "DE", "DJ", "DK", "DM", "DO", "DZ", "EC", "EE", "EG", "EH", "ER", "ES", "ET", "FI", "FJ", "FK", "FM", "FO", "FR", "GA", "GB", "GD", "GE", "GF", "GG", "GH", "GI", "GL", "GM", "GN", "GP", "GQ", "GR", "GS", "GT", "GU", "GW", "GY", "HK", "HM", "HN", "HR", "HT", "HU", "ID", "IE", "IL", "IM", "IN", "IO", "IQ", "IR", "IS", "IT", "JE", "JM", "JO", "JP", "KE", "KG", "KH", "KI", "KM", "KN", "KP", "KR", "KW", "KY", "KZ", "LA", "LB", "LC", "LI", "LK", "LR", "LS", "LT", "LU", "LV", "LY", "MA", "MC", "MD", "ME", "MF", "MG", "MH", "MK", "ML", "MM", "MN", "MO", "MP", "MQ", "MR", "MS", "MT", "MU", "MV", "MW", "MX", "MY", "MZ", "NA", "NC", "NE", "NF", "NG", "NI", "NL", "NO", "NP", "NR", "NU", "NZ", "OM", "PA", "PE", "PF", "PG", "PH", "PK", "PL", "PM", "PN", "PR", "PS", "PT", "PW", "PY", "QA", "RE", "RO", "RS", "RU", "RW", "SA", "SB", "SC", "SD", "SE", "SG", "SH", "SI", "SJ", "SK", "SL", "SM", "SN", "SO", "SR", "SS", "ST", "SV", "SX", "SY", "SZ", "TC", "TD", "TF", "TG", "TH", "TJ", "TK", "TL", "TM", "TN", "TO", "TR", "TT", "TV", "TW", "TZ", "UA", "UG", "UM", "US", "UY", "UZ", "VA", "VC", "VE", "VG", "VI", "VN", "VU", "WF", "WS", "YE", "YT", "ZA", "ZM", "ZW"];
-    let client = reqwest::Client::new();
     for region_code in &region_codes {
         let heads_of_state = region_code_to_figures(&client, region_code).await?;
         for head_of_state in heads_of_state {

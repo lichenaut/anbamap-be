@@ -2,7 +2,7 @@ use crate::db::upstash::update_db;
 use crate::KEYPHRASE_REGION_MAP;
 use rayon::prelude::*;
 use super::scrapers::youtube::scrape_youtube_channel;
-use std::{env, error::Error, process::Command, str, sync::{Arc, Mutex}};
+use std::{env::var, error::Error, process::Command, str, sync::{Arc, Mutex}};
 use tokio::time::{Duration, interval};
 use unidecode::unidecode;
 
@@ -27,7 +27,7 @@ pub async fn run_scrapers() -> Result<(), Box<dyn Error>> {
 
 pub async fn get_regions(text: &[&str]) -> Result<Vec<String>, Box<dyn Error>> {
     let text = text.join(" ").replace("&#39;", "'").replace("'s ", " ").replace("s' ", " ");
-    let regions = Command::new("bash").arg("-c").arg(format!("source {} && python -c 'import sys; sys.path.append(\".\"); from src.region.media_to_regions import get_regions; print(get_regions(\"{}\"))'", env::var("PY_ENV_ACTIVATE_PATH")?, text)).output()?;
+    let regions = Command::new("bash").arg("-c").arg(format!("source {} && python -c 'import sys; sys.path.append(\".\"); from src.region.media_to_regions import get_regions; print(get_regions(\"{}\"))'", var("PY_ENV_ACTIVATE_PATH")?, text)).output()?;
     let regions = str::from_utf8(&regions.stdout)?.trim();
     let regions: Vec<String> = regions
             .replace("[", "")

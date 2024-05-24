@@ -3,7 +3,7 @@ use crate::db::keyphrase_db::get_region_db_pool;
 use once_cell::sync::Lazy;
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
 use sqlx::Row;
-use std::{collections::{HashMap, HashSet}, error::Error, io::stdin, path::Path, vec};
+use std::{collections::{HashMap, HashSet}, env, error::Error, io::stdin, path::Path, vec};
 
 struct RegionKeyphrases {
     pub automated: Option<Vec<String>>, // src/db/keyphrase_db.rs
@@ -81,8 +81,16 @@ impl RegionKeyphrases {
 }
 
 async fn build_region_map() -> Result<HashMap<String, Vec<String>>, Box<dyn Error>> {
-    let current_dir = std::env::current_dir()?;
-    let db_path = format!("{}/src/db/region_db.sqlite", current_dir.display());
+    let exe_path = env::current_exe()?;
+    let exe_parent = match exe_path.parent() {
+        Some(parent_dir) => parent_dir.display(),
+        None => {
+            tracing::error!("Could not get parent directory of executable.");
+            return Err(String::new().into())
+        },
+    };
+    
+    let db_path = format!("{}/region_db.sqlite", exe_parent);
     let db_path = Path::new(&db_path);
     let pool = get_region_db_pool(&db_path).await?;
     let mut region_map = HashMap::new();
@@ -997,7 +1005,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         names: Some(vec!["north korea".into()]),
         demonyms: None,
         enterprises: None,
-        misc: Some(vec!["supreme people's assembly".into(), "dfrk".into()]),
+        misc: Some(vec!["supreme people's assembly".into(), "dprk".into()]),
     }.get_region_vec(), "North Korea".into()));
     map.push((RegionKeyphrases {
         automated: get_automated_keyphrases(&region_map, "KR"),
