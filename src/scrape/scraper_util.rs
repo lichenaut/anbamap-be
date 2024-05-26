@@ -64,7 +64,7 @@ pub async fn get_regions(text: &[&str]) -> Result<Vec<String>, Box<dyn Error>> {
         }
     });
 
-    let regions = match regions.lock() {
+    let mut regions = match regions.lock() {
         Ok(regions) => regions.clone(),
         Err(poisoned) => {
             tracing::error!("Poisoned lock: {:?}", poisoned);
@@ -72,8 +72,11 @@ pub async fn get_regions(text: &[&str]) -> Result<Vec<String>, Box<dyn Error>> {
         }
     };
 
+    if text.contains("ireland") && !regions.contains(&"northern ireland".to_string()) { regions.push("Ireland".into()); }
+
     Ok(regions)
 }
+
 
 // pub fn get_name_from_iso(iso_code: &str) -> Option<&str> {
 //     match iso_code {

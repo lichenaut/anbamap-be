@@ -871,7 +871,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
         automated: get_automated_keyphrases(&region_map, "IE"),
         names: None,
         demonyms: Some(vec!["irish".into()]),
-        enterprises: Some(vec!["accenture".into(), "eaton".into(), "medtronic".into(), "trane tech".into(), "cement roadstone".into(), "johnson controls".into(), "experian".into(), "ingersoll".into(), "flutter entertainment".into(), "ryanair".into(), "icon plc".into(), "steris".into(), "aptiv".into(), "seagate".into(), "aercap".into(), "kingspan".into(), "james hardie".into(), "kerry group".into(), "aib".into(), "smurfit kappa".into(), "bank of ireland".into(), "allegion".into()]),
+        enterprises: Some(vec!["accenture".into(), "eaton".into(), "medtronic".into(), "trane tech".into(), "cement roadstone".into(), "johnson controls".into(), "experian".into(), "ingersoll".into(), "flutter entertainment".into(), "ryanair".into(), "icon plc".into(), "steris".into(), "aptiv inc".into(), "seagate".into(), "aercap".into(), "kingspan".into(), "james hardie".into(), "kerry group".into(), "aib".into(), "smurfit kappa".into(), "bank of ireland".into(), "allegion".into()]),
         misc: Some(vec!["oireachtas".into(), "fianna fail".into(), "fine gael".into(), "sinn fein".into()]),
     }.get_region_vec(), "Ireland".into()));
     map.push((RegionKeyphrases {
