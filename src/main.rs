@@ -24,11 +24,7 @@ use db::keyphrase_db::gen_keyphrase_db;
 use region::regions::KEYPHRASE_REGION_MAP;
 use sentry::{init, release_name, ClientOptions};
 use sentry_tracing::EventFilter;
-use std::{
-    env::{current_exe, var},
-    error::Error,
-    str,
-};
+use std::{env::var, error::Error, str};
 use tracing_subscriber::{fmt, layer::SubscriberExt, util::SubscriberInitExt};
 use util::{path_service::get_parent_dir, venv_service::create_venv};
 

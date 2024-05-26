@@ -33,7 +33,7 @@ pub async fn update_db(
 
         connection.hset(&url, "timestamp", now)?;
         connection.hset(&url, "title", title)?;
-        connection.hset(&url, "description", description)?;
+        connection.hset(&url, "body", description)?;
         connection.hset(url, "regions", regions.join(","))?;
     }
 
