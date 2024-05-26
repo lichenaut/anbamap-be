@@ -10,6 +10,12 @@ In order to host this software, you will need: a [Python 3 virtual environment](
 
 Every 2 hours, Anbamap-BE will scrape text from its configured media sources, use 2 layers of region identification to determine which regions a media is related to, and store all of this information to a database.
 
+#### Identification Layers
+The 2 layers of identification are as follows:
+1. [flashgeotext](https://github.com/iwpnd/flashgeotext): a Python library that uses AI to determine related regions from text with OK accuracy. This is mainly for contextual meanings the keyphrase checker does not do a good job with.
+2. Keyphrase checking: an in-memory data structure of keyphrases that are checked against scraped text content. Please help me maintain [this](https://github.com/lichenaut/anbamap-be/blob/dcfcc41ef99947fb45179c89a85d0fd462234121/src/region/regions.rs#L152) as time goes on!
+
+&nbsp;
 #### Rust Code: Database Storing
 ```rust
 for (url, title, description, regions) in media {
@@ -19,12 +25,6 @@ for (url, title, description, regions) in media {
     connection.hset(url, "regions", regions.join(","))?;
 }
 ```
-
-&nbsp;
-#### Identification Layers
-The 2 layers of identification are as follows:
-1. [flashgeotext](https://github.com/iwpnd/flashgeotext): a Python library that uses AI to determine related regions from text with OK accuracy. This is mainly for contextual meanings the keyphrase checker does not do a good job with.
-2. Keyphrase checking: an in-memory data structure of keyphrases that are checked against scraped text content. Please help me maintain [this](https://github.com/lichenaut/anbamap-be/blob/dcfcc41ef99947fb45179c89a85d0fd462234121/src/region/regions.rs#L152) as time goes on!
 
 &nbsp;
 ## Installation
