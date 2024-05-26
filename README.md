@@ -3,6 +3,7 @@ This repository contains the backend server software for Anbamap.
 
 [![Github All Releases](https://img.shields.io/github/downloads/lichenaut/anbamap-be/total.svg)]()
 
+&nbsp;
 ## Functionality Overview
 
 In order to host this software, you will need: a [Python 3 virtual environment](https://docs.python.org/3/library/venv.html), [Youtube Data API key](https://developers.google.com/youtube/registering_an_application), and [Upstash](https://upstash.com/) Redis database. Optionally, you can also use [Sentry](https://sentry.io/welcome/).
@@ -25,6 +26,7 @@ The 2 layers of identification are as follows:
 1. [flashgeotext](https://github.com/iwpnd/flashgeotext): a Python library that uses AI to determine related regions from text with OK accuracy. This is mainly for contextual meanings the keyphrase checker does not do a good job with.
 2. Keyphrase checking: an in-memory data structure of keyphrases that are checked against scraped text content. Please help me maintain [this](https://github.com/lichenaut/anbamap-be/blob/dcfcc41ef99947fb45179c89a85d0fd462234121/src/region/regions.rs#L152) as time goes on!
 
+&nbsp;
 ## Installation
 
 ### Linux
