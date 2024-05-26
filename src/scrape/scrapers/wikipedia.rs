@@ -1,30 +1,33 @@
-use reqwest::Client;
 use super::super::scraper_util::get_iso_from_name;
-use serde_json::{Value, from_str};
+use reqwest::Client;
+use serde_json::{from_str, Value};
 use std::{collections::HashMap, error::Error};
 use wikitext_table_parser::parser::{Event, WikitextTableParser};
 
-pub async fn get_private_enterprises_map(client: &Client) -> Result<HashMap<String, Vec<String>>, Box<dyn Error>> {
+pub async fn get_private_enterprises_map(
+    client: &Client,
+) -> Result<HashMap<String, Vec<String>>, Box<dyn Error>> {
     let mut region_to_companies: HashMap<String, Vec<String>> = HashMap::new();
     let url = "https://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&rvslots=main&format=json&titles=List_of_largest_private_non-governmental_companies_by_revenue";
     let response = client.get(url).send().await?;
     if !response.status().is_success() {
         tracing::error!("Non-success response from Wikipedia: {}", response.status());
-        return Ok(region_to_companies)
+        return Ok(region_to_companies);
     }
 
     let text = response.text().await?;
     let parsed: Value = from_str(&text)?;
     let content = match parsed["query"]["pages"].as_object().and_then(|pages| {
-        pages.values().next().and_then(|page| {
-            page["revisions"][0]["slots"]["main"]["*"].as_str()
-        })
+        pages
+            .values()
+            .next()
+            .and_then(|page| page["revisions"][0]["slots"]["main"]["*"].as_str())
     }) {
         Some(content) => content,
         None => {
             tracing::error!("Failed to get content from Wikipedia response");
-            return Ok(region_to_companies)
-        },
+            return Ok(region_to_companies);
+        }
     };
 
     let mut current_region;
@@ -39,7 +42,7 @@ pub async fn get_private_enterprises_map(client: &Client) -> Result<HashMap<Stri
                 };
 
                 if text.starts_with("[[") && text.ends_with("]]") {
-                    current_enterprise = text[2..text.len()-2].to_string();
+                    current_enterprise = text[2..text.len() - 2].to_string();
 
                     if current_enterprise.contains("|") {
                         current_enterprise = match current_enterprise.split("|").last() {
@@ -47,7 +50,10 @@ pub async fn get_private_enterprises_map(client: &Client) -> Result<HashMap<Stri
                             None => continue,
                         };
                     }
-                } else if !first_char.is_numeric() && !text.starts_with("[") && !text.starts_with("\"") {
+                } else if !first_char.is_numeric()
+                    && !text.starts_with("[")
+                    && !text.starts_with("\"")
+                {
                     current_region = text.to_string();
 
                     if current_region.contains(".") {
@@ -62,7 +68,10 @@ pub async fn get_private_enterprises_map(client: &Client) -> Result<HashMap<Stri
                         None => continue,
                     };
 
-                    region_to_companies.entry(current_region_code).or_insert_with(Vec::new).push(current_enterprise.clone());
+                    region_to_companies
+                        .entry(current_region_code)
+                        .or_insert_with(Vec::new)
+                        .push(current_enterprise.clone());
                 }
             }
             _ => (),

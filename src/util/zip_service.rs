@@ -5,7 +5,11 @@ use tokio::io::AsyncWriteExt;
 use tokio_stream::StreamExt;
 use zip::ZipArchive;
 
-pub async fn zip_from_url(client: &Client, url: &str, zip_path: &str) -> Result<(), Box<dyn Error>> {
+pub async fn zip_from_url(
+    client: &Client,
+    url: &str,
+    zip_path: &str,
+) -> Result<(), Box<dyn Error>> {
     tracing::info!("Downloading zip file from {} to {}", url, zip_path);
 
     let response = client.get(url).send().await?;
@@ -28,7 +32,7 @@ pub async fn unzip_files_to(zip_path: &str, parent_dir: &str) -> Result<(), Box<
             Some(path) => path.to_owned(),
             None => continue,
         };
-        
+
         let mut path = PathBuf::from(parent_dir);
         path.push(outpath);
         let mut outfile = std::fs::File::create(&path)?;

@@ -1,68 +1,81 @@
-use crate::db::upstash::update_db;
-use crate::KEYPHRASE_REGION_MAP;
-use rayon::prelude::*;
 use super::scrapers::youtube::scrape_youtube_channel;
-use std::{env::var, error::Error, process::Command, str, sync::{Arc, Mutex}};
-use tokio::time::{Duration, interval};
+use crate::KEYPHRASE_REGION_MAP;
+use crate::{db::redis::update_db, util::path_service::get_parent_dir};
+use rayon::prelude::*;
+use std::{
+    env::var,
+    error::Error,
+    process::Command,
+    str,
+    sync::{Arc, Mutex},
+};
 use unidecode::unidecode;
-
-pub async fn schedule_scrapers() -> Result<(), Box<dyn Error>> {
-    let mut interval = interval(Duration::from_secs(7200));
-    
-    loop {
-        interval.tick().await;
-        run_scrapers().await?;
-    }
-}
 
 pub async fn run_scrapers() -> Result<(), Box<dyn Error>> {
     let mut media = Vec::new();
-
-    media.extend(scrape_youtube_channel("UCNye-wNBqNL5ZzHSJj3l8Bg").await?);
-    
+    scrape_youtube(&mut media).await?;
     update_db(media).await?;
 
     Ok(())
 }
 
-pub async fn get_regions(text: &[&str]) -> Result<Vec<String>, Box<dyn Error>> {
-    let text = text.join(" ").replace("&#39;", "'").replace("'s ", " ").replace("s' ", " ");
-    let regions = Command::new("bash").arg("-c").arg(format!("source {} && python -c 'import sys; sys.path.append(\".\"); from src.region.media_to_regions import get_regions; print(get_regions(\"{}\"))'", var("PY_ENV_ACTIVATE_PATH")?, text)).output()?;
-    let regions = str::from_utf8(&regions.stdout)?.trim();
-    let regions: Vec<String> = regions
-            .replace("[", "")
-            .replace("]", "")
-            .replace("'", "")
-            .split(", ")
-            .map(|s| s.to_string())
-            .collect();
+async fn scrape_youtube(
+    media: &mut Vec<(String, String, String, Vec<String>)>,
+) -> Result<(), Box<dyn Error>> {
+    let youtube_api_key = var("YOUTUBE_API_KEY")?;
+    if youtube_api_key.is_empty() {
+        return Ok(());
+    }
 
-    let regions = regions.into_iter().filter(|s| match s.as_str() {
-        "Chad" | "Georgia" | "Guinea-Bissau" | "Jordan" | "Republic of Congo" => false,
-        _ => true,
-    }).collect::<Vec<String>>();
+    let youtube_channel_ids = var("YOUTUBE_CHANNEL_IDS")?;
+    if youtube_channel_ids.is_empty() {
+        return Ok(());
+    }
+
+    let youtube_channel_ids = youtube_channel_ids
+        .split(",")
+        .filter(|&s| !s.is_empty())
+        .collect::<Vec<&str>>();
+    for youtube_channel_id in youtube_channel_ids {
+        media.extend(scrape_youtube_channel(&youtube_api_key, &youtube_channel_id).await?);
+    }
+
+    Ok(())
+}
+
+pub async fn get_regions(text: &[&str]) -> Result<Vec<String>, Box<dyn Error>> {
+    let text = text
+        .join(" ")
+        .replace("&#39;", "'")
+        .replace("'s ", " ")
+        .replace("s' ", " ");
+    let regions = get_flashgeotext_regions(&text).await?;
 
     let text = unidecode(&text.to_lowercase());
     let regions = Arc::new(Mutex::new(regions));
-    KEYPHRASE_REGION_MAP.par_iter().for_each(|(keyphrases, region)| {
-        let regions = Arc::clone(&regions);
-        let mut regions_locked = match regions.lock() {
-            Ok(regions) => regions,
-            Err(poisoned) => {
-                tracing::error!("Poisoned lock: {:?}", poisoned);
+    KEYPHRASE_REGION_MAP
+        .par_iter()
+        .for_each(|(keyphrases, region)| {
+            let regions = Arc::clone(&regions);
+            let mut regions_locked = match regions.lock() {
+                Ok(regions) => regions,
+                Err(poisoned) => {
+                    tracing::error!("Poisoned lock: {:?}", poisoned);
+                    return;
+                }
+            };
+
+            if regions_locked.contains(&region.to_string()) {
                 return;
             }
-        };
 
-        if regions_locked.contains(&region.to_string()) { return; }
-
-        for keyphrase in keyphrases.iter() {
-            if text.contains(keyphrase) {
-                regions_locked.push(region.to_string());
-                break;
+            for keyphrase in keyphrases.iter() {
+                if text.contains(keyphrase) {
+                    regions_locked.push(region.to_string());
+                    break;
+                }
             }
-        }
-    });
+        });
 
     let mut regions = match regions.lock() {
         Ok(regions) => regions.clone(),
@@ -72,267 +85,45 @@ pub async fn get_regions(text: &[&str]) -> Result<Vec<String>, Box<dyn Error>> {
         }
     };
 
-    if text.contains("ireland") && !regions.contains(&"northern ireland".to_string()) { regions.push("Ireland".into()); }
+    if text.contains("ireland") && !regions.contains(&"northern ireland".to_string()) {
+        regions.push("Ireland".into());
+    }
 
     Ok(regions)
 }
 
+async fn get_flashgeotext_regions(text: &String) -> Result<Vec<String>, Box<dyn Error>> {
+    let regions = Command::new(format!("{}/p3venv/bin/python", get_parent_dir().await?))
+            .arg("-c")
+            .arg(format!("import sys; sys.path.append(\".\"); from flashgeotext import get_regions; print(get_regions(\"{}\"))", text))
+            .output()?;
 
-// pub fn get_name_from_iso(iso_code: &str) -> Option<&str> {
-//     match iso_code {
-//         "AD" => Some("Andorra"),
-//         "AE" => Some("United Arab Emirates"),
-//         "AF" => Some("Afghanistan"),
-//         "AG" => Some("Antigua and Barbuda"),
-//         "AI" => Some("Anguilla"),
-//         "AL" => Some("Albania"),
-//         "AM" => Some("Armenia"),
-//         "AO" => Some("Angola"),
-//         "AQ" => Some("Antarctica"),
-//         "AR" => Some("Argentina"),
-//         "AS" => Some("American Samoa"),
-//         "AT" => Some("Austria"),
-//         "AU" => Some("Australia"),
-//         "AW" => Some("Aruba"),
-//         "AX" => Some("Aland Islands"),
-//         "AZ" => Some("Azerbaijan"),
-//         "BA" => Some("Bosnia and Herzegovina"),
-//         "BB" => Some("Barbados"),
-//         "BD" => Some("Bangladesh"),
-//         "BE" => Some("Belgium"),
-//         "BF" => Some("Burkina Faso"),
-//         "BG" => Some("Bulgaria"),
-//         "BH" => Some("Bahrain"),
-//         "BI" => Some("Burundi"),
-//         "BJ" => Some("Benin"),
-//         "BL" => Some("Saint Barthelemy"),
-//         "BM" => Some("Bermuda"),
-//         "BN" => Some("Brunei"),
-//         "BO" => Some("Bolivia"),
-//         "BQ" => Some("Bonaire, Sint Eustatius, and Saba"),
-//         "BR" => Some("Brazil"),
-//         "BS" => Some("Bahamas"),
-//         "BT" => Some("Bhutan"),
-//         "BV" => Some("Bouvet Island"),
-//         "BW" => Some("Botswana"),
-//         "BY" => Some("Belarus"),
-//         "BZ" => Some("Belize"),
-//         "CA" => Some("Canada"),
-//         "CC" => Some("Cocos (Keeling) Islands"),
-//         "CD" => Some("Democratic Republic of the Congo"),
-//         "CF" => Some("Central African Republic"),
-//         "CG" => Some("Republic of the Congo"),
-//         "CH" => Some("Switzerland"),
-//         "CI" => Some("Ivory Coast"),
-//         "CK" => Some("Cook Islands"),
-//         "CL" => Some("Chile"),
-//         "CM" => Some("Cameroon"),
-//         "CN" => Some("China"),
-//         "CO" => Some("Colombia"),
-//         "CR" => Some("Costa Rica"),
-//         "CU" => Some("Cuba"),
-//         "CV" => Some("Cape Verde"),
-//         "CW" => Some("Curacao"),
-//         "CX" => Some("Christmas Island"),
-//         "CY" => Some("Cyprus"),
-//         "CZ" => Some("Czech Republic"),
-//         "DE" => Some("Germany"),
-//         "DJ" => Some("Djibouti"),
-//         "DK" => Some("Denmark"),
-//         "DM" => Some("Dominica"),
-//         "DO" => Some("Dominican Republic"),
-//         "DZ" => Some("Algeria"),
-//         "EC" => Some("Ecuador"),
-//         "EE" => Some("Estonia"),
-//         "EG" => Some("Egypt"),
-//         "EH" => Some("Western Sahara"),
-//         "ER" => Some("Eritrea"),
-//         "ES" => Some("Spain"),
-//         "ET" => Some("Ethiopia"),
-//         "FI" => Some("Finland"),
-//         "FJ" => Some("Fiji"),
-//         "FK" => Some("Falkland Islands"),
-//         "FM" => Some("Micronesia"),
-//         "FO" => Some("Faroe Islands"),
-//         "FR" => Some("France"),
-//         "GA" => Some("Gabon"),
-//         "GB" => Some("United Kingdom"),
-//         "GD" => Some("Grenada"),
-//         "GE" => Some("Georgia"),
-//         "GF" => Some("French Guiana"),
-//         "GG" => Some("Guernsey"),
-//         "GH" => Some("Ghana"),
-//         "GI" => Some("Gibraltar"),
-//         "GL" => Some("Greenland"),
-//         "GM" => Some("Gambia"),
-//         "GN" => Some("Guinea"),
-//         "GP" => Some("Guadeloupe"),
-//         "GQ" => Some("Equatorial Guinea"),
-//         "GR" => Some("Greece"),
-//         "GS" => Some("South Georgia and the South Sandwich Islands"),
-//         "GT" => Some("Guatemala"),
-//         "GU" => Some("Guam"),
-//         "GW" => Some("Guinea-Bissau"),
-//         "GY" => Some("Guyana"),
-//         "HK" => Some("Hong Kong"),
-//         "HM" => Some("Heard Island and McDonald Islands"),
-//         "HN" => Some("Honduras"),
-//         "HR" => Some("Croatia"),
-//         "HT" => Some("Haiti"),
-//         "HU" => Some("Hungary"),
-//         "ID" => Some("Indonesia"),
-//         "IE" => Some("Ireland"),
-//         "IL" => Some("Israel"),
-//         "IM" => Some("Isle of Man"),
-//         "IN" => Some("India"),
-//         "IO" => Some("British Indian Ocean Territory"),
-//         "IQ" => Some("Iraq"),
-//         "IR" => Some("Iran"),
-//         "IS" => Some("Iceland"),
-//         "IT" => Some("Italy"),
-//         "JE" => Some("Jersey"),
-//         "JM" => Some("Jamaica"),
-//         "JO" => Some("Jordan"),
-//         "JP" => Some("Japan"),
-//         "KE" => Some("Kenya"),
-//         "KG" => Some("Kyrgyzstan"),
-//         "KH" => Some("Cambodia"),
-//         "KI" => Some("Kiribati"),
-//         "KM" => Some("Comoros"),
-//         "KN" => Some("Saint Kitts and Nevis"),
-//         "KP" => Some("North Korea"),
-//         "KR" => Some("South Korea"),
-//         "KW" => Some("Kuwait"),
-//         "KY" => Some("Cayman Islands"),
-//         "KZ" => Some("Kazakhstan"),
-//         "LA" => Some("Laos"),
-//         "LB" => Some("Lebanon"),
-//         "LC" => Some("Saint Lucia"),
-//         "LI" => Some("Liechtenstein"),
-//         "LK" => Some("Sri Lanka"),
-//         "LR" => Some("Liberia"),
-//         "LS" => Some("Lesotho"),
-//         "LT" => Some("Lithuania"),
-//         "LU" => Some("Luxembourg"),
-//         "LV" => Some("Latvia"),
-//         "LY" => Some("Libya"),
-//         "MA" => Some("Morocco"),
-//         "MC" => Some("Monaco"),
-//         "MD" => Some("Moldova"),
-//         "ME" => Some("Montenegro"),
-//         "MF" => Some("Saint Martin"),
-//         "MG" => Some("Madagascar"),
-//         "MH" => Some("Marshall Islands"),
-//         "MK" => Some("North Macedonia"),
-//         "ML" => Some("Mali"),
-//         "MM" => Some("Myanmar"),
-//         "MN" => Some("Mongolia"),
-//         "MO" => Some("Macau"),
-//         "MP" => Some("Northern Mariana Islands"),
-//         "MQ" => Some("Martinique"),
-//         "MR" => Some("Mauritania"),
-//         "MS" => Some("Montserrat"),
-//         "MT" => Some("Malta"),
-//         "MU" => Some("Mauritius"),
-//         "MV" => Some("Maldives"),
-//         "MW" => Some("Malawi"),
-//         "MX" => Some("Mexico"),
-//         "MY" => Some("Malaysia"),
-//         "MZ" => Some("Mozambique"),
-//         "NA" => Some("Namibia"),
-//         "NC" => Some("New Caledonia"),
-//         "NE" => Some("Niger"),
-//         "NF" => Some("Norfolk Island"),
-//         "NG" => Some("Nigeria"),
-//         "NI" => Some("Nicaragua"),
-//         "NL" => Some("Netherlands"),
-//         "NO" => Some("Norway"),
-//         "NP" => Some("Nepal"),
-//         "NR" => Some("Nauru"),
-//         "NU" => Some("Niue"),
-//         "NZ" => Some("New Zealand"),
-//         "OM" => Some("Oman"),
-//         "PA" => Some("Panama"),
-//         "PE" => Some("Peru"),
-//         "PF" => Some("French Polynesia"),
-//         "PG" => Some("Papua New Guinea"),
-//         "PH" => Some("Philippines"),
-//         "PK" => Some("Pakistan"),
-//         "PL" => Some("Poland"),
-//         "PM" => Some("Saint Pierre and Miquelon"),
-//         "PN" => Some("Pitcairn Islands"),
-//         "PR" => Some("Puerto Rico"),
-//         "PS" => Some("Palestine"),
-//         "PT" => Some("Portugal"),
-//         "PW" => Some("Palau"),
-//         "PY" => Some("Paraguay"),
-//         "QA" => Some("Qatar"),
-//         "RE" => Some("Reunion"),
-//         "RO" => Some("Romania"),
-//         "RS" => Some("Serbia"),
-//         "RU" => Some("Russia"),
-//         "RW" => Some("Rwanda"),
-//         "SA" => Some("Saudi Arabia"),
-//         "SB" => Some("Solomon Islands"),
-//         "SC" => Some("Seychelles"),
-//         "SD" => Some("Sudan"),
-//         "SE" => Some("Sweden"),
-//         "SG" => Some("Singapore"),
-//         "SH" => Some("Saint Helena"),
-//         "SI" => Some("Slovenia"),
-//         "SJ" => Some("Svalbard and Jan Mayen"),
-//         "SK" => Some("Slovakia"),
-//         "SL" => Some("Sierra Leone"),
-//         "SM" => Some("San Marino"),
-//         "SN" => Some("Senegal"),
-//         "SO" => Some("Somalia"),
-//         "SR" => Some("Suriname"),
-//         "SS" => Some("South Sudan"),
-//         "ST" => Some("Sao Tome and Principe"),
-//         "SV" => Some("El Salvador"),
-//         "SX" => Some("Sint Maarten"),
-//         "SY" => Some("Syria"),
-//         "SZ" => Some("Eswatini"),
-//         "TC" => Some("Turks and Caicos Islands"),
-//         "TD" => Some("Chad"),
-//         "TF" => Some("French Southern Territories"),
-//         "TG" => Some("Togo"),
-//         "TH" => Some("Thailand"),
-//         "TJ" => Some("Tajikistan"),
-//         "TK" => Some("Tokelau"),
-//         "TL" => Some("East Timor"),
-//         "TM" => Some("Turkmenistan"),
-//         "TN" => Some("Tunisia"),
-//         "TO" => Some("Tonga"),
-//         "TR" => Some("Turkey"),
-//         "TT" => Some("Trinidad and Tobago"),
-//         "TV" => Some("Tuvalu"),
-//         "TW" => Some("Taiwan"),
-//         "TZ" => Some("Tanzania"),
-//         "UA" => Some("Ukraine"),
-//         "UG" => Some("Uganda"),
-//         "UM" => Some("United States Minor Outlying Islands"),
-//         "US" => Some("United States"),
-//         "UY" => Some("Uruguay"),
-//         "UZ" => Some("Uzbekistan"),
-//         "VA" => Some("Vatican City"),
-//         "VC" => Some("Saint Vincent and the Grenadines"),
-//         "VE" => Some("Venezuela"),
-//         "VG" => Some("British Virgin Islands"),
-//         "VI" => Some("United States Virgin Islands"),
-//         "VN" => Some("Vietnam"),
-//         "VU" => Some("Vanuatu"),
-//         "WF" => Some("Wallis and Futuna"),
-//         "WS" => Some("Samoa"),
-//         "YE" => Some("Yemen"),
-//         "YT" => Some("Mayotte"),
-//         "XK" => Some("Kosovo"),
-//         "ZA" => Some("South Africa"),
-//         "ZM" => Some("Zambia"),
-//         "ZW" => Some("Zimbabwe"),
-//         _ => None,
-//     }
-// }
+    if regions.status.success() {
+        let regions = str::from_utf8(&regions.stdout)?.trim();
+        let regions: Vec<String> = regions
+            .replace("[", "")
+            .replace("]", "")
+            .replace("'", "")
+            .split(", ")
+            .map(|s| s.to_string())
+            .collect();
+        let regions = regions
+            .into_iter()
+            .filter(|s| match s.as_str() {
+                "Chad" | "Georgia" | "Guinea-Bissau" | "Jordan" | "Republic of Congo" => false,
+                _ => true,
+            })
+            .collect::<Vec<String>>();
+
+        Ok(regions)
+    } else {
+        println!(
+            "Flashgeotext error: {:?}",
+            str::from_utf8(&regions.stderr)?.trim()
+        ); //TODO remove
+        Ok(Vec::new())
+    }
+}
 
 pub fn get_iso_from_name(name: &str) -> Option<&str> {
     match name {
@@ -589,3 +380,259 @@ pub fn get_iso_from_name(name: &str) -> Option<&str> {
         _ => None,
     }
 }
+
+// pub fn get_name_from_iso(iso_code: &str) -> Option<&str> {
+//     match iso_code {
+//         "AD" => Some("Andorra"),
+//         "AE" => Some("United Arab Emirates"),
+//         "AF" => Some("Afghanistan"),
+//         "AG" => Some("Antigua and Barbuda"),
+//         "AI" => Some("Anguilla"),
+//         "AL" => Some("Albania"),
+//         "AM" => Some("Armenia"),
+//         "AO" => Some("Angola"),
+//         "AQ" => Some("Antarctica"),
+//         "AR" => Some("Argentina"),
+//         "AS" => Some("American Samoa"),
+//         "AT" => Some("Austria"),
+//         "AU" => Some("Australia"),
+//         "AW" => Some("Aruba"),
+//         "AX" => Some("Aland Islands"),
+//         "AZ" => Some("Azerbaijan"),
+//         "BA" => Some("Bosnia and Herzegovina"),
+//         "BB" => Some("Barbados"),
+//         "BD" => Some("Bangladesh"),
+//         "BE" => Some("Belgium"),
+//         "BF" => Some("Burkina Faso"),
+//         "BG" => Some("Bulgaria"),
+//         "BH" => Some("Bahrain"),
+//         "BI" => Some("Burundi"),
+//         "BJ" => Some("Benin"),
+//         "BL" => Some("Saint Barthelemy"),
+//         "BM" => Some("Bermuda"),
+//         "BN" => Some("Brunei"),
+//         "BO" => Some("Bolivia"),
+//         "BQ" => Some("Bonaire, Sint Eustatius, and Saba"),
+//         "BR" => Some("Brazil"),
+//         "BS" => Some("Bahamas"),
+//         "BT" => Some("Bhutan"),
+//         "BV" => Some("Bouvet Island"),
+//         "BW" => Some("Botswana"),
+//         "BY" => Some("Belarus"),
+//         "BZ" => Some("Belize"),
+//         "CA" => Some("Canada"),
+//         "CC" => Some("Cocos (Keeling) Islands"),
+//         "CD" => Some("Democratic Republic of the Congo"),
+//         "CF" => Some("Central African Republic"),
+//         "CG" => Some("Republic of the Congo"),
+//         "CH" => Some("Switzerland"),
+//         "CI" => Some("Ivory Coast"),
+//         "CK" => Some("Cook Islands"),
+//         "CL" => Some("Chile"),
+//         "CM" => Some("Cameroon"),
+//         "CN" => Some("China"),
+//         "CO" => Some("Colombia"),
+//         "CR" => Some("Costa Rica"),
+//         "CU" => Some("Cuba"),
+//         "CV" => Some("Cape Verde"),
+//         "CW" => Some("Curacao"),
+//         "CX" => Some("Christmas Island"),
+//         "CY" => Some("Cyprus"),
+//         "CZ" => Some("Czech Republic"),
+//         "DE" => Some("Germany"),
+//         "DJ" => Some("Djibouti"),
+//         "DK" => Some("Denmark"),
+//         "DM" => Some("Dominica"),
+//         "DO" => Some("Dominican Republic"),
+//         "DZ" => Some("Algeria"),
+//         "EC" => Some("Ecuador"),
+//         "EE" => Some("Estonia"),
+//         "EG" => Some("Egypt"),
+//         "EH" => Some("Western Sahara"),
+//         "ER" => Some("Eritrea"),
+//         "ES" => Some("Spain"),
+//         "ET" => Some("Ethiopia"),
+//         "FI" => Some("Finland"),
+//         "FJ" => Some("Fiji"),
+//         "FK" => Some("Falkland Islands"),
+//         "FM" => Some("Micronesia"),
+//         "FO" => Some("Faroe Islands"),
+//         "FR" => Some("France"),
+//         "GA" => Some("Gabon"),
+//         "GB" => Some("United Kingdom"),
+//         "GD" => Some("Grenada"),
+//         "GE" => Some("Georgia"),
+//         "GF" => Some("French Guiana"),
+//         "GG" => Some("Guernsey"),
+//         "GH" => Some("Ghana"),
+//         "GI" => Some("Gibraltar"),
+//         "GL" => Some("Greenland"),
+//         "GM" => Some("Gambia"),
+//         "GN" => Some("Guinea"),
+//         "GP" => Some("Guadeloupe"),
+//         "GQ" => Some("Equatorial Guinea"),
+//         "GR" => Some("Greece"),
+//         "GS" => Some("South Georgia and the South Sandwich Islands"),
+//         "GT" => Some("Guatemala"),
+//         "GU" => Some("Guam"),
+//         "GW" => Some("Guinea-Bissau"),
+//         "GY" => Some("Guyana"),
+//         "HK" => Some("Hong Kong"),
+//         "HM" => Some("Heard Island and McDonald Islands"),
+//         "HN" => Some("Honduras"),
+//         "HR" => Some("Croatia"),
+//         "HT" => Some("Haiti"),
+//         "HU" => Some("Hungary"),
+//         "ID" => Some("Indonesia"),
+//         "IE" => Some("Ireland"),
+//         "IL" => Some("Israel"),
+//         "IM" => Some("Isle of Man"),
+//         "IN" => Some("India"),
+//         "IO" => Some("British Indian Ocean Territory"),
+//         "IQ" => Some("Iraq"),
+//         "IR" => Some("Iran"),
+//         "IS" => Some("Iceland"),
+//         "IT" => Some("Italy"),
+//         "JE" => Some("Jersey"),
+//         "JM" => Some("Jamaica"),
+//         "JO" => Some("Jordan"),
+//         "JP" => Some("Japan"),
+//         "KE" => Some("Kenya"),
+//         "KG" => Some("Kyrgyzstan"),
+//         "KH" => Some("Cambodia"),
+//         "KI" => Some("Kiribati"),
+//         "KM" => Some("Comoros"),
+//         "KN" => Some("Saint Kitts and Nevis"),
+//         "KP" => Some("North Korea"),
+//         "KR" => Some("South Korea"),
+//         "KW" => Some("Kuwait"),
+//         "KY" => Some("Cayman Islands"),
+//         "KZ" => Some("Kazakhstan"),
+//         "LA" => Some("Laos"),
+//         "LB" => Some("Lebanon"),
+//         "LC" => Some("Saint Lucia"),
+//         "LI" => Some("Liechtenstein"),
+//         "LK" => Some("Sri Lanka"),
+//         "LR" => Some("Liberia"),
+//         "LS" => Some("Lesotho"),
+//         "LT" => Some("Lithuania"),
+//         "LU" => Some("Luxembourg"),
+//         "LV" => Some("Latvia"),
+//         "LY" => Some("Libya"),
+//         "MA" => Some("Morocco"),
+//         "MC" => Some("Monaco"),
+//         "MD" => Some("Moldova"),
+//         "ME" => Some("Montenegro"),
+//         "MF" => Some("Saint Martin"),
+//         "MG" => Some("Madagascar"),
+//         "MH" => Some("Marshall Islands"),
+//         "MK" => Some("North Macedonia"),
+//         "ML" => Some("Mali"),
+//         "MM" => Some("Myanmar"),
+//         "MN" => Some("Mongolia"),
+//         "MO" => Some("Macau"),
+//         "MP" => Some("Northern Mariana Islands"),
+//         "MQ" => Some("Martinique"),
+//         "MR" => Some("Mauritania"),
+//         "MS" => Some("Montserrat"),
+//         "MT" => Some("Malta"),
+//         "MU" => Some("Mauritius"),
+//         "MV" => Some("Maldives"),
+//         "MW" => Some("Malawi"),
+//         "MX" => Some("Mexico"),
+//         "MY" => Some("Malaysia"),
+//         "MZ" => Some("Mozambique"),
+//         "NA" => Some("Namibia"),
+//         "NC" => Some("New Caledonia"),
+//         "NE" => Some("Niger"),
+//         "NF" => Some("Norfolk Island"),
+//         "NG" => Some("Nigeria"),
+//         "NI" => Some("Nicaragua"),
+//         "NL" => Some("Netherlands"),
+//         "NO" => Some("Norway"),
+//         "NP" => Some("Nepal"),
+//         "NR" => Some("Nauru"),
+//         "NU" => Some("Niue"),
+//         "NZ" => Some("New Zealand"),
+//         "OM" => Some("Oman"),
+//         "PA" => Some("Panama"),
+//         "PE" => Some("Peru"),
+//         "PF" => Some("French Polynesia"),
+//         "PG" => Some("Papua New Guinea"),
+//         "PH" => Some("Philippines"),
+//         "PK" => Some("Pakistan"),
+//         "PL" => Some("Poland"),
+//         "PM" => Some("Saint Pierre and Miquelon"),
+//         "PN" => Some("Pitcairn Islands"),
+//         "PR" => Some("Puerto Rico"),
+//         "PS" => Some("Palestine"),
+//         "PT" => Some("Portugal"),
+//         "PW" => Some("Palau"),
+//         "PY" => Some("Paraguay"),
+//         "QA" => Some("Qatar"),
+//         "RE" => Some("Reunion"),
+//         "RO" => Some("Romania"),
+//         "RS" => Some("Serbia"),
+//         "RU" => Some("Russia"),
+//         "RW" => Some("Rwanda"),
+//         "SA" => Some("Saudi Arabia"),
+//         "SB" => Some("Solomon Islands"),
+//         "SC" => Some("Seychelles"),
+//         "SD" => Some("Sudan"),
+//         "SE" => Some("Sweden"),
+//         "SG" => Some("Singapore"),
+//         "SH" => Some("Saint Helena"),
+//         "SI" => Some("Slovenia"),
+//         "SJ" => Some("Svalbard and Jan Mayen"),
+//         "SK" => Some("Slovakia"),
+//         "SL" => Some("Sierra Leone"),
+//         "SM" => Some("San Marino"),
+//         "SN" => Some("Senegal"),
+//         "SO" => Some("Somalia"),
+//         "SR" => Some("Suriname"),
+//         "SS" => Some("South Sudan"),
+//         "ST" => Some("Sao Tome and Principe"),
+//         "SV" => Some("El Salvador"),
+//         "SX" => Some("Sint Maarten"),
+//         "SY" => Some("Syria"),
+//         "SZ" => Some("Eswatini"),
+//         "TC" => Some("Turks and Caicos Islands"),
+//         "TD" => Some("Chad"),
+//         "TF" => Some("French Southern Territories"),
+//         "TG" => Some("Togo"),
+//         "TH" => Some("Thailand"),
+//         "TJ" => Some("Tajikistan"),
+//         "TK" => Some("Tokelau"),
+//         "TL" => Some("East Timor"),
+//         "TM" => Some("Turkmenistan"),
+//         "TN" => Some("Tunisia"),
+//         "TO" => Some("Tonga"),
+//         "TR" => Some("Turkey"),
+//         "TT" => Some("Trinidad and Tobago"),
+//         "TV" => Some("Tuvalu"),
+//         "TW" => Some("Taiwan"),
+//         "TZ" => Some("Tanzania"),
+//         "UA" => Some("Ukraine"),
+//         "UG" => Some("Uganda"),
+//         "UM" => Some("United States Minor Outlying Islands"),
+//         "US" => Some("United States"),
+//         "UY" => Some("Uruguay"),
+//         "UZ" => Some("Uzbekistan"),
+//         "VA" => Some("Vatican City"),
+//         "VC" => Some("Saint Vincent and the Grenadines"),
+//         "VE" => Some("Venezuela"),
+//         "VG" => Some("British Virgin Islands"),
+//         "VI" => Some("United States Virgin Islands"),
+//         "VN" => Some("Vietnam"),
+//         "VU" => Some("Vanuatu"),
+//         "WF" => Some("Wallis and Futuna"),
+//         "WS" => Some("Samoa"),
+//         "YE" => Some("Yemen"),
+//         "YT" => Some("Mayotte"),
+//         "XK" => Some("Kosovo"),
+//         "ZA" => Some("South Africa"),
+//         "ZM" => Some("Zambia"),
+//         "ZW" => Some("Zimbabwe"),
+//         _ => None,
+//     }
+// }
