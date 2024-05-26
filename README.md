@@ -5,7 +5,7 @@ This repository contains the backend server software for Anbamap.
 
 ## Functionality Overview
 
-In order to host this software, you will need: a [Python 3 virttual environment](https://docs.python.org/3/library/venv.html), [Youtube Data API key](https://developers.google.com/youtube/registering_an_application), and [Upstash](https://upstash.com/) Redis database. Optionally, you can also use [Sentry](https://sentry.io/welcome/).
+In order to host this software, you will need: a [Python 3 virtual environment](https://docs.python.org/3/library/venv.html), [Youtube Data API key](https://developers.google.com/youtube/registering_an_application), and [Upstash](https://upstash.com/) Redis database. Optionally, you can also use [Sentry](https://sentry.io/welcome/).
 
 Every 2 hours, Anbamap-BE will scrape text from its configured media sources, use 2 layers of region identification to determine which regions a media is related to, and store all of this information to a database.
 
