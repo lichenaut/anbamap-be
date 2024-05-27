@@ -2,19 +2,16 @@ extern crate redis;
 use redis::Commands;
 use std::{
     collections::HashSet,
-    env::var,
     error::Error,
     time::{SystemTime, UNIX_EPOCH},
 };
 
+use crate::util::var_service::get_redis_client;
+
 pub async fn update_db(
     media: Vec<(String, String, String, Vec<String>)>,
 ) -> Result<(), Box<dyn Error>> {
-    let client = redis::Client::open(format!(
-        "rediss://default:{}@{}",
-        var("REDIS_PASSWORD")?,
-        var("REDIS_ENDPOINT")?
-    ))?;
+    let client = get_redis_client().await?;
     let mut connection = client.get_connection()?;
 
     let now = SystemTime::now().duration_since(UNIX_EPOCH)?.as_secs();

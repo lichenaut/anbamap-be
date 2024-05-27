@@ -1,9 +1,9 @@
 use super::scrapers::youtube::scrape_youtube_channel;
 use crate::region::regions::KEYPHRASE_REGION_MAP;
+use crate::util::var_service::{get_youtube_api_key, get_youtube_channel_ids};
 use crate::{db::redis::update_db, util::path_service::get_parent_dir};
 use rayon::prelude::*;
 use std::{
-    env::var,
     error::Error,
     process::Command,
     str,
@@ -22,15 +22,15 @@ pub async fn run_scrapers() -> Result<(), Box<dyn Error>> {
 async fn scrape_youtube(
     media: &mut Vec<(String, String, String, Vec<String>)>,
 ) -> Result<(), Box<dyn Error>> {
-    let youtube_api_key = var("YOUTUBE_API_KEY")?;
-    if youtube_api_key.is_empty() {
-        return Ok(());
-    }
+    let youtube_api_key = match get_youtube_api_key().await? {
+        Some(api_key) => api_key,
+        None => return Ok(()),
+    };
 
-    let youtube_channel_ids = var("YOUTUBE_CHANNEL_IDS")?;
-    if youtube_channel_ids.is_empty() {
-        return Ok(());
-    }
+    let youtube_channel_ids = match get_youtube_channel_ids().await? {
+        Some(channel_ids) => channel_ids,
+        None => return Ok(()),
+    };
 
     let youtube_channel_ids = youtube_channel_ids
         .split(",")

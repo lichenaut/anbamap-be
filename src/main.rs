@@ -15,19 +15,19 @@ mod scrape {
     pub mod scraper_util;
 }
 mod util {
-    pub mod log_service;
     pub mod path_service;
+    pub mod var_service;
     pub mod venv_service;
     pub mod zip_service;
 }
 use crate::scrape::scraper_util::run_scrapers;
 use db::keyphrase_db::gen_keyphrase_db;
 use std::error::Error;
-use util::{log_service::setup_logging, path_service::get_parent_dir, venv_service::create_venv};
+use util::{path_service::get_parent_dir, var_service::set_logging, venv_service::create_venv};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    setup_logging().await?;
+    set_logging().await?;
     let exe_parent = get_parent_dir().await?;
     create_venv(&exe_parent).await?;
     gen_keyphrase_db(exe_parent).await?;
