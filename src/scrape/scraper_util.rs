@@ -22,15 +22,33 @@ pub async fn run_scrapers() -> Result<(), Box<dyn Error>> {
 async fn scrape_youtube(
     media: &mut Vec<(String, String, String, Vec<String>)>,
 ) -> Result<(), Box<dyn Error>> {
-    let youtube_api_key = var("YOUTUBE_API_KEY")?;
-    if youtube_api_key.is_empty() {
-        return Ok(());
-    }
+    let youtube_api_key = match var("YOUTUBE_API_KEY") {
+        Ok(api_key) => {
+            if api_key.is_empty() {
+                return Ok(());
+            }
 
-    let youtube_channel_ids = var("YOUTUBE_CHANNEL_IDS")?;
-    if youtube_channel_ids.is_empty() {
-        return Ok(());
-    }
+            api_key
+        }
+        Err(e) => {
+            tracing::error!("Error getting Youtube API key: {:?}", e);
+            return Ok(());
+        }
+    };
+
+    let youtube_channel_ids = match var("YOUTUBE_CHANNEL_IDS") {
+        Ok(channel_ids) => {
+            if channel_ids.is_empty() {
+                return Ok(());
+            }
+
+            channel_ids
+        }
+        Err(e) => {
+            tracing::error!("Error getting Youtube channel IDs: {:?}", e);
+            return Ok(());
+        }
+    };
 
     let youtube_channel_ids = youtube_channel_ids
         .split(",")
@@ -93,21 +111,26 @@ pub async fn get_regions(text: &[&str]) -> Result<Vec<String>, Box<dyn Error>> {
 }
 
 async fn get_flashgeotext_regions(text: &String) -> Result<Vec<String>, Box<dyn Error>> {
-    let regions = Command::new(format!("{}/p3venv/bin/python", get_parent_dir().await?))
-            .arg("-c")
-            .arg(format!("import sys; sys.path.append(\".\"); from flashgeotext import get_regions; print(get_regions(\"{}\"))", text))
-            .output()?;
+    let exe_parent = get_parent_dir().await?;
+    let regions = Command::new(format!("{}/p3venv/bin/python", exe_parent))
+        .arg("-c")
+        .arg(format!(
+            "\"import sys; sys.path.append('{}'); from media_to_regions import get_regions; print(get_regions(\'{}\'))\"",
+            exe_parent, text
+        ))
+        .output()?;
 
+    let output = str::from_utf8(&regions.stdout)?;
     if regions.status.success() {
-        let regions = str::from_utf8(&regions.stdout)?.trim();
-        let regions: Vec<String> = regions
+        let output: Vec<String> = output
+            .trim()
             .replace("[", "")
             .replace("]", "")
             .replace("'", "")
             .split(", ")
             .map(|s| s.to_string())
             .collect();
-        let regions = regions
+        let regions = output
             .into_iter()
             .filter(|s| match s.as_str() {
                 "Chad" | "Georgia" | "Guinea-Bissau" | "Jordan" | "Republic of Congo" => false,
@@ -117,10 +140,7 @@ async fn get_flashgeotext_regions(text: &String) -> Result<Vec<String>, Box<dyn 
 
         Ok(regions)
     } else {
-        println!(
-            "Flashgeotext error: {:?}",
-            str::from_utf8(&regions.stderr)?.trim()
-        ); //TODO remove
+        tracing::error!("Error getting regions from flashgeotext: {:?}", output);
         Ok(Vec::new())
     }
 }

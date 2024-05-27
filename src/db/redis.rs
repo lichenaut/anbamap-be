@@ -11,7 +11,7 @@ pub async fn update_db(
     media: Vec<(String, String, String, Vec<String>)>,
 ) -> Result<(), Box<dyn Error>> {
     let client = redis::Client::open(format!(
-        "redis://:{}@{}",
+        "rediss://default:{}@{}",
         var("REDIS_PASSWORD")?,
         var("REDIS_ENDPOINT")?
     ))?;

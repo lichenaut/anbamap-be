@@ -2987,7 +2987,13 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
                 "euronext".into(),
                 "qiagen".into(),
             ]),
-            misc: Some(vec!["vvd".into(), "d66".into(), "pvv".into()]),
+            misc: Some(vec![
+                "vvd".into(),
+                "d66".into(),
+                "pvv".into(),
+                "icc".into(),
+                "international criminal court".into(),
+            ]),
         }
         .get_region_vec(),
         "Netherlands".into(),
@@ -4825,7 +4831,7 @@ pub async fn show_region_map() -> Result<(), Box<dyn Error>> {
     while let Some(region) = current_region {
         tracing::info!("Region: {}", region.1);
         tracing::info!("Keyphrases: {:?}", region.0);
-        tracing::info!("Press enter to go to the next region");
+        tracing::info!("Press Enter to go to the next region");
         stdin().read_line(&mut input)?;
         current_region = next_region;
         next_region = regions_iter.next();

@@ -1,4 +1,4 @@
-use std::{error::Error, path::Path, process::Command};
+use std::{error::Error, fs::write, path::Path, process::Command};
 
 pub async fn create_venv(exe_parent: &str) -> Result<(), Box<dyn Error>> {
     let venv_path = format!("{}/p3venv", exe_parent);
@@ -21,6 +21,18 @@ pub async fn create_venv(exe_parent: &str) -> Result<(), Box<dyn Error>> {
         tracing::error!(err);
         return Err(err.into());
     }
+
+    write(
+        format!("{}/media_to_regions.py", exe_parent),
+        "from flashgeotext.geotext import GeoText
+
+geotext = GeoText()
+
+def get_regions(text):
+    result = geotext.extract(input_text=text)
+    regions = list(result['countries'].keys())
+    return regions",
+    )?;
 
     Ok(())
 }
