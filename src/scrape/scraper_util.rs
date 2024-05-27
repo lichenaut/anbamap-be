@@ -1,5 +1,5 @@
 use super::scrapers::youtube::scrape_youtube_channel;
-use crate::KEYPHRASE_REGION_MAP;
+use crate::region::regions::KEYPHRASE_REGION_MAP;
 use crate::{db::redis::update_db, util::path_service::get_parent_dir};
 use rayon::prelude::*;
 use std::{
@@ -22,33 +22,15 @@ pub async fn run_scrapers() -> Result<(), Box<dyn Error>> {
 async fn scrape_youtube(
     media: &mut Vec<(String, String, String, Vec<String>)>,
 ) -> Result<(), Box<dyn Error>> {
-    let youtube_api_key = match var("YOUTUBE_API_KEY") {
-        Ok(api_key) => {
-            if api_key.is_empty() {
-                return Ok(());
-            }
+    let youtube_api_key = var("YOUTUBE_API_KEY")?;
+    if youtube_api_key.is_empty() {
+        return Ok(());
+    }
 
-            api_key
-        }
-        Err(e) => {
-            tracing::error!("Error getting Youtube API key: {:?}", e);
-            return Ok(());
-        }
-    };
-
-    let youtube_channel_ids = match var("YOUTUBE_CHANNEL_IDS") {
-        Ok(channel_ids) => {
-            if channel_ids.is_empty() {
-                return Ok(());
-            }
-
-            channel_ids
-        }
-        Err(e) => {
-            tracing::error!("Error getting Youtube channel IDs: {:?}", e);
-            return Ok(());
-        }
-    };
+    let youtube_channel_ids = var("YOUTUBE_CHANNEL_IDS")?;
+    if youtube_channel_ids.is_empty() {
+        return Ok(());
+    }
 
     let youtube_channel_ids = youtube_channel_ids
         .split(",")
@@ -64,12 +46,18 @@ async fn scrape_youtube(
 pub async fn get_regions(text: &[&str]) -> Result<Vec<String>, Box<dyn Error>> {
     let text = text
         .join(" ")
-        .replace("&#39;", "'")
+        .replace("'", r"\'")
+        .replace("&#39;", r"\'")
+        .replace("\"", "")
+        .replace("`", "")
+        .replace("‘", "")
+        .replace("’", "")
+        .replace("–", "")
         .replace("'s ", " ")
         .replace("s' ", " ");
     let regions = get_flashgeotext_regions(&text).await?;
 
-    let text = unidecode(&text.to_lowercase());
+    let text = unidecode(&text.replace(r"\'", "'").to_lowercase());
     let regions = Arc::new(Mutex::new(regions));
     KEYPHRASE_REGION_MAP
         .par_iter()
@@ -121,34 +109,38 @@ async fn get_flashgeotext_regions(text: &String) -> Result<Vec<String>, Box<dyn 
     let regions = Command::new(format!("{}/p3venv/bin/python", exe_parent))
         .arg("-c")
         .arg(format!(
-            "\"import sys; sys.path.append('{}'); from media_to_regions import get_regions; print(get_regions(\'{}\'))\"",
+            "import sys; sys.path.append('{}'); from media_to_regions import get_regions; print(get_regions('{}'))",
             exe_parent, text
         ))
         .output()?;
 
     let output = str::from_utf8(&regions.stdout)?;
-    if regions.status.success() {
-        let output: Vec<String> = output
-            .trim()
-            .replace("[", "")
-            .replace("]", "")
-            .replace("'", "")
-            .split(", ")
-            .map(|s| s.to_string())
-            .collect();
-        let regions = output
-            .into_iter()
-            .filter(|s| match s.as_str() {
-                "Chad" | "Georgia" | "Guinea-Bissau" | "Jordan" | "Republic of Congo" => false,
-                _ => true,
-            })
-            .collect::<Vec<String>>();
-
-        Ok(regions)
-    } else {
-        tracing::error!("Error getting regions from flashgeotext: {:?}", output);
-        Ok(Vec::new())
+    if output.is_empty() {
+        tracing::error!("Flashgeotext error from body: {}", text);
+        return Ok(Vec::new());
     }
+
+    if output == "[]\n" {
+        return Ok(Vec::new());
+    }
+
+    let output: Vec<String> = output
+        .trim()
+        .replace("[", "")
+        .replace("]", "")
+        .replace("'", "")
+        .split(", ")
+        .map(|s| s.to_string())
+        .collect();
+    let regions = output
+        .into_iter()
+        .filter(|s| match s.as_str() {
+            "Chad" | "Georgia" | "Guinea-Bissau" | "Jordan" | "Republic of Congo" => false,
+            _ => true,
+        })
+        .collect::<Vec<String>>();
+
+    Ok(regions)
 }
 
 pub fn get_iso_from_name(name: &str) -> Option<&str> {

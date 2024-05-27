@@ -16,7 +16,7 @@ struct RegionKeyphrases {
     pub names: Option<Vec<String>>,       // Manual
     pub demonyms: Option<Vec<String>>,    // Manual
     pub enterprises: Option<Vec<String>>, // Manual: https://companiesmarketcap.com/all-countries/
-    pub misc: Option<Vec<String>>,        // Manual: https://realtimebillionaires.de/list/rtb
+    pub misc: Option<Vec<String>>,        // Manual
 }
 
 impl RegionKeyphrases {

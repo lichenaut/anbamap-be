@@ -1,6 +1,5 @@
-use async_std::path::PathBuf;
 use reqwest::Client;
-use std::{error::Error, io::copy};
+use std::{error::Error, io::copy, path::PathBuf};
 use tokio::io::AsyncWriteExt;
 use tokio_stream::StreamExt;
 use zip::ZipArchive;
