@@ -58,8 +58,8 @@ TODO
 
 | Environment Variable  | Description                          | Necessity |
 | --------------------- | ------------------------------------ | --------- |
-| `REDIS_ENDPOINT`      | The endpoint to your Redis database. | Mandatory |
-| `REDIS_PASSWORD`      | The password to your Redis database  | Mandatory |
-| `SENTRY_DSN`          | The Data Source Name for Sentry.     | Optional  |
+| `REDIS_ENDPOINT`      | Your Redis database endpoint.        | Mandatory |
+| `REDIS_PASSWORD`      | Your Redis database password.        | Mandatory |
+| `SENTRY_DSN`          | Your Data Source Name for Sentry.    | Optional  |
 | `YOUTUBE_API_KEY`     | Your Youtube Data API key.           | Optional  |
 | `YOUTUBE_CHANNEL_IDS` | Comma-separated Youtube channel IDs. | Optional  |
