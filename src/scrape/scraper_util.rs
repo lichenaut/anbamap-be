@@ -103,8 +103,14 @@ pub async fn get_regions(text: &[&str]) -> Result<Vec<String>, Box<dyn Error>> {
         }
     };
 
-    if text.contains("ireland") && !regions.contains(&"northern ireland".to_string()) {
+    if text.contains("georgia") && !regions.contains(&"United States".into()) {
+        regions.push("Georgia".into());
+    }
+    if text.contains("ireland") && !text.contains("northern ireland") {
         regions.push("Ireland".into());
+    }
+    if text.contains("mexico") && !text.contains("new mexico") {
+        regions.push("Mexico".into());
     }
 
     Ok(regions)

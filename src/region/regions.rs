@@ -2837,8 +2837,8 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<String>, String)>> = Lazy::new(||
     map.push((
         RegionKeyphrases {
             automated: get_automated_keyphrases(&region_map, "MX"),
-            names: Some(vec!["mexic".into()]),
-            demonyms: None,
+            names: None,
+            demonyms: Some(vec!["mexican".into()]),
             enterprises: Some(vec![
                 "walmex".into(),
                 "america movil".into(),

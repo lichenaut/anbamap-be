@@ -2,7 +2,10 @@ use super::super::scraper_util::get_iso_from_name;
 use reqwest::Client;
 use serde_json::{from_str, Value};
 use std::{collections::HashMap, error::Error};
-use wikitext_table_parser::parser::{Event, WikitextTableParser};
+use wikitext_table_parser::{
+    parser::{Event, WikitextTableParser},
+    tokenizer::{get_all_cell_text_special_tokens, get_all_table_special_tokens, Tokenizer},
+};
 
 pub async fn get_private_enterprises_map(
     client: &Client,
@@ -32,7 +35,12 @@ pub async fn get_private_enterprises_map(
 
     let mut current_region;
     let mut current_enterprise = String::new();
-    let wikitext_table_parser = WikitextTableParser::new(&content);
+    let wikitext_table_parser = WikitextTableParser::new(
+        Tokenizer::build(get_all_table_special_tokens()),
+        Tokenizer::build(get_all_cell_text_special_tokens()),
+        &content,
+        true,
+    );
     for event in wikitext_table_parser {
         match event {
             Event::ColEnd(text) => {
