@@ -1,7 +1,7 @@
 use crate::scrape::scrapers::forbes400::get_largest_billionaires_map;
 use crate::scrape::scrapers::wikidata::{region_code_to_figures, verify_codes};
 use crate::scrape::scrapers::wikipedia::get_private_enterprises_map;
-use crate::util::zip_service::{unzip_files_to, zip_from_url};
+use crate::util::zip_service::{zip_from_url, zip_to_txt};
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
 use reqwest::Client;
 use sqlx::sqlite::{SqliteConnectOptions, SqliteQueryResult};
@@ -50,7 +50,7 @@ pub async fn gen_keyphrase_db(exe_parent: String) -> Result<(), Box<dyn std::err
             .await?;
         }
         tracing::info!("Decompressing allCountries.zip.");
-        unzip_files_to(&zip_path, &exe_parent).await?;
+        zip_to_txt(&zip_path).await?;
     }
 
     let pool = get_region_db_pool(&db_path).await?;

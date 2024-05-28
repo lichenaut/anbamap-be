@@ -1,5 +1,5 @@
+use super::regions::KEYPHRASE_REGION_MAP;
 use super::scrapers::youtube::scrape_youtube_channel;
-use crate::region::regions::KEYPHRASE_REGION_MAP;
 use crate::util::var_service::{get_youtube_api_key, get_youtube_channel_ids};
 use crate::{db::redis::update_db, util::path_service::get_parent_dir};
 use rayon::prelude::*;

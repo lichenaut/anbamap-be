@@ -2,9 +2,6 @@ mod db {
     pub mod keyphrase_db;
     pub mod redis;
 }
-mod region {
-    pub mod regions;
-}
 mod scrape {
     pub mod scrapers {
         pub mod forbes400;
@@ -12,6 +9,7 @@ mod scrape {
         pub mod wikipedia;
         pub mod youtube;
     }
+    pub mod regions;
     pub mod scraper_util;
 }
 mod util {

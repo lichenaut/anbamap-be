@@ -44,7 +44,7 @@ for (url, title, description, regions) in media {
    chmod +x ./anbamap-be
    ./anbamap-be
    ```
-   and wait a couple minutes while it sets up. If you get an archive-related error, it may be a network error. Delete "allCountries.zip" and redo this step.
+   and wait a few minutes for it to set up.
 
 &nbsp;
 

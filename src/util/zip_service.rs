@@ -1,42 +1,41 @@
+use async_std::io::ReadExt;
+use async_zip::tokio::read::seek::ZipFileReader;
 use reqwest::Client;
-use std::{error::Error, io::copy, path::PathBuf};
-use tokio::io::AsyncWriteExt;
+use std::error::Error;
+use tokio::{
+    fs::File,
+    io::{AsyncWriteExt, BufReader, BufWriter},
+};
 use tokio_stream::StreamExt;
-use zip::ZipArchive;
 
 pub async fn zip_from_url(
     client: &Client,
     url: &str,
     zip_path: &str,
 ) -> Result<(), Box<dyn Error>> {
-    tracing::info!("Downloading zip file from {} to {}", url, zip_path);
-
     let response = client.get(url).send().await?;
     let mut stream = response.bytes_stream();
-    let mut zip_file = tokio::fs::File::create(zip_path).await?;
+    let file = File::create(zip_path).await?;
+    let mut zip_file = BufWriter::new(file);
     while let Some(item) = stream.next().await {
         let item = item?;
         zip_file.write_all(&item).await?;
     }
+    zip_file.flush().await?;
 
     Ok(())
 }
 
-pub async fn unzip_files_to(zip_path: &str, parent_dir: &str) -> Result<(), Box<dyn Error>> {
-    let file = std::fs::File::open(zip_path)?;
-    let mut archive = ZipArchive::new(file)?;
-    for i in 0..archive.len() {
-        let mut file = archive.by_index(i)?;
-        let outpath = match file.enclosed_name() {
-            Some(path) => path.to_owned(),
-            None => continue,
-        };
-
-        let mut path = PathBuf::from(parent_dir);
-        path.push(outpath);
-        let mut outfile = std::fs::File::create(&path)?;
-        copy(&mut file, &mut outfile)?;
-    }
+pub async fn zip_to_txt(zip_path: &str) -> Result<(), Box<dyn Error>> {
+    let mut file = BufReader::new(File::open(zip_path).await?);
+    let mut zip = ZipFileReader::with_tokio(&mut file).await?;
+    let mut reader = zip.reader_with_entry(0).await?;
+    let mut buffer = Vec::new();
+    reader.read_to_end(&mut buffer).await?;
+    let mut file =
+        BufWriter::new(File::create(format!("{}.txt", &zip_path[..zip_path.len() - 4])).await?);
+    file.write_all(&buffer).await?;
+    file.flush().await?;
 
     Ok(())
 }

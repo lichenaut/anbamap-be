@@ -14,28 +14,32 @@ pub async fn get_redis_client() -> Result<Client, Box<dyn Error>> {
     let redis_password = match var("REDIS_PASSWORD") {
         Ok(password) => match password.is_empty() {
             true => {
-                tracing::error!("REDIS_PASSWORD is empty");
-                return Err("REDIS_PASSWORD is empty".into());
+                let err = "REDIS_PASSWORD is empty";
+                tracing::error!(err);
+                return Err(err.into());
             }
             false => password,
         },
         Err(e) => {
-            tracing::error!("REDIS_PASSWORD not found in environment: {}", e);
-            return Err("REDIS_PASSWORD not found in environment".into());
+            let err = format!("REDIS_PASSWORD not found in environment: {:?}", e);
+            tracing::error!(err);
+            return Err(err.into());
         }
     };
 
     let redis_endpoint = match var("REDIS_ENDPOINT") {
         Ok(endpoint) => match endpoint.is_empty() {
             true => {
-                tracing::error!("REDIS_ENDPOINT is empty");
-                return Err("REDIS_ENDPOINT is empty".into());
+                let err = "REDIS_ENDPOINT is empty";
+                tracing::error!(err);
+                return Err(err.into());
             }
             false => endpoint,
         },
         Err(e) => {
-            tracing::error!("REDIS_ENDPOINT not found in environment: {}", e);
-            return Err("REDIS_ENDPOINT not found in environment".into());
+            let err = format!("REDIS_ENDPOINT not found in environment: {:?}", e);
+            tracing::error!(err);
+            return Err(err.into());
         }
     };
 
