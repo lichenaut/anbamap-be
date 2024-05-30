@@ -1,17 +1,17 @@
-use super::regions::KEYPHRASE_REGION_MAP;
-use super::scrapers::youtube::scrape_youtube_channel;
+use super::region::KEYPHRASE_REGION_MAP;
+use super::scraper::youtube::scrape_youtube_channel;
+use crate::prelude::*;
 use crate::util::var_service::{get_youtube_api_key, get_youtube_channel_ids};
 use crate::{db::redis::update_db, util::path_service::get_parent_dir};
 use rayon::prelude::*;
 use std::{
-    error::Error,
     process::Command,
-    str,
+    str::from_utf8,
     sync::{Arc, Mutex},
 };
 use unidecode::unidecode;
 
-pub async fn run_scrapers() -> Result<(), Box<dyn Error>> {
+pub async fn run_scrapers() -> Result<()> {
     let mut media = Vec::new();
     scrape_youtube(&mut media).await?;
     update_db(media).await?;
@@ -19,9 +19,7 @@ pub async fn run_scrapers() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-async fn scrape_youtube(
-    media: &mut Vec<(String, String, String, Vec<String>)>,
-) -> Result<(), Box<dyn Error>> {
+async fn scrape_youtube(media: &mut Vec<(String, String, String, Vec<String>)>) -> Result<()> {
     let youtube_api_key = match get_youtube_api_key().await? {
         Some(api_key) => api_key,
         None => return Ok(()),
@@ -33,26 +31,22 @@ async fn scrape_youtube(
     };
 
     let youtube_channel_ids = youtube_channel_ids
-        .split(",")
+        .split(',')
         .filter(|&s| !s.is_empty())
         .collect::<Vec<&str>>();
     for youtube_channel_id in youtube_channel_ids {
-        media.extend(scrape_youtube_channel(&youtube_api_key, &youtube_channel_id).await?);
+        media.extend(scrape_youtube_channel(&youtube_api_key, youtube_channel_id).await?);
     }
 
     Ok(())
 }
 
-pub async fn get_regions(text: &[&str]) -> Result<Vec<String>, Box<dyn Error>> {
+pub async fn get_regions(text: &[&str]) -> Result<Vec<String>> {
     let text = text
         .join(" ")
-        .replace("'", r"\'")
+        .replace('\'', r"\'")
         .replace("&#39;", r"\'")
-        .replace("\"", "")
-        .replace("`", "")
-        .replace("‘", "")
-        .replace("’", "")
-        .replace("–", "")
+        .replace(['"', '`', '‘', '’', '–'], "")
         .replace("'s ", " ")
         .replace("s' ", " ");
     let regions = get_flashgeotext_regions(&text).await?;
@@ -104,7 +98,7 @@ pub async fn get_regions(text: &[&str]) -> Result<Vec<String>, Box<dyn Error>> {
     Ok(regions)
 }
 
-async fn get_flashgeotext_regions(text: &String) -> Result<Vec<String>, Box<dyn Error>> {
+async fn get_flashgeotext_regions(text: &String) -> Result<Vec<String>> {
     let exe_parent = get_parent_dir().await?;
     let regions = Command::new(format!("{}/p3venv/bin/python", exe_parent))
         .arg("-c")
@@ -114,7 +108,7 @@ async fn get_flashgeotext_regions(text: &String) -> Result<Vec<String>, Box<dyn 
         ))
         .output()?;
 
-    let output = str::from_utf8(&regions.stdout)?;
+    let output = from_utf8(&regions.stdout)?;
     if output.is_empty() {
         tracing::error!("Flashgeotext error from body: {}", text);
         return Ok(Vec::new());
@@ -126,17 +120,17 @@ async fn get_flashgeotext_regions(text: &String) -> Result<Vec<String>, Box<dyn 
 
     let output: Vec<String> = output
         .trim()
-        .replace("[", "")
-        .replace("]", "")
-        .replace("'", "")
+        .replace(['[', ']', '\''], "")
         .split(", ")
         .map(|s| s.to_string())
         .collect();
     let regions = output
         .into_iter()
-        .filter(|s| match s.as_str() {
-            "Chad" | "Georgia" | "Guinea-Bissau" | "Jordan" | "Republic of Congo" => false,
-            _ => true,
+        .filter(|s| {
+            !matches!(
+                s.as_str(),
+                "Chad" | "Georgia" | "Guinea-Bissau" | "Jordan" | "Republic of Congo"
+            )
         })
         .collect::<Vec<String>>();
 

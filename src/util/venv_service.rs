@@ -1,6 +1,8 @@
-use std::{error::Error, fs::write, path::Path, process::Command};
+use crate::prelude::*;
+use anyhow::anyhow;
+use std::{fs::write, path::Path, process::Command};
 
-pub async fn create_venv(exe_parent: &str) -> Result<(), Box<dyn Error>> {
+pub async fn create_venv(exe_parent: &str) -> Result<()> {
     let venv_path = format!("{}/p3venv", exe_parent);
     let venv_path = Path::new(&venv_path);
     if venv_path.exists() {
@@ -19,7 +21,7 @@ pub async fn create_venv(exe_parent: &str) -> Result<(), Box<dyn Error>> {
     } else {
         let err = format!("Failed to create venv: {:?}", venv_cmd.stderr);
         tracing::error!(err);
-        return Err(err.into());
+        return Err(anyhow!(err));
     }
 
     write(
@@ -37,7 +39,7 @@ def get_regions(text):
     Ok(())
 }
 
-async fn update_flashgeotext(exe_parent: &str) -> Result<(), Box<dyn Error>> {
+async fn update_flashgeotext(exe_parent: &str) -> Result<()> {
     let flashgeotext_update = Command::new(format!("{}/p3venv/bin/python", exe_parent))
         .arg("-m")
         .arg("pip")
@@ -54,6 +56,6 @@ async fn update_flashgeotext(exe_parent: &str) -> Result<(), Box<dyn Error>> {
             flashgeotext_update.stderr
         );
         tracing::error!(err);
-        Err(err.into())
+        Err(anyhow!(err))
     }
 }

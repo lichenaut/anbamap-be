@@ -1,13 +1,12 @@
 use super::super::scraper_util::get_iso_from_name;
+use crate::prelude::*;
 use reqwest::Client;
 use serde_json::Value;
-use std::{collections::HashMap, error::Error};
+use std::collections::HashMap;
 
-pub async fn get_largest_billionaires_map(
-    client: &Client,
-) -> Result<HashMap<String, Vec<String>>, Box<dyn Error>> {
+pub async fn get_largest_billionaires_map(client: &Client) -> Result<HashMap<String, Vec<String>>> {
     let mut billionaires: HashMap<String, Vec<String>> = HashMap::new();
-    let url = format!("https://forbes400.onrender.com/api/forbes400/getAllBillionaires");
+    let url = "https://forbes400.onrender.com/api/forbes400/getAllBillionaires".to_string();
     let response = client.get(&url).send().await?;
     if !response.status().is_success() {
         tracing::error!("Non-success response from Forbes400: {}", response.status());
@@ -55,10 +54,7 @@ pub async fn get_largest_billionaires_map(
             }
         };
 
-        billionaires
-            .entry(citizenship)
-            .or_insert_with(Vec::new)
-            .push(name);
+        billionaires.entry(citizenship).or_default().push(name);
     }
 
     Ok(billionaires)

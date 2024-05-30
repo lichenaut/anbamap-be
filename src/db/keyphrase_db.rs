@@ -1,6 +1,7 @@
-use crate::scrape::scrapers::forbes400::get_largest_billionaires_map;
-use crate::scrape::scrapers::wikidata::{region_code_to_figures, verify_codes};
-use crate::scrape::scrapers::wikipedia::get_private_enterprises_map;
+use crate::prelude::*;
+use crate::scrape::scraper::forbes400::get_largest_billionaires_map;
+use crate::scrape::scraper::wikidata::{region_code_to_figures, verify_codes};
+use crate::scrape::scraper::wikipedia::get_private_enterprises_map;
 use crate::util::zip_service::{zip_from_url, zip_to_txt};
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
 use reqwest::Client;
@@ -13,7 +14,7 @@ struct Region {
     keyphrases: String,
 }
 
-pub async fn get_region_db_pool(db_path: &Path) -> Result<SqlitePool, sqlx::Error> {
+pub async fn get_region_db_pool(db_path: &Path) -> Result<SqlitePool> {
     Ok(SqlitePool::connect_with(
         SqliteConnectOptions::new()
             .filename(db_path)
@@ -25,7 +26,7 @@ pub async fn get_region_db_pool(db_path: &Path) -> Result<SqlitePool, sqlx::Erro
     .await?)
 }
 
-pub async fn gen_keyphrase_db(exe_parent: String) -> Result<(), Box<dyn std::error::Error>> {
+pub async fn gen_keyphrase_db(exe_parent: String) -> Result<()> {
     let db_path = format!("{}/region_db.sqlite", exe_parent);
     let db_path = Path::new(&db_path);
     if db_path.exists() {
@@ -53,7 +54,7 @@ pub async fn gen_keyphrase_db(exe_parent: String) -> Result<(), Box<dyn std::err
         zip_to_txt(&zip_path).await?;
     }
 
-    let pool = get_region_db_pool(&db_path).await?;
+    let pool = get_region_db_pool(db_path).await?;
     pool.execute(
         "CREATE TABLE IF NOT EXISTS regions (
             region_code TEXT PRIMARY KEY,
@@ -65,7 +66,7 @@ pub async fn gen_keyphrase_db(exe_parent: String) -> Result<(), Box<dyn std::err
     let reader = std::io::BufReader::new(std::fs::File::open(all_countries_path)?);
     for line in reader.lines() {
         let line = line?;
-        let mut fields = line.split("\t");
+        let mut fields = line.split('\t');
         let ascii_name = match fields.nth(2) {
             Some(ascii_name) => ascii_name,
             None => continue,
@@ -76,7 +77,7 @@ pub async fn gen_keyphrase_db(exe_parent: String) -> Result<(), Box<dyn std::err
             None => continue,
         };
 
-        let feature_code = match fields.nth(0) {
+        let feature_code = match fields.next() {
             Some(feature_code) => feature_code,
             None => continue,
         };
@@ -85,7 +86,7 @@ pub async fn gen_keyphrase_db(exe_parent: String) -> Result<(), Box<dyn std::err
             continue;
         }
 
-        let region_code = match fields.nth(0) {
+        let region_code = match fields.next() {
             Some(region_code) => region_code,
             None => continue,
         };
@@ -123,7 +124,7 @@ pub async fn gen_keyphrase_db(exe_parent: String) -> Result<(), Box<dyn std::err
             &pool,
             Region {
                 region_code: region_code.to_string(),
-                keyphrases: format!("{}", ascii_name),
+                keyphrases: ascii_name.to_string(),
             },
         )
         .await?;
@@ -197,7 +198,7 @@ pub async fn gen_keyphrase_db(exe_parent: String) -> Result<(), Box<dyn std::err
 async fn update_region(
     pool: &sqlx::Pool<sqlx::Sqlite>,
     region: Region,
-) -> Result<SqliteQueryResult, sqlx::Error> {
+) -> Result<SqliteQueryResult> {
     let row: Option<(String,)> =
         sqlx::query_as("SELECT keyphrases FROM regions WHERE region_code = $1")
             .bind(&region.region_code)
@@ -207,22 +208,24 @@ async fn update_region(
     let region_keyphrases = unidecode(&region.keyphrases.to_lowercase());
     match row {
         Some((existing_keyphrases,)) => {
-            let mut keyphrases = existing_keyphrases.split(",").collect::<Vec<&str>>();
-            keyphrases.extend(region_keyphrases.split(","));
+            let mut keyphrases = existing_keyphrases.split(',').collect::<Vec<&str>>();
+            keyphrases.extend(region_keyphrases.split(','));
             let keyphrases: HashSet<&str> = keyphrases.into_par_iter().collect();
             let keyphrases = keyphrases.into_par_iter().collect::<Vec<&str>>().join(",");
-            sqlx::query("UPDATE regions SET keyphrases = $1 WHERE region_code = $2")
-                .bind(keyphrases)
-                .bind(region.region_code)
-                .execute(pool)
-                .await
+            Ok(
+                sqlx::query("UPDATE regions SET keyphrases = $1 WHERE region_code = $2")
+                    .bind(keyphrases)
+                    .bind(region.region_code)
+                    .execute(pool)
+                    .await?,
+            )
         }
-        None => {
+        None => Ok(
             sqlx::query("INSERT INTO regions (region_code, keyphrases) VALUES ($1, $2)")
                 .bind(region.region_code)
                 .bind(region_keyphrases)
                 .execute(pool)
-                .await
-        }
+                .await?,
+        ),
     }
 }

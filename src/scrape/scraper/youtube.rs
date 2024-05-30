@@ -1,12 +1,12 @@
 use super::super::scraper_util;
+use crate::prelude::*;
 use chrono::Utc;
 use serde_json::Value;
-use std::{error::Error, str};
 
 pub async fn scrape_youtube_channel(
     api_key: &str,
     channel_id: &str,
-) -> Result<Vec<(String, String, String, Vec<String>)>, Box<dyn Error>> {
+) -> Result<Vec<(String, String, String, Vec<String>)>> {
     let mut videos: Vec<(String, String, String, Vec<String>)> = Vec::new();
     let url =
             format!("https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&channelId={}&type=video&order=date&key={}",

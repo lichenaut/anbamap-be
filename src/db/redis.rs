@@ -1,25 +1,22 @@
 extern crate redis;
+use crate::prelude::*;
+use crate::util::var_service::get_redis_client;
 use redis::Commands;
 use std::{
     collections::HashSet,
-    error::Error,
     time::{SystemTime, UNIX_EPOCH},
 };
 
-use crate::util::var_service::get_redis_client;
-
-pub async fn update_db(
-    media: Vec<(String, String, String, Vec<String>)>,
-) -> Result<(), Box<dyn Error>> {
+pub async fn update_db(media: Vec<(String, String, String, Vec<String>)>) -> Result<()> {
     let client = get_redis_client().await?;
     let mut connection = client.get_connection()?;
 
     let now = SystemTime::now().duration_since(UNIX_EPOCH)?.as_secs();
     let keys: HashSet<String> = connection.keys("*")?;
     for key in &keys {
-        let timestamp: u64 = connection.hget(&key, "timestamp")?;
+        let timestamp: u64 = connection.hget(key, "timestamp")?;
         if now - timestamp > 60 * 60 * 24 * 7 {
-            connection.del(&key)?;
+            connection.del(key)?;
         }
     }
 

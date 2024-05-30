@@ -3,13 +3,13 @@ mod db {
     pub mod redis;
 }
 mod scrape {
-    pub mod scrapers {
+    pub mod scraper {
         pub mod forbes400;
         pub mod wikidata;
         pub mod wikipedia;
         pub mod youtube;
     }
-    pub mod regions;
+    pub mod region;
     pub mod scraper_util;
 }
 mod util {
@@ -18,13 +18,14 @@ mod util {
     pub mod venv_service;
     pub mod zip_service;
 }
+mod prelude;
+use crate::prelude::*;
 use crate::scrape::scraper_util::run_scrapers;
 use db::keyphrase_db::gen_keyphrase_db;
-use std::error::Error;
 use util::{path_service::get_parent_dir, var_service::set_logging, venv_service::create_venv};
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn Error>> {
+async fn main() -> Result<()> {
     set_logging().await?;
     let exe_parent = get_parent_dir().await?;
     create_venv(&exe_parent).await?;

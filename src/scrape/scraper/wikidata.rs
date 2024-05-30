@@ -1,11 +1,8 @@
+use crate::prelude::*;
 use reqwest::Client;
 use serde_json::Value;
-use std::error::Error;
 
-pub async fn region_code_to_figures(
-    client: &Client,
-    iso_code: &str,
-) -> Result<Vec<String>, Box<dyn Error>> {
+pub async fn region_code_to_figures(client: &Client, iso_code: &str) -> Result<Vec<String>> {
     let mut figures = Vec::new();
     let property = match get_property_from_iso(iso_code) {
         Some(property) => format!("Q{}", property),
@@ -73,7 +70,7 @@ pub async fn region_code_to_figures(
     Ok(figures)
 }
 
-fn push_to_figures(mut figure_name: &str, figures: &mut Vec<String>) -> Result<(), Box<dyn Error>> {
+fn push_to_figures(mut figure_name: &str, figures: &mut Vec<String>) -> Result<()> {
     if figure_name == "Frederik X of Denmark" {
         figure_name = "frederik x";
     } else if figure_name == "Willem-Alexander of the Netherlands" {
@@ -353,7 +350,7 @@ async fn print_result(name: &str, code: &str, result: &bool) {
     }
 }
 
-async fn verify_iso_match(client: &reqwest::Client, wikidata_id: &str, name: &str) -> bool {
+async fn verify_iso_match(client: &Client, wikidata_id: &str, name: &str) -> bool {
     let property = get_property_from_iso(wikidata_id);
     let property = match property {
         Some(property) => property,
@@ -382,7 +379,7 @@ async fn verify_iso_match(client: &reqwest::Client, wikidata_id: &str, name: &st
         None => return false,
     };
 
-    return label == name;
+    label == name
 }
 
 pub async fn verify_codes() {

@@ -1,7 +1,9 @@
+use crate::prelude::*;
+use anyhow::anyhow;
 use redis::Client;
 use sentry::{init, release_name, ClientOptions};
 use sentry_tracing::{EventFilter, SentryLayer};
-use std::{env::var, error::Error, str};
+use std::env::var;
 use tracing_subscriber::{
     fmt,
     layer::{Layered, SubscriberExt},
@@ -10,20 +12,20 @@ use tracing_subscriber::{
     Registry,
 };
 
-pub async fn get_redis_client() -> Result<Client, Box<dyn Error>> {
+pub async fn get_redis_client() -> Result<Client> {
     let redis_password = match var("REDIS_PASSWORD") {
         Ok(password) => match password.is_empty() {
             true => {
                 let err = "REDIS_PASSWORD is empty";
                 tracing::error!(err);
-                return Err(err.into());
+                return Err(anyhow!(err));
             }
             false => password,
         },
         Err(e) => {
             let err = format!("REDIS_PASSWORD not found in environment: {:?}", e);
             tracing::error!(err);
-            return Err(err.into());
+            return Err(anyhow!(err));
         }
     };
 
@@ -32,14 +34,14 @@ pub async fn get_redis_client() -> Result<Client, Box<dyn Error>> {
             true => {
                 let err = "REDIS_ENDPOINT is empty";
                 tracing::error!(err);
-                return Err(err.into());
+                return Err(anyhow!(err));
             }
             false => endpoint,
         },
         Err(e) => {
             let err = format!("REDIS_ENDPOINT not found in environment: {:?}", e);
             tracing::error!(err);
-            return Err(err.into());
+            return Err(anyhow!(err));
         }
     };
 
@@ -49,7 +51,7 @@ pub async fn get_redis_client() -> Result<Client, Box<dyn Error>> {
     ))?)
 }
 
-pub async fn set_logging() -> Result<(), Box<dyn Error>> {
+pub async fn set_logging() -> Result<()> {
     match var("SENTRY_DSN") {
         Ok(dsn) => match dsn.is_empty() {
             true => {
@@ -80,7 +82,7 @@ pub async fn set_logging() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-async fn set_subscriber<S>(layer: Option<SentryLayer<S>>) -> Result<(), Box<dyn Error>>
+async fn set_subscriber<S>(layer: Option<SentryLayer<S>>) -> Result<()>
 where
     SentryLayer<S>:
         __tracing_subscriber_Layer<Layered<tracing_subscriber::fmt::Layer<Registry>, Registry>>,
@@ -98,34 +100,34 @@ where
     Ok(())
 }
 
-pub async fn get_youtube_api_key() -> Result<Option<String>, Box<dyn Error>> {
+pub async fn get_youtube_api_key() -> Result<Option<String>> {
     match var("YOUTUBE_API_KEY") {
         Ok(api_key) => match api_key.is_empty() {
             true => {
                 tracing::info!("YOUTUBE_API_KEY is empty");
-                return Ok(None);
+                Ok(None)
             }
             false => Ok(Some(api_key)),
         },
         Err(e) => {
             tracing::info!("YOUTUBE_API_KEY not found in environment: {}", e);
-            return Ok(None);
+            Ok(None)
         }
     }
 }
 
-pub async fn get_youtube_channel_ids() -> Result<Option<String>, Box<dyn Error>> {
+pub async fn get_youtube_channel_ids() -> Result<Option<String>> {
     match var("YOUTUBE_CHANNEL_IDS") {
         Ok(channel_ids) => match channel_ids.is_empty() {
             true => {
                 tracing::info!("YOUTUBE_CHANNEL_IDS is empty");
-                return Ok(None);
+                Ok(None)
             }
             false => Ok(Some(channel_ids)),
         },
         Err(e) => {
             tracing::info!("YOUTUBE_CHANNEL_IDS not found in environment: {}", e);
-            return Ok(None);
+            Ok(None)
         }
     }
 }
