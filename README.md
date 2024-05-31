@@ -34,15 +34,15 @@ for (url, title, description, regions) in media {
 
 &nbsp;
 
-## Remote Deployment
+## Deployment
 
-```bash
-    docker volume create anbamap_vol
-    docker pull thing
-    docker run -v anbamap_vol:/scraper/data -e DOCKER_VOLUME=/scraper/data -e REDIS_ENDPOINT= -e REDIS_PASSWORD= -e YOUTUBE_API_KEY= -e YOUTUBE_CHANNEL_IDS= imageid
-```
-
-and wait a few minutes for it to set up.
+1. Create a Docker volume, pull the Docker image, and run a container to generate setup files.
+   ```bash
+       docker volume create anbamap_vol
+       docker pull lichenaut/anbamap-scraper:latest
+       docker run -v anbamap_vol:/scraper/data -e DOCKER_VOLUME=/scraper/data -e REDIS_ENDPOINT= -e REDIS_PASSWORD= -e YOUTUBE_API_KEY= -e YOUTUBE_CHANNEL_IDS= image-id
+   ```
+2. Automate this run command at an interval of your choice.
 
 &nbsp;
 
