@@ -2,8 +2,6 @@
 
 This repository contains the database utility software for Anbamap.
 
-[![Github All Releases](https://img.shields.io/github/downloads/lichenaut/anbamap-be/total.svg)]()
-
 &nbsp;
 
 ## Functionality Overview
