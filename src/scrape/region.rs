@@ -1,5 +1,5 @@
 use crate::prelude::*;
-use crate::{db::keyphrase_db::get_region_db_pool, util::path_service::get_parent_dir};
+use crate::{db::keyphrase::get_region_db_pool, service::var_service::get_docker_volume};
 use async_std::task;
 use once_cell::sync::Lazy;
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
@@ -12,9 +12,9 @@ use std::{
 };
 
 struct RegionKeyphrases {
-    pub automated: Option<Vec<String>>,      // src/db/keyphrase_db.rs
-    pub names: Option<Vec<&'static str>>,    // Manual
-    pub demonyms: Option<Vec<&'static str>>, // Manual
+    pub automated: Option<Vec<String>>,         // src/db/keyphrase.rs
+    pub names: Option<Vec<&'static str>>,       // Manual
+    pub demonyms: Option<Vec<&'static str>>,    // Manual
     pub enterprises: Option<Vec<&'static str>>, // Manual: https://companiesmarketcap.com/all-countries/
     pub misc: Option<Vec<&'static str>>,        // Manual
 }
@@ -23,7 +23,7 @@ impl RegionKeyphrases {
     pub fn get_region_vec(self) -> Vec<&'static str> {
         let mut region_vec: Vec<&'static str> = Vec::new();
         // First-order administrative regions ≥ 490k population, capitals, cities ≥ 290k population...
-        // ...heads of state and government, largest private enterprises, and billionaires ≥ 9.9B final worth USD.
+        // ...heads of state and government, largest private enterprises, and billionaires ≥ 9.9B final worth USD.z
         if let Some(automated) = self.automated {
             for s in automated {
                 region_vec.push(Box::leak(s.into_boxed_str()));
@@ -82,17 +82,19 @@ impl RegionKeyphrases {
         // Enterprise type changes do not have to be tracked this way.
         let mut enterprise_types: Vec<&'static str> = Vec::new();
         region_vec.iter().for_each(|s| {
-            if let Some(stripped) = s.strip_suffix(" inc") {
-                enterprise_types.push(Box::leak(format!("{}, inc", stripped).into_boxed_str()));
-                enterprise_types.push(Box::leak(format!("{} ltd", stripped).into_boxed_str()));
-                enterprise_types.push(Box::leak(format!("{}, ltd", stripped).into_boxed_str()));
-                enterprise_types.push(Box::leak(format!("{} limited", stripped).into_boxed_str()));
-                enterprise_types.push(Box::leak(format!("{}, limited", stripped).into_boxed_str()));
-                enterprise_types.push(Box::leak(format!("{} plc", stripped).into_boxed_str()));
-                enterprise_types.push(Box::leak(format!("{}, plc", stripped).into_boxed_str()));
-                enterprise_types.push(Box::leak(format!("{} llc", stripped).into_boxed_str()));
-                enterprise_types.push(Box::leak(format!("{}, llc", stripped).into_boxed_str()));
-            }
+            let Some(stripped) = s.strip_suffix(" inc") else {
+                return;
+            };
+
+            enterprise_types.push(Box::leak(format!("{}, inc", stripped).into_boxed_str()));
+            enterprise_types.push(Box::leak(format!("{} ltd", stripped).into_boxed_str()));
+            enterprise_types.push(Box::leak(format!("{}, ltd", stripped).into_boxed_str()));
+            enterprise_types.push(Box::leak(format!("{} limited", stripped).into_boxed_str()));
+            enterprise_types.push(Box::leak(format!("{}, limited", stripped).into_boxed_str()));
+            enterprise_types.push(Box::leak(format!("{} plc", stripped).into_boxed_str()));
+            enterprise_types.push(Box::leak(format!("{}, plc", stripped).into_boxed_str()));
+            enterprise_types.push(Box::leak(format!("{} llc", stripped).into_boxed_str()));
+            enterprise_types.push(Box::leak(format!("{}, llc", stripped).into_boxed_str()));
         });
         region_vec.extend(enterprise_types.iter().cloned());
 
@@ -101,7 +103,7 @@ impl RegionKeyphrases {
 }
 
 async fn build_region_map() -> Result<HashMap<String, Vec<String>>> {
-    let db_path = format!("{}/region_db.sqlite", get_parent_dir().await?);
+    let db_path = format!("{}/region_db.sqlite", get_docker_volume().await?);
     let db_path = Path::new(&db_path);
     let pool = get_region_db_pool(db_path).await?;
     let mut region_map = HashMap::new();
@@ -119,9 +121,7 @@ fn get_automated_keyphrases(
     region_map: &HashMap<String, Vec<String>>,
     region_code: &str,
 ) -> Option<Vec<String>> {
-    let geo = region_map.get(region_code).cloned();
-
-    geo.map(|g| {
+    region_map.get(region_code).map(|g| {
         g.iter()
             .flat_map(|s| s.split(',').map(|s| s.trim().to_string()))
             .collect::<Vec<_>>()

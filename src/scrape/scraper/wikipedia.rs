@@ -1,5 +1,5 @@
-use super::super::scraper_util::get_iso_from_name;
 use crate::prelude::*;
+use crate::scrape::util::get_iso_from_name;
 use reqwest::Client;
 use serde_json::{from_str, Value};
 use std::collections::HashMap;
@@ -42,41 +42,45 @@ pub async fn get_private_enterprises_map(client: &Client) -> Result<HashMap<Stri
     );
 
     for event in wikitext_table_parser {
-        if let Event::ColEnd(text) = event {
-            let first_char = match text.chars().next() {
-                Some(first_char) => first_char,
+        let Event::ColEnd(text) = event else {
+            continue;
+        };
+
+        let first_char = match text.chars().next() {
+            Some(first_char) => first_char,
+            None => continue,
+        };
+
+        if text.starts_with("[[") && text.ends_with("]]") {
+            current_enterprise = text[2..text.len() - 2].to_string();
+            if !current_enterprise.contains('|') {
+                continue;
+            }
+
+            current_enterprise = match current_enterprise.split('|').last() {
+                Some(current_enterprise) => current_enterprise.to_string(),
+                None => continue,
+            };
+        } else if !first_char.is_numeric() && !text.starts_with('[') && !text.starts_with('"') {
+            current_region = text.to_string();
+            if !current_region.contains('.') {
+                continue;
+            }
+
+            current_region = match current_region.split('.').next() {
+                Some(current_region) => current_region.to_string(),
                 None => continue,
             };
 
-            if text.starts_with("[[") && text.ends_with("]]") {
-                current_enterprise = text[2..text.len() - 2].to_string();
+            let current_region_code = match get_iso_from_name(&current_region) {
+                Some(current_region_code) => current_region_code.to_string(),
+                None => continue,
+            };
 
-                if current_enterprise.contains('|') {
-                    current_enterprise = match current_enterprise.split('|').last() {
-                        Some(current_enterprise) => current_enterprise.to_string(),
-                        None => continue,
-                    };
-                }
-            } else if !first_char.is_numeric() && !text.starts_with('[') && !text.starts_with('"') {
-                current_region = text.to_string();
-
-                if current_region.contains('.') {
-                    current_region = match current_region.split('.').next() {
-                        Some(current_region) => current_region.to_string(),
-                        None => continue,
-                    };
-                }
-
-                let current_region_code = match get_iso_from_name(&current_region) {
-                    Some(current_region_code) => current_region_code.to_string(),
-                    None => continue,
-                };
-
-                region_to_companies
-                    .entry(current_region_code)
-                    .or_default()
-                    .push(current_enterprise.clone());
-            }
+            region_to_companies
+                .entry(current_region_code)
+                .or_default()
+                .push(current_enterprise.clone());
         }
     }
 

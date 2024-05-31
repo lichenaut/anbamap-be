@@ -2,7 +2,7 @@ use crate::prelude::*;
 use crate::scrape::scraper::forbes400::get_largest_billionaires_map;
 use crate::scrape::scraper::wikidata::{region_code_to_figures, verify_codes};
 use crate::scrape::scraper::wikipedia::get_private_enterprises_map;
-use crate::util::zip_service::{zip_from_url, zip_to_txt};
+use crate::service::zip_service::{zip_from_url, zip_to_txt};
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
 use reqwest::Client;
 use sqlx::sqlite::{SqliteConnectOptions, SqliteQueryResult};
@@ -26,8 +26,8 @@ pub async fn get_region_db_pool(db_path: &Path) -> Result<SqlitePool> {
     .await?)
 }
 
-pub async fn gen_keyphrase_db(exe_parent: String) -> Result<()> {
-    let db_path = format!("{}/region_db.sqlite", exe_parent);
+pub async fn gen_keyphrase_db(docker_volume: String) -> Result<()> {
+    let db_path = format!("{}/region_db.sqlite", docker_volume);
     let db_path = Path::new(&db_path);
     if db_path.exists() {
         tracing::info!("region_db.sqlite found. Skipping keyphrase database generation.");
@@ -35,12 +35,12 @@ pub async fn gen_keyphrase_db(exe_parent: String) -> Result<()> {
     }
 
     let client = Client::new();
-    let all_countries_path = format!("{}/allCountries.txt", exe_parent);
+    let all_countries_path = format!("{}/allCountries.txt", docker_volume);
     let all_countries_path = Path::new(&all_countries_path);
     if all_countries_path.exists() {
         tracing::info!("allCountries.txt found. Skipping download and decompression.");
     } else {
-        let zip_path = format!("{}/allCountries.zip", exe_parent);
+        let zip_path = format!("{}/allCountries.zip", docker_volume);
         if !Path::new(&zip_path).exists() {
             tracing::info!("allCountries.zip not found. Downloading allCountries.zip.");
             zip_from_url(

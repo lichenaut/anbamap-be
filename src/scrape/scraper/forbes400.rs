@@ -1,5 +1,5 @@
-use super::super::scraper_util::get_iso_from_name;
 use crate::prelude::*;
+use crate::scrape::util::get_iso_from_name;
 use reqwest::Client;
 use serde_json::Value;
 use std::collections::HashMap;
@@ -20,10 +20,12 @@ pub async fn get_largest_billionaires_map(client: &Client) -> Result<HashMap<Str
     };
 
     for billionaire in data {
-        if let Some(final_worth) = billionaire["finalWorth"].as_f64() {
-            if final_worth < 9900.0 {
-                continue;
-            }
+        let Some(final_worth) = billionaire["finalWorth"].as_f64() else {
+            continue;
+        };
+
+        if final_worth < 9900.0 {
+            continue;
         }
 
         let citizenship = match billionaire["countryOfCitizenship"].as_str() {

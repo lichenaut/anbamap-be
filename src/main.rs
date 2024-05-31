@@ -1,5 +1,5 @@
 mod db {
-    pub mod keyphrase_db;
+    pub mod keyphrase;
     pub mod redis;
 }
 mod scrape {
@@ -10,26 +10,28 @@ mod scrape {
         pub mod youtube;
     }
     pub mod region;
-    pub mod scraper_util;
+    pub mod util;
 }
-mod util {
-    pub mod path_service;
+mod service {
+    pub mod scrape_service;
     pub mod var_service;
     pub mod venv_service;
     pub mod zip_service;
 }
 mod prelude;
 use crate::prelude::*;
-use crate::scrape::scraper_util::run_scrapers;
-use db::keyphrase_db::gen_keyphrase_db;
-use util::{path_service::get_parent_dir, var_service::set_logging, venv_service::create_venv};
+use db::keyphrase::gen_keyphrase_db;
+use service::{
+    scrape_service::run_scrapers, var_service::get_docker_volume, venv_service::create_venv,
+};
+use tracing_subscriber::{fmt, layer::SubscriberExt, util::SubscriberInitExt};
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    set_logging().await?;
-    let exe_parent = get_parent_dir().await?;
-    create_venv(&exe_parent).await?;
-    gen_keyphrase_db(exe_parent).await?;
+    tracing_subscriber::registry().with(fmt::layer()).init();
+    let docker_volume = get_docker_volume().await?;
+    create_venv(&docker_volume).await?;
+    gen_keyphrase_db(docker_volume).await?;
     //regions::show_region_map().await?;
     run_scrapers().await?;
 

@@ -2,11 +2,11 @@ use crate::prelude::*;
 use anyhow::anyhow;
 use std::{fs::write, path::Path, process::Command};
 
-pub async fn create_venv(exe_parent: &str) -> Result<()> {
-    let venv_path = format!("{}/p3venv", exe_parent);
+pub async fn create_venv(docker_volume: &str) -> Result<()> {
+    let venv_path = format!("{}/p3venv", docker_volume);
     let venv_path = Path::new(&venv_path);
     if venv_path.exists() {
-        update_flashgeotext(exe_parent).await?;
+        update_flashgeotext(docker_volume).await?;
         return Ok(());
     }
 
@@ -17,7 +17,7 @@ pub async fn create_venv(exe_parent: &str) -> Result<()> {
         .output()?;
 
     if venv_cmd.status.success() {
-        update_flashgeotext(exe_parent).await?;
+        update_flashgeotext(docker_volume).await?;
     } else {
         let err = format!("Failed to create venv: {:?}", venv_cmd.stderr);
         tracing::error!(err);
@@ -25,7 +25,7 @@ pub async fn create_venv(exe_parent: &str) -> Result<()> {
     }
 
     write(
-        format!("{}/media_to_regions.py", exe_parent),
+        format!("{}/media_to_regions.py", docker_volume),
         "from flashgeotext.geotext import GeoText
 
 geotext = GeoText()
@@ -39,8 +39,8 @@ def get_regions(text):
     Ok(())
 }
 
-async fn update_flashgeotext(exe_parent: &str) -> Result<()> {
-    let flashgeotext_update = Command::new(format!("{}/p3venv/bin/python", exe_parent))
+async fn update_flashgeotext(docker_volume: &str) -> Result<()> {
+    let flashgeotext_update = Command::new(format!("{}/p3venv/bin/python", docker_volume))
         .arg("-m")
         .arg("pip")
         .arg("install")

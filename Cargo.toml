@@ -11,10 +11,8 @@ chrono = "0.4"
 once_cell = "1.19.0"
 rayon = "1.10.0"
 redis = { version = "0.25.3", features = ["tls-native-tls"] }
-reqwest = { version = "0.12.4", features = ["stream"] }
+reqwest = { version = "0.12.4", features = ["stream", "json"] }
 scraper = "0.19.0"
-sentry = "0.33.0"
-sentry-tracing = "0.33.0"
 serde_json = "1.0"
 sqlx = { version = "0.7.4", features = ["runtime-tokio", "sqlite"] }
 tokio = { version = "1.37", features = ["full"] }

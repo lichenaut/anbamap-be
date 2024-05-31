@@ -1,9 +1,6 @@
 use super::region::KEYPHRASE_REGION_MAP;
-use super::scraper::youtube::scrape_youtube_channel;
-use crate::prelude::*;
-use crate::util::var_service::{get_youtube_api_key, get_youtube_channel_ids};
-use crate::{db::redis::update_db, util::path_service::get_parent_dir};
-use rayon::prelude::*;
+use crate::{prelude::*, service::var_service::get_docker_volume};
+use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use std::{
     process::Command,
     str::from_utf8,
@@ -11,37 +8,7 @@ use std::{
 };
 use unidecode::unidecode;
 
-pub async fn run_scrapers() -> Result<()> {
-    let mut media = Vec::new();
-    scrape_youtube(&mut media).await?;
-    update_db(media).await?;
-
-    Ok(())
-}
-
-async fn scrape_youtube(media: &mut Vec<(String, String, String, Vec<String>)>) -> Result<()> {
-    let youtube_api_key = match get_youtube_api_key().await? {
-        Some(api_key) => api_key,
-        None => return Ok(()),
-    };
-
-    let youtube_channel_ids = match get_youtube_channel_ids().await? {
-        Some(channel_ids) => channel_ids,
-        None => return Ok(()),
-    };
-
-    let youtube_channel_ids = youtube_channel_ids
-        .split(',')
-        .filter(|&s| !s.is_empty())
-        .collect::<Vec<&str>>();
-    for youtube_channel_id in youtube_channel_ids {
-        media.extend(scrape_youtube_channel(&youtube_api_key, youtube_channel_id).await?);
-    }
-
-    Ok(())
-}
-
-pub async fn get_regions(text: &[&str]) -> Result<Vec<String>> {
+pub(super) async fn get_regions(text: &[&str]) -> Result<Vec<String>> {
     let text = text
         .join(" ")
         .replace('\'', r"\'")
@@ -49,15 +16,15 @@ pub async fn get_regions(text: &[&str]) -> Result<Vec<String>> {
         .replace(['"', '`', '‘', '’', '–'], "")
         .replace("'s ", " ")
         .replace("s' ", " ");
-    let regions = get_flashgeotext_regions(&text).await?;
+    let identified_regions = get_flashgeotext_regions(&text).await?;
 
     let text = unidecode(&text.replace(r"\'", "'").to_lowercase());
-    let regions = Arc::new(Mutex::new(regions));
+    let identified_regions = Arc::new(Mutex::new(identified_regions));
     KEYPHRASE_REGION_MAP
         .par_iter()
         .for_each(|(keyphrases, region)| {
-            let regions = Arc::clone(&regions);
-            let mut regions_locked = match regions.lock() {
+            let identified_regions = Arc::clone(&identified_regions);
+            let mut identified_regions_locked = match identified_regions.lock() {
                 Ok(regions) => regions,
                 Err(poisoned) => {
                     tracing::error!("Poisoned lock: {:?}", poisoned);
@@ -65,19 +32,19 @@ pub async fn get_regions(text: &[&str]) -> Result<Vec<String>> {
                 }
             };
 
-            if regions_locked.contains(&region.to_string()) {
+            if identified_regions_locked.contains(region) {
                 return;
             }
 
             for keyphrase in keyphrases.iter() {
                 if text.contains(keyphrase) {
-                    regions_locked.push(region.to_string());
+                    identified_regions_locked.push(region);
                     break;
                 }
             }
         });
 
-    let mut regions = match regions.lock() {
+    let mut regions = match identified_regions.lock() {
         Ok(regions) => regions.clone(),
         Err(poisoned) => {
             tracing::error!("Poisoned lock: {:?}", poisoned);
@@ -85,28 +52,28 @@ pub async fn get_regions(text: &[&str]) -> Result<Vec<String>> {
         }
     };
 
-    if text.contains("georgia") && !regions.contains(&"United States".into()) {
-        regions.push("Georgia".into());
+    if text.contains("georgia") && !regions.contains(&"United States") {
+        regions.push("Georgia");
     }
     if text.contains("ireland") && !text.contains("northern ireland") {
-        regions.push("Ireland".into());
+        regions.push("Ireland");
     }
     if text.contains("mexico") && !text.contains("new mexico") {
-        regions.push("Mexico".into());
+        regions.push("Mexico");
     }
 
-    Ok(regions)
+    Ok(regions.iter().map(|s| s.to_string()).collect())
 }
 
-async fn get_flashgeotext_regions(text: &String) -> Result<Vec<String>> {
-    let exe_parent = get_parent_dir().await?;
-    let regions = Command::new(format!("{}/p3venv/bin/python", exe_parent))
-        .arg("-c")
-        .arg(format!(
-            "import sys; sys.path.append('{}'); from media_to_regions import get_regions; print(get_regions('{}'))",
-            exe_parent, text
-        ))
-        .output()?;
+async fn get_flashgeotext_regions(text: &String) -> Result<Vec<&'static str>> {
+    let docker_volume = get_docker_volume().await?;
+    let regions = Command::new(format!("{}/p3venv/bin/python", docker_volume))
+    .arg("-c")
+    .arg(format!(
+        "import sys; sys.path.append('{}'); from media_to_regions import get_regions; print(get_regions('{}'))",
+        docker_volume, text
+    ))
+    .output()?;
 
     let output = from_utf8(&regions.stdout)?;
     if output.is_empty() {
@@ -118,21 +85,21 @@ async fn get_flashgeotext_regions(text: &String) -> Result<Vec<String>> {
         return Ok(Vec::new());
     }
 
-    let output: Vec<String> = output
+    let output: Vec<&'static str> = output
         .trim()
         .replace(['[', ']', '\''], "")
         .split(", ")
-        .map(|s| s.to_string())
+        .map(|s| &*Box::leak(s.to_string().into_boxed_str()))
         .collect();
     let regions = output
         .into_iter()
         .filter(|s| {
             !matches!(
-                s.as_str(),
+                *s,
                 "Chad" | "Georgia" | "Guinea-Bissau" | "Jordan" | "Republic of Congo"
             )
         })
-        .collect::<Vec<String>>();
+        .collect();
 
     Ok(regions)
 }

@@ -1,6 +1,6 @@
 extern crate redis;
 use crate::prelude::*;
-use crate::util::var_service::get_redis_client;
+use crate::service::var_service::get_redis_client;
 use redis::Commands;
 use std::{
     collections::HashSet,
@@ -15,7 +15,7 @@ pub async fn update_db(media: Vec<(String, String, String, Vec<String>)>) -> Res
     let keys: HashSet<String> = connection.keys("*")?;
     for key in &keys {
         let timestamp: u64 = connection.hget(key, "timestamp")?;
-        if now - timestamp > 60 * 60 * 24 * 7 {
+        if now - timestamp > 604800 {
             connection.del(key)?;
         }
     }
