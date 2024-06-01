@@ -4418,7 +4418,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                     "jefferies financial",
                     "catalent",
                 ]),
-                misc: Some(vec!["medicaid", "medicare"]),
+                misc: Some(vec!["donald trump", "medicaid", "medicare"]),
             }
             .get_region_vec(),
             "United States",
