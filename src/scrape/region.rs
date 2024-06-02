@@ -212,7 +212,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["general syndic", "council of the valleys"]),
             }
             .get_region_vec(),
-            "Andorra",
+            "ad",
         ),
         (
             RegionKeyphrases {
@@ -239,7 +239,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "United Arab Emirates",
+            "ae",
         ),
         (
             RegionKeyphrases {
@@ -250,7 +250,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["taliban"]),
             }
             .get_region_vec(),
-            "Afghanistan",
+            "af",
         ),
         (
             RegionKeyphrases {
@@ -261,7 +261,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["ablp", "united progressive party"]),
             }
             .get_region_vec(),
-            "Antigua and Barbuda",
+            "ag",
         ),
         (
             RegionKeyphrases {
@@ -272,7 +272,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Anguilla",
+            "ai",
         ),
         (
             RegionKeyphrases {
@@ -283,7 +283,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["kuvendi"]),
             }
             .get_region_vec(),
-            "Albania",
+            "al",
         ),
         (
             RegionKeyphrases {
@@ -295,12 +295,12 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                     "armenia.",
                     "armenia,",
                 ]),
-                demonyms: None,
+                demonyms: Some(vec!["armenian"]),
                 enterprises: None,
                 misc: Some(vec!["azgayin zhoghov"]),
             }
             .get_region_vec(),
-            "Armenia",
+            "am",
         ),
         (
             RegionKeyphrases {
@@ -311,7 +311,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["mpla", "unita"]),
             }
             .get_region_vec(),
-            "Angola",
+            "ao",
         ),
         (
             RegionKeyphrases {
@@ -322,7 +322,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["mcmurdo"]),
             }
             .get_region_vec(),
-            "Antarctica",
+            "aq",
         ),
         (
             RegionKeyphrases {
@@ -340,7 +340,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 ]),
             }
             .get_region_vec(),
-            "Argentina",
+            "ar",
         ),
         (
             RegionKeyphrases {
@@ -351,7 +351,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "American Samoa",
+            "as",
         ),
         (
             RegionKeyphrases {
@@ -362,7 +362,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Austria",
+            "at",
         ),
         (
             RegionKeyphrases {
@@ -406,7 +406,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["aborigin", "assange"]),
             }
             .get_region_vec(),
-            "Australia",
+            "au",
         ),
         (
             RegionKeyphrases {
@@ -417,7 +417,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Aruba",
+            "aw",
         ),
         (
             RegionKeyphrases {
@@ -428,7 +428,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Aland Islands",
+            "ax",
         ),
         (
             RegionKeyphrases {
@@ -439,7 +439,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["milli majlis", "democratic reforms party"]),
             }
             .get_region_vec(),
-            "Azerbaijan",
+            "az",
         ),
         (
             RegionKeyphrases {
@@ -453,7 +453,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 ]),
             }
             .get_region_vec(),
-            "Bosnia and Herzegovina",
+            "ba",
         ),
         (
             RegionKeyphrases {
@@ -464,7 +464,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Barbados",
+            "bb",
         ),
         (
             RegionKeyphrases {
@@ -480,7 +480,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 ]),
             }
             .get_region_vec(),
-            "Bangladesh",
+            "bd",
         ),
         (
             RegionKeyphrases {
@@ -491,7 +491,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["flemish", "walloon"]),
             }
             .get_region_vec(),
-            "Belgium",
+            "be",
         ),
         (
             RegionKeyphrases {
@@ -502,7 +502,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["mpsr"]),
             }
             .get_region_vec(),
-            "Burkina Faso",
+            "bf",
         ),
         (
             RegionKeyphrases {
@@ -513,7 +513,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["narodno sabranie", "gerb"]),
             }
             .get_region_vec(),
-            "Bulgaria",
+            "bg",
         ),
         (
             RegionKeyphrases {
@@ -529,7 +529,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 ]),
             }
             .get_region_vec(),
-            "Bahrain",
+            "bh",
         ),
         (
             RegionKeyphrases {
@@ -544,7 +544,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 ]),
             }
             .get_region_vec(),
-            "Burundi",
+            "bi",
         ),
         (
             RegionKeyphrases {
@@ -555,7 +555,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["progressive union for renewal"]),
             }
             .get_region_vec(),
-            "Benin",
+            "bj",
         ),
         (
             RegionKeyphrases {
@@ -566,7 +566,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Saint Barthelemy",
+            "bl",
         ),
         (
             RegionKeyphrases {
@@ -577,7 +577,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Bermuda",
+            "bm",
         ),
         (
             RegionKeyphrases {
@@ -588,7 +588,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Brunei",
+            "bn",
         ),
         (
             RegionKeyphrases {
@@ -599,7 +599,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["pluritonal", "plaza murillo"]),
             }
             .get_region_vec(),
-            "Bolivia",
+            "bo",
         ),
         (
             RegionKeyphrases {
@@ -616,7 +616,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Bonaire, Sint Eustatius, and Saba",
+            "bq",
         ),
         (
             RegionKeyphrases {
@@ -647,7 +647,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["planalto", "lula"]),
             }
             .get_region_vec(),
-            "Brazil",
+            "br",
         ),
         (
             RegionKeyphrases {
@@ -658,7 +658,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["progressive liberal party", "free national movement"]),
             }
             .get_region_vec(),
-            "The Bahamas",
+            "bs",
         ),
         (
             RegionKeyphrases {
@@ -669,7 +669,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["druk gyalpo"]),
             }
             .get_region_vec(),
-            "Bhutan",
+            "bt",
         ),
         (
             RegionKeyphrases {
@@ -680,7 +680,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Bouvet Island",
+            "bv",
         ),
         (
             RegionKeyphrases {
@@ -691,7 +691,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["umbrella for democratic change"]),
             }
             .get_region_vec(),
-            "Botswana",
+            "bw",
         ),
         (
             RegionKeyphrases {
@@ -702,7 +702,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["belaya rus", "ldpb"]),
             }
             .get_region_vec(),
-            "Belarus",
+            "by",
         ),
         (
             RegionKeyphrases {
@@ -713,7 +713,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["people's united party"]),
             }
             .get_region_vec(),
-            "Belize",
+            "bz",
         ),
         (
             RegionKeyphrases {
@@ -784,7 +784,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 ]),
             }
             .get_region_vec(),
-            "Canada",
+            "ca",
         ),
         (
             RegionKeyphrases {
@@ -795,7 +795,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Cocos (Keeling) Islands",
+            "cc",
         ),
         (
             RegionKeyphrases {
@@ -813,7 +813,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 ]),
             }
             .get_region_vec(),
-            "Democratic Republic of the Congo",
+            "cd",
         ),
         (
             RegionKeyphrases {
@@ -829,7 +829,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 ]),
             }
             .get_region_vec(),
-            "Central African Republic",
+            "cf",
         ),
         (
             RegionKeyphrases {
@@ -840,7 +840,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["congolese party of labour", "upads"]),
             }
             .get_region_vec(),
-            "Republic of the Congo",
+            "cg",
         ),
         (
             RegionKeyphrases {
@@ -887,7 +887,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Switzerland",
+            "ch",
         ),
         (
             RegionKeyphrases {
@@ -898,7 +898,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Ivory Coast",
+            "ci",
         ),
         (
             RegionKeyphrases {
@@ -909,7 +909,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Cook Islands",
+            "ck",
         ),
         (
             RegionKeyphrases {
@@ -920,7 +920,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Chile",
+            "cl",
         ),
         (
             RegionKeyphrases {
@@ -931,7 +931,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["unity palace", "rdpc", "ambazonia"]),
             }
             .get_region_vec(),
-            "Cameroon",
+            "cm",
         ),
         (
             RegionKeyphrases {
@@ -1046,7 +1046,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 ]),
             }
             .get_region_vec(),
-            "China",
+            "cn",
         ),
         (
             RegionKeyphrases {
@@ -1057,7 +1057,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["casa de narino", "capitolio nacional", "eln"]),
             }
             .get_region_vec(),
-            "Colombia",
+            "co",
         ),
         (
             RegionKeyphrases {
@@ -1073,7 +1073,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 ]),
             }
             .get_region_vec(),
-            "Costa Rica",
+            "cr",
         ),
         (
             RegionKeyphrases {
@@ -1084,7 +1084,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["national assembly of people's power"]),
             }
             .get_region_vec(),
-            "Cuba",
+            "cu",
         ),
         (
             RegionKeyphrases {
@@ -1095,7 +1095,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["paicv"]),
             }
             .get_region_vec(),
-            "Cape Verde",
+            "cv",
         ),
         (
             RegionKeyphrases {
@@ -1106,7 +1106,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["mfk", "real alternative party"]),
             }
             .get_region_vec(),
-            "Curacao",
+            "cw",
         ),
         (
             RegionKeyphrases {
@@ -1117,7 +1117,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Christmas Island",
+            "cx",
         ),
         (
             RegionKeyphrases {
@@ -1128,7 +1128,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["akel"]),
             }
             .get_region_vec(),
-            "Cyprus",
+            "cy",
         ),
         (
             RegionKeyphrases {
@@ -1139,7 +1139,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["spolu", "ano 2011"]),
             }
             .get_region_vec(),
-            "Czech Republic",
+            "cz",
         ),
         (
             RegionKeyphrases {
@@ -1193,7 +1193,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["bundestag", "cdu", "scholz"]),
             }
             .get_region_vec(),
-            "Germany",
+            "de",
         ),
         (
             RegionKeyphrases {
@@ -1204,7 +1204,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["union for the presidential majority"]),
             }
             .get_region_vec(),
-            "Djibouti",
+            "dj",
         ),
         (
             RegionKeyphrases {
@@ -1230,7 +1230,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["folketing"]),
             }
             .get_region_vec(),
-            "Denmark",
+            "dk",
         ),
         (
             RegionKeyphrases {
@@ -1247,18 +1247,18 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Dominica",
+            "dm",
         ),
         (
             RegionKeyphrases {
                 automated: get_automated_keyphrases(&region_map, "DO"),
                 names: Some(vec!["dominican republic"]),
-                demonyms: None,
+                demonyms: Some(vec!["quisqueyan"]),
                 enterprises: None,
                 misc: None,
             }
             .get_region_vec(),
-            "Dominican Republic",
+            "do",
         ),
         (
             RegionKeyphrases {
@@ -1269,7 +1269,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["algerie", "fln"]),
             }
             .get_region_vec(),
-            "Algeria",
+            "dz",
         ),
         (
             RegionKeyphrases {
@@ -1280,7 +1280,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["union for hope"]),
             }
             .get_region_vec(),
-            "Ecuador",
+            "ec",
         ),
         (
             RegionKeyphrases {
@@ -1291,7 +1291,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Estonia",
+            "ee",
         ),
         (
             RegionKeyphrases {
@@ -1302,7 +1302,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Egypt",
+            "eg",
         ),
         (
             RegionKeyphrases {
@@ -1313,7 +1313,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["polisario"]),
             }
             .get_region_vec(),
-            "Western Sahara",
+            "eh",
         ),
         (
             RegionKeyphrases {
@@ -1324,7 +1324,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["pfdj"]),
             }
             .get_region_vec(),
-            "Eritrea",
+            "er",
         ),
         (
             RegionKeyphrases {
@@ -1353,7 +1353,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["cortes generales", "psoe", "sumar"]),
             }
             .get_region_vec(),
-            "Spain",
+            "es",
         ),
         (
             RegionKeyphrases {
@@ -1369,7 +1369,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 ]),
             }
             .get_region_vec(),
-            "Ethiopia",
+            "et",
         ),
         (
             RegionKeyphrases {
@@ -1391,7 +1391,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["eduskunta", "national coalition party"]),
             }
             .get_region_vec(),
-            "Finland",
+            "fi",
         ),
         (
             RegionKeyphrases {
@@ -1402,7 +1402,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Fiji",
+            "fj",
         ),
         (
             RegionKeyphrases {
@@ -1413,7 +1413,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Falkland Islands",
+            "fk",
         ),
         (
             RegionKeyphrases {
@@ -1424,7 +1424,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Micronesia",
+            "fm",
         ),
         (
             RegionKeyphrases {
@@ -1435,7 +1435,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["logting"]),
             }
             .get_region_vec(),
-            "Faroe Islands",
+            "fo",
         ),
         (
             RegionKeyphrases {
@@ -1490,7 +1490,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["macron"]),
             }
             .get_region_vec(),
-            "France",
+            "fr",
         ),
         (
             RegionKeyphrases {
@@ -1501,7 +1501,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["ctri"]),
             }
             .get_region_vec(),
-            "Gabon",
+            "ga",
         ),
         (
             RegionKeyphrases {
@@ -1577,7 +1577,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["house of lords", "stormont", "sunak"]),
             }
             .get_region_vec(),
-            "United Kingdom",
+            "gb",
         ),
         (
             RegionKeyphrases {
@@ -1588,7 +1588,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["rgpf"]),
             }
             .get_region_vec(),
-            "Grenada",
+            "gd",
         ),
         (
             RegionKeyphrases {
@@ -1599,7 +1599,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["abkhaz", "united national movement"]),
             }
             .get_region_vec(),
-            "Georgia",
+            "ge",
         ),
         (
             RegionKeyphrases {
@@ -1610,7 +1610,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "French Guiana",
+            "gf",
         ),
         (
             RegionKeyphrases {
@@ -1621,7 +1621,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Guernsey",
+            "gg",
         ),
         (
             RegionKeyphrases {
@@ -1632,7 +1632,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["national democratic congress", "new patriotic party"]),
             }
             .get_region_vec(),
-            "Ghana",
+            "gh",
         ),
         (
             RegionKeyphrases {
@@ -1643,7 +1643,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["gslp"]),
             }
             .get_region_vec(),
-            "Gibraltar",
+            "gi",
         ),
         (
             RegionKeyphrases {
@@ -1654,7 +1654,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["inuit ataqatigiit", "naleraq", "siumut"]),
             }
             .get_region_vec(),
-            "Greenland",
+            "gl",
         ),
         (
             RegionKeyphrases {
@@ -1665,7 +1665,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Gambia",
+            "gm",
         ),
         (
             RegionKeyphrases {
@@ -1676,7 +1676,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["cnrd"]),
             }
             .get_region_vec(),
-            "Guinea",
+            "gn",
         ),
         (
             RegionKeyphrases {
@@ -1687,7 +1687,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Guadeloupe",
+            "gp",
         ),
         (
             RegionKeyphrases {
@@ -1698,7 +1698,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["pdge"]),
             }
             .get_region_vec(),
-            "Equatorial Guinea",
+            "gq",
         ),
         (
             RegionKeyphrases {
@@ -1709,7 +1709,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["helleni", "syriza"]),
             }
             .get_region_vec(),
-            "Greece",
+            "gr",
         ),
         (
             RegionKeyphrases {
@@ -1720,7 +1720,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "South Georgia and the South Sandwich Islands",
+            "gs",
         ),
         (
             RegionKeyphrases {
@@ -1731,7 +1731,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["semilla"]),
             }
             .get_region_vec(),
-            "Guatemala",
+            "gt",
         ),
         (
             RegionKeyphrases {
@@ -1742,7 +1742,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Guam",
+            "gu",
         ),
         (
             RegionKeyphrases {
@@ -1753,7 +1753,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["terra ranka", "paigc", "madem g15", "madem-g15"]),
             }
             .get_region_vec(),
-            "Guinea-Bissau",
+            "gw",
         ),
         (
             RegionKeyphrases {
@@ -1764,7 +1764,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Guyana",
+            "gy",
         ),
         (
             RegionKeyphrases {
@@ -1800,7 +1800,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["legco"]),
             }
             .get_region_vec(),
-            "Hong Kong",
+            "hk",
         ),
         (
             RegionKeyphrases {
@@ -1811,7 +1811,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Heard Island and McDonald Islands",
+            "hm",
         ),
         (
             RegionKeyphrases {
@@ -1822,7 +1822,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["liberty and refoundation"]),
             }
             .get_region_vec(),
-            "Honduras",
+            "hn",
         ),
         (
             RegionKeyphrases {
@@ -1833,7 +1833,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["hdz"]),
             }
             .get_region_vec(),
-            "Croatia",
+            "hr",
         ),
         (
             RegionKeyphrases {
@@ -1844,7 +1844,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["phtk"]),
             }
             .get_region_vec(),
-            "Haiti",
+            "ht",
         ),
         (
             RegionKeyphrases {
@@ -1855,7 +1855,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["fidesz", "orban"]),
             }
             .get_region_vec(),
-            "Hungary",
+            "hu",
         ),
         (
             RegionKeyphrases {
@@ -1873,7 +1873,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["pdi-p", "golkar", "prosperous justice party"]),
             }
             .get_region_vec(),
-            "Indonesia",
+            "id",
         ),
         (
             RegionKeyphrases {
@@ -1907,7 +1907,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["oireachtas", "fianna fail", "fine gael", "sinn fein"]),
             }
             .get_region_vec(),
-            "Ireland",
+            "ie",
         ),
         (
             RegionKeyphrases {
@@ -1938,7 +1938,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 ]),
             }
             .get_region_vec(),
-            "Israel",
+            "il",
         ),
         (
             RegionKeyphrases {
@@ -1949,7 +1949,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["tynwald"]),
             }
             .get_region_vec(),
-            "Isle of Man",
+            "im",
         ),
         (
             RegionKeyphrases {
@@ -2035,7 +2035,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["lok sabha", "rajya sabha", "bjp"]),
             }
             .get_region_vec(),
-            "India",
+            "in",
         ),
         (
             RegionKeyphrases {
@@ -2046,7 +2046,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "British Indian Ocean Territory",
+            "io",
         ),
         (
             RegionKeyphrases {
@@ -2057,18 +2057,18 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["takadum", "emtidad"]),
             }
             .get_region_vec(),
-            "Iraq",
+            "iq",
         ),
         (
             RegionKeyphrases {
                 automated: get_automated_keyphrases(&region_map, "IR"),
                 names: Some(vec!["iran ", "iran'", "iran\"", "iran.", "iran,"]),
-                demonyms: None,
+                demonyms: Some(vec!["iranian"]),
                 enterprises: None,
                 misc: Some(vec!["guardian council", "khomeini"]),
             }
             .get_region_vec(),
-            "Iran",
+            "ir",
         ),
         (
             RegionKeyphrases {
@@ -2079,7 +2079,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["althing", "samfylkingin"]),
             }
             .get_region_vec(),
-            "Iceland",
+            "is",
         ),
         (
             RegionKeyphrases {
@@ -2110,7 +2110,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["lega", "pd-idp"]),
             }
             .get_region_vec(),
-            "Italy",
+            "it",
         ),
         (
             RegionKeyphrases {
@@ -2127,7 +2127,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Jersey",
+            "je",
         ),
         (
             RegionKeyphrases {
@@ -2138,7 +2138,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Jamaica",
+            "jm",
         ),
         (
             RegionKeyphrases {
@@ -2149,7 +2149,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["islamic action front"]),
             }
             .get_region_vec(),
-            "Jordan",
+            "jo",
         ),
         (
             RegionKeyphrases {
@@ -2250,7 +2250,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["komeito", "tokio"]),
             }
             .get_region_vec(),
-            "Japan",
+            "jp",
         ),
         (
             RegionKeyphrases {
@@ -2261,7 +2261,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["azimio"]),
             }
             .get_region_vec(),
-            "Kenya",
+            "ke",
         ),
         (
             RegionKeyphrases {
@@ -2272,7 +2272,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["jogorku kenesh", "mekenchil", "eldik"]),
             }
             .get_region_vec(),
-            "Kyrgyzstan",
+            "kg",
         ),
         (
             RegionKeyphrases {
@@ -2283,7 +2283,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["funcinpec"]),
             }
             .get_region_vec(),
-            "Cambodia",
+            "kh",
         ),
         (
             RegionKeyphrases {
@@ -2294,7 +2294,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Kiribati",
+            "ki",
         ),
         (
             RegionKeyphrases {
@@ -2305,7 +2305,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["orange party"]),
             }
             .get_region_vec(),
-            "Comoros",
+            "km",
         ),
         (
             RegionKeyphrases {
@@ -2316,7 +2316,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["concerned citizens' movement"]),
             }
             .get_region_vec(),
-            "Saint Kitts and Nevis",
+            "kn",
         ),
         (
             RegionKeyphrases {
@@ -2327,7 +2327,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["supreme people's assembly", "dprk"]),
             }
             .get_region_vec(),
-            "North Korea",
+            "kp",
         ),
         (
             RegionKeyphrases {
@@ -2354,7 +2354,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["people power party"]),
             }
             .get_region_vec(),
-            "South Korea",
+            "kr",
         ),
         (
             RegionKeyphrases {
@@ -2365,7 +2365,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Kuwait",
+            "kw",
         ),
         (
             RegionKeyphrases {
@@ -2376,7 +2376,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Cayman Islands",
+            "ky",
         ),
         (
             RegionKeyphrases {
@@ -2387,7 +2387,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["mazhilis", "amanat", "auyl"]),
             }
             .get_region_vec(),
-            "Kazakhstan",
+            "kz",
         ),
         (
             RegionKeyphrases {
@@ -2398,7 +2398,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["lprp"]),
             }
             .get_region_vec(),
-            "Laos",
+            "la",
         ),
         (
             RegionKeyphrases {
@@ -2415,7 +2415,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 ]),
             }
             .get_region_vec(),
-            "Lebanon",
+            "lb",
         ),
         (
             RegionKeyphrases {
@@ -2426,7 +2426,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Saint Lucia",
+            "lc",
         ),
         (
             RegionKeyphrases {
@@ -2437,7 +2437,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Liechtenstein",
+            "li",
         ),
         (
             RegionKeyphrases {
@@ -2448,7 +2448,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["slpfa", "samagi jana balawegaya"]),
             }
             .get_region_vec(),
-            "Sri Lanka",
+            "lk",
         ),
         (
             RegionKeyphrases {
@@ -2459,7 +2459,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["coalition for democratic change"]),
             }
             .get_region_vec(),
-            "Liberia",
+            "lr",
         ),
         (
             RegionKeyphrases {
@@ -2470,7 +2470,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["revolution for prosperity"]),
             }
             .get_region_vec(),
-            "Lesotho",
+            "ls",
         ),
         (
             RegionKeyphrases {
@@ -2481,7 +2481,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["seimas", "homeland union", "lvzs"]),
             }
             .get_region_vec(),
-            "Lithuania",
+            "lt",
         ),
         (
             RegionKeyphrases {
@@ -2492,7 +2492,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["christian social people's party", "lsap"]),
             }
             .get_region_vec(),
-            "Luxembourg",
+            "lu",
         ),
         (
             RegionKeyphrases {
@@ -2503,7 +2503,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["saeima", "zzs"]),
             }
             .get_region_vec(),
-            "Latvia",
+            "lv",
         ),
         (
             RegionKeyphrases {
@@ -2514,7 +2514,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["government of national"]),
             }
             .get_region_vec(),
-            "Libya",
+            "ly",
         ),
         (
             RegionKeyphrases {
@@ -2530,7 +2530,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 ]),
             }
             .get_region_vec(),
-            "Morocco",
+            "ma",
         ),
         (
             RegionKeyphrases {
@@ -2541,7 +2541,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Monaco",
+            "mc",
         ),
         (
             RegionKeyphrases {
@@ -2552,7 +2552,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["party of action and solidarity", "psrm"]),
             }
             .get_region_vec(),
-            "Moldova",
+            "md",
         ),
         (
             RegionKeyphrases {
@@ -2563,7 +2563,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["pes!"]),
             }
             .get_region_vec(),
-            "Montenegro",
+            "me",
         ),
         (
             RegionKeyphrases {
@@ -2574,7 +2574,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Saint Martin",
+            "mf",
         ),
         (
             RegionKeyphrases {
@@ -2585,7 +2585,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Madagascar",
+            "mg",
         ),
         (
             RegionKeyphrases {
@@ -2596,7 +2596,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Marshall Islands",
+            "mh",
         ),
         (
             RegionKeyphrases {
@@ -2607,18 +2607,18 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["sobranie", "sdsm", "vmro-dpmne"]),
             }
             .get_region_vec(),
-            "North Macedonia",
+            "mk",
         ),
         (
             RegionKeyphrases {
                 automated: get_automated_keyphrases(&region_map, "ML"),
-                names: Some(vec!["mali"]),
-                demonyms: None,
+                names: Some(vec!["mali ", "mali'", "mali\"", "mali.", "mali,"]),
+                demonyms: Some(vec!["malian ", "malian'", "malian\"", "malian.", "malian,"]),
                 enterprises: None,
                 misc: None,
             }
             .get_region_vec(),
-            "Mali",
+            "ml",
         ),
         (
             RegionKeyphrases {
@@ -2629,7 +2629,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["pyidaungsu hluttaw", "nld"]),
             }
             .get_region_vec(),
-            "Myanmar",
+            "mm",
         ),
         (
             RegionKeyphrases {
@@ -2640,7 +2640,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["state great khural"]),
             }
             .get_region_vec(),
-            "Mongolia",
+            "mn",
         ),
         (
             RegionKeyphrases {
@@ -2651,7 +2651,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Macau",
+            "mo",
         ),
         (
             RegionKeyphrases {
@@ -2662,7 +2662,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Northern Mariana Islands",
+            "mp",
         ),
         (
             RegionKeyphrases {
@@ -2673,7 +2673,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Martinique",
+            "mq",
         ),
         (
             RegionKeyphrases {
@@ -2684,7 +2684,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["tewassoul"]),
             }
             .get_region_vec(),
-            "Mauritania",
+            "mr",
         ),
         (
             RegionKeyphrases {
@@ -2695,7 +2695,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["movement for change and prosperity"]),
             }
             .get_region_vec(),
-            "Montserrat",
+            "ms",
         ),
         (
             RegionKeyphrases {
@@ -2706,7 +2706,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Malta",
+            "mt",
         ),
         (
             RegionKeyphrases {
@@ -2717,7 +2717,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["mauricien"]),
             }
             .get_region_vec(),
-            "Mauritius",
+            "mu",
         ),
         (
             RegionKeyphrases {
@@ -2728,7 +2728,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["people's majlis"]),
             }
             .get_region_vec(),
-            "Maldives",
+            "mv",
         ),
         (
             RegionKeyphrases {
@@ -2739,7 +2739,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Malawi",
+            "mw",
         ),
         (
             RegionKeyphrases {
@@ -2762,7 +2762,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Mexico",
+            "mx",
         ),
         (
             RegionKeyphrases {
@@ -2782,7 +2782,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Malaysia",
+            "my",
         ),
         (
             RegionKeyphrases {
@@ -2793,7 +2793,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["frelimo", "renamo"]),
             }
             .get_region_vec(),
-            "Mozambique",
+            "mz",
         ),
         (
             RegionKeyphrases {
@@ -2804,7 +2804,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["swapo"]),
             }
             .get_region_vec(),
-            "Namibia",
+            "na",
         ),
         (
             RegionKeyphrases {
@@ -2815,7 +2815,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["flnks", "l'eo"]),
             }
             .get_region_vec(),
-            "New Caledonia",
+            "nc",
         ),
         (
             RegionKeyphrases {
@@ -2826,7 +2826,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Niger",
+            "ne",
         ),
         (
             RegionKeyphrases {
@@ -2837,7 +2837,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Norfolk Island",
+            "nf",
         ),
         (
             RegionKeyphrases {
@@ -2848,7 +2848,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["all progressives congress"]),
             }
             .get_region_vec(),
-            "Nigeria",
+            "ng",
         ),
         (
             RegionKeyphrases {
@@ -2859,7 +2859,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["sandinista"]),
             }
             .get_region_vec(),
-            "Nicaragua",
+            "ni",
         ),
         (
             RegionKeyphrases {
@@ -2903,7 +2903,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 ]),
             }
             .get_region_vec(),
-            "Netherlands",
+            "nl",
         ),
         (
             RegionKeyphrases {
@@ -2922,7 +2922,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["storting"]),
             }
             .get_region_vec(),
-            "Norway",
+            "no",
         ),
         (
             RegionKeyphrases {
@@ -2933,7 +2933,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Nepal",
+            "np",
         ),
         (
             RegionKeyphrases {
@@ -2944,7 +2944,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Nauru",
+            "nr",
         ),
         (
             RegionKeyphrases {
@@ -2955,7 +2955,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Niue",
+            "nu",
         ),
         (
             RegionKeyphrases {
@@ -2966,7 +2966,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["parliament", "nzlp"]),
             }
             .get_region_vec(),
-            "New Zealand",
+            "nz",
         ),
         (
             RegionKeyphrases {
@@ -2977,7 +2977,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Oman",
+            "om",
         ),
         (
             RegionKeyphrases {
@@ -2988,7 +2988,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["molirena"]),
             }
             .get_region_vec(),
-            "Panama",
+            "pa",
         ),
         (
             RegionKeyphrases {
@@ -2999,7 +2999,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["fujimoris"]),
             }
             .get_region_vec(),
-            "Peru",
+            "pe",
         ),
         (
             RegionKeyphrases {
@@ -3010,7 +3010,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["tavini", "tapura"]),
             }
             .get_region_vec(),
-            "French Polynesia",
+            "pf",
         ),
         (
             RegionKeyphrases {
@@ -3021,7 +3021,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["pangu pati"]),
             }
             .get_region_vec(),
-            "Papua New Guinea",
+            "pg",
         ),
         (
             RegionKeyphrases {
@@ -3040,7 +3040,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["uniteam alliance", "tropa"]),
             }
             .get_region_vec(),
-            "Philippines",
+            "ph",
         ),
         (
             RegionKeyphrases {
@@ -3051,7 +3051,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["pml-n", "ittehad council"]),
             }
             .get_region_vec(),
-            "Pakistan",
+            "pk",
         ),
         (
             RegionKeyphrases {
@@ -3071,7 +3071,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["sejm"]),
             }
             .get_region_vec(),
-            "Poland",
+            "pl",
         ),
         (
             RegionKeyphrases {
@@ -3082,7 +3082,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["archipelago tomorrow"]),
             }
             .get_region_vec(),
-            "Saint Pierre and Miquelon",
+            "pm",
         ),
         (
             RegionKeyphrases {
@@ -3093,7 +3093,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Pitcairn Islands",
+            "pn",
         ),
         (
             RegionKeyphrases {
@@ -3104,7 +3104,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Puerto Rico",
+            "pr",
         ),
         (
             RegionKeyphrases {
@@ -3115,7 +3115,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["plo", "hamas", "fatah", "gaza", "rafah"]),
             }
             .get_region_vec(),
-            "Palestine",
+            "ps",
         ),
         (
             RegionKeyphrases {
@@ -3126,7 +3126,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Portugal",
+            "pt",
         ),
         (
             RegionKeyphrases {
@@ -3137,7 +3137,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Palau",
+            "pw",
         ),
         (
             RegionKeyphrases {
@@ -3148,7 +3148,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Paraguay",
+            "py",
         ),
         (
             RegionKeyphrases {
@@ -3159,7 +3159,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["house of thani"]),
             }
             .get_region_vec(),
-            "Qatar",
+            "qa",
         ),
         (
             RegionKeyphrases {
@@ -3170,7 +3170,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Reunion",
+            "re",
         ),
         (
             RegionKeyphrases {
@@ -3181,7 +3181,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Romania",
+            "ro",
         ),
         (
             RegionKeyphrases {
@@ -3192,7 +3192,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["av-zms", "sps-zs"]),
             }
             .get_region_vec(),
-            "Serbia",
+            "rs",
         ),
         (
             RegionKeyphrases {
@@ -3215,7 +3215,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["state duma", "ldpr", "putin"]),
             }
             .get_region_vec(),
-            "Russia",
+            "ru",
         ),
         (
             RegionKeyphrases {
@@ -3226,7 +3226,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Rwanda",
+            "rw",
         ),
         (
             RegionKeyphrases {
@@ -3252,7 +3252,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Saudi Arabia",
+            "sa",
         ),
         (
             RegionKeyphrases {
@@ -3263,7 +3263,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["kadere party"]),
             }
             .get_region_vec(),
-            "Solomon Islands",
+            "sb",
         ),
         (
             RegionKeyphrases {
@@ -3274,7 +3274,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Seychelles",
+            "sc",
         ),
         (
             RegionKeyphrases {
@@ -3285,7 +3285,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Sudan",
+            "sd",
         ),
         (
             RegionKeyphrases {
@@ -3323,7 +3323,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["riksdag"]),
             }
             .get_region_vec(),
-            "Sweden",
+            "se",
         ),
         (
             RegionKeyphrases {
@@ -3344,7 +3344,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["people's action party"]),
             }
             .get_region_vec(),
-            "Singapore",
+            "sg",
         ),
         (
             RegionKeyphrases {
@@ -3355,7 +3355,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Saint Helena",
+            "sh",
         ),
         (
             RegionKeyphrases {
@@ -3366,7 +3366,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Slovenia",
+            "si",
         ),
         (
             RegionKeyphrases {
@@ -3377,7 +3377,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Svalbard and Jan Mayen",
+            "sj",
         ),
         (
             RegionKeyphrases {
@@ -3388,7 +3388,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["smer-sd", "hlas-sd"]),
             }
             .get_region_vec(),
-            "Slovakia",
+            "sk",
         ),
         (
             RegionKeyphrases {
@@ -3399,7 +3399,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Sierra Leone",
+            "sl",
         ),
         (
             RegionKeyphrases {
@@ -3410,7 +3410,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "San Marino",
+            "sm",
         ),
         (
             RegionKeyphrases {
@@ -3421,7 +3421,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Senegal",
+            "sn",
         ),
         (
             RegionKeyphrases {
@@ -3432,7 +3432,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Somalia",
+            "so",
         ),
         (
             RegionKeyphrases {
@@ -3443,7 +3443,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Suriname",
+            "sr",
         ),
         (
             RegionKeyphrases {
@@ -3454,7 +3454,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["splm-in-opposition"]),
             }
             .get_region_vec(),
-            "South Sudan",
+            "ss",
         ),
         (
             RegionKeyphrases {
@@ -3465,7 +3465,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["mlstp"]),
             }
             .get_region_vec(),
-            "Sao Tome and Principe",
+            "st",
         ),
         (
             RegionKeyphrases {
@@ -3476,7 +3476,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["nuevas ideas"]),
             }
             .get_region_vec(),
-            "El Salvador",
+            "sv",
         ),
         (
             RegionKeyphrases {
@@ -3487,7 +3487,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Sint Maarten",
+            "sx",
         ),
         (
             RegionKeyphrases {
@@ -3498,7 +3498,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Syria",
+            "sy",
         ),
         (
             RegionKeyphrases {
@@ -3509,7 +3509,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["tinkhundla"]),
             }
             .get_region_vec(),
-            "Eswatini",
+            "sz",
         ),
         (
             RegionKeyphrases {
@@ -3520,7 +3520,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Turks and Caicos Islands",
+            "tc",
         ),
         (
             RegionKeyphrases {
@@ -3531,7 +3531,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["national transitional council"]),
             }
             .get_region_vec(),
-            "Chad",
+            "td",
         ),
         (
             RegionKeyphrases {
@@ -3549,7 +3549,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "French Southern Territories",
+            "tf",
         ),
         (
             RegionKeyphrases {
@@ -3560,7 +3560,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["union of forces for change"]),
             }
             .get_region_vec(),
-            "Togo",
+            "tg",
         ),
         (
             RegionKeyphrases {
@@ -3579,7 +3579,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["bhumjaithai", "palang pracharath"]),
             }
             .get_region_vec(),
-            "Thailand",
+            "th",
         ),
         (
             RegionKeyphrases {
@@ -3590,7 +3590,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Tajikistan",
+            "tj",
         ),
         (
             RegionKeyphrases {
@@ -3601,7 +3601,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Tokelau",
+            "tk",
         ),
         (
             RegionKeyphrases {
@@ -3612,7 +3612,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["national parliament", "cnrt", "fretilin"]),
             }
             .get_region_vec(),
-            "East Timor",
+            "tl",
         ),
         (
             RegionKeyphrases {
@@ -3623,7 +3623,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Turkmenistan",
+            "tm",
         ),
         (
             RegionKeyphrases {
@@ -3637,7 +3637,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 ]),
             }
             .get_region_vec(),
-            "Tunisia",
+            "tn",
         ),
         (
             RegionKeyphrases {
@@ -3648,7 +3648,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Tonga",
+            "to",
         ),
         (
             RegionKeyphrases {
@@ -3660,7 +3660,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["grand national assembly"]),
             }
             .get_region_vec(),
-            "Turkey",
+            "tr",
         ),
         (
             RegionKeyphrases {
@@ -3671,7 +3671,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Trinidad and Tobago",
+            "tt",
         ),
         (
             RegionKeyphrases {
@@ -3682,7 +3682,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Tuvalu",
+            "tv",
         ),
         (
             RegionKeyphrases {
@@ -3726,7 +3726,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 ]),
             }
             .get_region_vec(),
-            "Taiwan",
+            "tw",
         ),
         (
             RegionKeyphrases {
@@ -3737,7 +3737,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["chama cha mapinduzi"]),
             }
             .get_region_vec(),
-            "Tanzania",
+            "tz",
         ),
         (
             RegionKeyphrases {
@@ -3748,7 +3748,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["verkhovna rada", "zelensky"]),
             }
             .get_region_vec(),
-            "Ukraine",
+            "ua",
         ),
         (
             RegionKeyphrases {
@@ -3759,7 +3759,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Uganda",
+            "ug",
         ),
         (
             RegionKeyphrases {
@@ -3781,7 +3781,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "United States Minor Outlying Islands",
+            "um",
         ),
         (
             RegionKeyphrases {
@@ -4421,7 +4421,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["donald trump", "medicaid", "medicare"]),
             }
             .get_region_vec(),
-            "United States",
+            "us",
         ),
         (
             RegionKeyphrases {
@@ -4432,7 +4432,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["biden", "nuland", "blinken"]),
             }
             .get_region_vec(),
-            "Uruguay",
+            "uy",
         ),
         (
             RegionKeyphrases {
@@ -4443,7 +4443,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["justice social democratic party"]),
             }
             .get_region_vec(),
-            "Uzbekistan",
+            "uz",
         ),
         (
             RegionKeyphrases {
@@ -4454,7 +4454,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["college of cardinals", "pope"]),
             }
             .get_region_vec(),
-            "Vatican City",
+            "va",
         ),
         (
             RegionKeyphrases {
@@ -4465,7 +4465,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Saint Vincent and the Grenadines",
+            "vc",
         ),
         (
             RegionKeyphrases {
@@ -4476,7 +4476,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["psuv"]),
             }
             .get_region_vec(),
-            "Venezuela",
+            "ve",
         ),
         (
             RegionKeyphrases {
@@ -4487,7 +4487,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "British Virgin Islands",
+            "vg",
         ),
         (
             RegionKeyphrases {
@@ -4502,7 +4502,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "United States Virgin Islands",
+            "vi",
         ),
         (
             RegionKeyphrases {
@@ -4513,7 +4513,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Vietnam",
+            "vn",
         ),
         (
             RegionKeyphrases {
@@ -4524,7 +4524,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Vanuatu",
+            "vu",
         ),
         (
             RegionKeyphrases {
@@ -4535,7 +4535,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Wallis and Futuna",
+            "wf",
         ),
         (
             RegionKeyphrases {
@@ -4546,7 +4546,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Samoa",
+            "ws",
         ),
         (
             RegionKeyphrases {
@@ -4557,7 +4557,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["houthi"]),
             }
             .get_region_vec(),
-            "Yemen",
+            "ye",
         ),
         (
             RegionKeyphrases {
@@ -4568,7 +4568,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "Mayotte",
+            "yt",
         ),
         (
             RegionKeyphrases {
@@ -4579,7 +4579,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["vetevendosje", "guxo"]),
             }
             .get_region_vec(),
-            "Kosovo",
+            "xk",
         ),
         (
             RegionKeyphrases {
@@ -4598,7 +4598,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["african national congress"]),
             }
             .get_region_vec(),
-            "South Africa",
+            "za",
         ),
         (
             RegionKeyphrases {
@@ -4609,7 +4609,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["upnd"]),
             }
             .get_region_vec(),
-            "Zambia",
+            "zm",
         ),
         (
             RegionKeyphrases {
@@ -4620,7 +4620,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: Some(vec!["zanu-pf", "citizens coalition for change"]),
             }
             .get_region_vec(),
-            "Zimbabwe",
+            "zw",
         ),
     ];
 

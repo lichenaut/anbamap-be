@@ -1,10 +1,14 @@
+use std::collections::HashSet;
+
 use crate::prelude::*;
 use crate::scrape::util::get_regions;
 use crate::service::var_service::{get_youtube_api_key, get_youtube_channel_ids};
 use chrono::Utc;
 use serde_json::Value;
 
-pub async fn scrape_youtube(media: &mut Vec<(String, String, String, Vec<String>)>) -> Result<()> {
+pub async fn scrape_youtube(
+    media: &mut Vec<(String, String, String, HashSet<String>)>,
+) -> Result<()> {
     let youtube_api_key = match get_youtube_api_key().await? {
         Some(api_key) => api_key,
         None => return Ok(()),
@@ -29,8 +33,8 @@ pub async fn scrape_youtube(media: &mut Vec<(String, String, String, Vec<String>
 pub async fn scrape_youtube_channel(
     api_key: &str,
     channel_id: &str,
-) -> Result<Vec<(String, String, String, Vec<String>)>> {
-    let mut videos: Vec<(String, String, String, Vec<String>)> = Vec::new();
+) -> Result<Vec<(String, String, String, HashSet<String>)>> {
+    let mut videos: Vec<(String, String, String, HashSet<String>)> = Vec::new();
     let url =
             format!("https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&channelId={}&type=video&order=date&key={}",
             channel_id,

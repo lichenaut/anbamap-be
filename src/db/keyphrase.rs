@@ -93,7 +93,10 @@ pub async fn gen_keyphrase_db(docker_volume: String) -> Result<()> {
 
         if region_code == "MZ" && ascii_name.contains("aza") {
             continue;
-        } // "Gaza" is a better keyphrase for Palestine.
+        } // "Gaza" is a better keyphrase for Palestine than Mozambique.
+        if ascii_name.contains("israel") && region_code != "IL" {
+            continue;
+        } // "Israel" is a better keyphrase for Israel than someone's name.
 
         let population = match fields.nth(5) {
             Some(population) => match population.parse::<u32>() {
