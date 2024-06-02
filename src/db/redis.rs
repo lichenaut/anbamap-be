@@ -59,7 +59,6 @@ pub async fn update_db(media: Vec<(String, String, String, HashSet<String>)>) ->
             data.insert("title", title.to_string());
             data.insert("body", body.to_string());
             data.insert("regions", regions.iter().join(","));
-
             url_data.insert(url, data);
         }
 
