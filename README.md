@@ -23,18 +23,17 @@ The two layers of identification are as follows:
 
 Database keys are of the form "code:url", where 'code' is a two-letter region code, and 'url' is the url of a piece of scraped media. 'url' itself serves as the key for the following fields: `timestamp` (unix), `title`, `body`, and `regions`.
 
-````
-
 &nbsp;
 
 ## Deployment
 
 1. Create a Docker volume, pull the Docker image, and run a container to generate setup files.
+
 ```bash
 docker volume create anbamap_vol
 docker pull lichenaut/anbamap-scraper:latest
 docker run -v anbamap_vol:/scraper/data -e DOCKER_VOLUME=/scraper/data -e REDIS_ENDPOINT= -e REDIS_PASSWORD= -e YOUTUBE_API_KEY= -e YOUTUBE_CHANNEL_IDS= image-id
-````
+```
 
 2. Automate this run command at an interval of your choice.
 
