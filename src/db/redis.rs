@@ -11,18 +11,13 @@ use std::{
 pub async fn update_db(media: Vec<(String, String, String, HashSet<String>)>) -> Result<()> {
     let client = get_redis_client().await?;
     let mut connection = client.get_connection()?;
-    let mut pipe = redis::pipe();
     let now = SystemTime::now().duration_since(UNIX_EPOCH)?.as_secs();
-    let region_codes: Vec<String> = connection.keys("*")?;
+    let keys: Vec<String> = connection.keys("*")?;
     let mut keys_to_delete = Vec::new();
-    for code in region_codes {
-        let urls: Vec<String> = connection.hkeys(&code)?;
-        for url in urls {
-            let key = format!("{}:{}", code, url);
-            let timestamp: u64 = connection.hget(&key, "timestamp")?;
-            if now - timestamp > 604800 {
-                keys_to_delete.push(key);
-            }
+    for key in keys {
+        let timestamp: u64 = connection.hget(&key, "timestamp")?;
+        if now - timestamp > 604800 {
+            keys_to_delete.push(key);
         }
     }
 
@@ -30,7 +25,6 @@ pub async fn update_db(media: Vec<(String, String, String, HashSet<String>)>) ->
         connection.del(keys_to_delete)?;
     }
 
-    let now = now.to_string();
     let region_codes = vec![
         "ad", "ae", "af", "ag", "ai", "al", "am", "ao", "aq", "ar", "as", "at", "au", "aw", "ax",
         "az", "ba", "bb", "bd", "be", "bf", "bg", "bh", "bi", "bj", "bl", "bm", "bn", "bo", "bq",
@@ -50,7 +44,8 @@ pub async fn update_db(media: Vec<(String, String, String, HashSet<String>)>) ->
         "tt", "tv", "tw", "tz", "ua", "ug", "um", "us", "uy", "uz", "va", "vc", "ve", "vg", "vi",
         "vn", "vu", "wf", "ws", "ye", "yt", "za", "zm", "zw",
     ];
-
+    let now = now.to_string();
+    let mut pipe = redis::pipe();
     for code in region_codes {
         let mut url_data: HashMap<&str, HashMap<&str, String>> = HashMap::new();
 
