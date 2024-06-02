@@ -21,7 +21,7 @@ The two layers of identification are as follows:
 
 #### Database Structure
 
-Database keys are of the form 'code:url', where 'code' is a two-letter region code, and 'url' is the URL of a piece of scraped media. 'url' itself serves as the key for the following fields:
+Database keys are of the form 'code:url', where 'code' is a two-letter region code, and 'url' is the URL of a piece of scraped media. A key has the following fields:
 
 | Field       | Description                           |
 | ----------- | ------------------------------------- |
