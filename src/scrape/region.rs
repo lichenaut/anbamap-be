@@ -1,5 +1,5 @@
 use crate::prelude::*;
-use crate::{db::keyphrase::get_region_db_pool, service::var_service::get_docker_volume};
+use crate::{db::util::get_db_pool, service::var_service::get_docker_volume};
 use async_std::task;
 use once_cell::sync::Lazy;
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
@@ -105,7 +105,7 @@ impl RegionKeyphrases {
 async fn build_region_map() -> Result<HashMap<String, Vec<String>>> {
     let db_path = format!("{}/region_db.sqlite", get_docker_volume().await?);
     let db_path = Path::new(&db_path);
-    let pool = get_region_db_pool(db_path).await?;
+    let pool = get_db_pool(db_path).await?;
     let mut region_map = HashMap::new();
     let rows = sqlx::query("SELECT * FROM regions")
         .fetch_all(&pool)
@@ -205,7 +205,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
     let map = vec![
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "AD"),
+                automated: get_automated_keyphrases(&region_map, "ad"),
                 names: Some(vec!["andorra"]),
                 demonyms: None,
                 enterprises: None,
@@ -216,7 +216,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "AE"),
+                automated: get_automated_keyphrases(&region_map, "ae"),
                 names: Some(vec!["united arab emirates", "uae"]),
                 demonyms: Some(vec!["emirati"]),
                 enterprises: Some(vec![
@@ -243,7 +243,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "AF"),
+                automated: get_automated_keyphrases(&region_map, "af"),
                 names: None,
                 demonyms: Some(vec!["afghan"]),
                 enterprises: None,
@@ -254,7 +254,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "AG"),
+                automated: get_automated_keyphrases(&region_map, "ag"),
                 names: Some(vec!["antigua", "barbuda", "a&b"]),
                 demonyms: None,
                 enterprises: None,
@@ -265,7 +265,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "AI"),
+                automated: get_automated_keyphrases(&region_map, "ai"),
                 names: Some(vec!["anguilla"]),
                 demonyms: None,
                 enterprises: None,
@@ -276,7 +276,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "AL"),
+                automated: get_automated_keyphrases(&region_map, "al"),
                 names: Some(vec!["albania"]),
                 demonyms: None,
                 enterprises: None,
@@ -287,7 +287,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "AM"),
+                automated: get_automated_keyphrases(&region_map, "am"),
                 names: Some(vec![
                     "armenia ",
                     "armenia'",
@@ -304,7 +304,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "AO"),
+                automated: get_automated_keyphrases(&region_map, "ao"),
                 names: Some(vec!["angola"]),
                 demonyms: None,
                 enterprises: None,
@@ -315,7 +315,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "AQ"),
+                automated: get_automated_keyphrases(&region_map, "aq"),
                 names: Some(vec!["antarctica"]),
                 demonyms: None,
                 enterprises: None,
@@ -326,7 +326,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "AR"),
+                automated: get_automated_keyphrases(&region_map, "ar"),
                 names: None,
                 demonyms: Some(vec!["argentin"]),
                 enterprises: Some(vec!["mercadolibre", "ypf", "yacimientos petroliferos"]),
@@ -344,7 +344,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "AS"),
+                automated: get_automated_keyphrases(&region_map, "as"),
                 names: Some(vec!["american samoa"]),
                 demonyms: None,
                 enterprises: None,
@@ -355,7 +355,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "AT"),
+                automated: get_automated_keyphrases(&region_map, "at"),
                 names: Some(vec!["austria", "oesterreich"]),
                 demonyms: None,
                 enterprises: Some(vec!["verbund", "erste group", "erste bank", "omv"]),
@@ -366,7 +366,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "AU"),
+                automated: get_automated_keyphrases(&region_map, "au"),
                 names: Some(vec!["australia"]),
                 demonyms: Some(vec!["aussie"]),
                 enterprises: Some(vec![
@@ -410,7 +410,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "AW"),
+                automated: get_automated_keyphrases(&region_map, "aw"),
                 names: Some(vec!["aruba"]),
                 demonyms: None,
                 enterprises: None,
@@ -421,7 +421,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "AX"),
+                automated: get_automated_keyphrases(&region_map, "ax"),
                 names: Some(vec!["aland"]),
                 demonyms: None,
                 enterprises: None,
@@ -432,7 +432,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "AZ"),
+                automated: get_automated_keyphrases(&region_map, "az"),
                 names: Some(vec!["azerbaijan"]),
                 demonyms: Some(vec!["azeri"]),
                 enterprises: None,
@@ -443,7 +443,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "BA"),
+                automated: get_automated_keyphrases(&region_map, "ba"),
                 names: Some(vec!["bosnia", "srpska", "brcko"]),
                 demonyms: Some(vec!["herzegovin"]),
                 enterprises: None,
@@ -457,7 +457,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "BB"),
+                automated: get_automated_keyphrases(&region_map, "bb"),
                 names: Some(vec!["barbados"]),
                 demonyms: None,
                 enterprises: None,
@@ -468,7 +468,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "BD"),
+                automated: get_automated_keyphrases(&region_map, "bd"),
                 names: Some(vec!["bangladesh"]),
                 demonyms: None,
                 enterprises: None,
@@ -484,7 +484,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "BE"),
+                automated: get_automated_keyphrases(&region_map, "be"),
                 names: Some(vec!["belgium"]),
                 demonyms: Some(vec!["belgian"]),
                 enterprises: Some(vec!["anheuser-busch", "kbc", "ucb", "d'leteren", "gbl"]),
@@ -495,7 +495,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "BF"),
+                automated: get_automated_keyphrases(&region_map, "bf"),
                 names: Some(vec!["burkina faso"]),
                 demonyms: Some(vec!["burkinabe", "burkinese"]),
                 enterprises: None,
@@ -506,7 +506,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "BG"),
+                automated: get_automated_keyphrases(&region_map, "bg"),
                 names: Some(vec!["bulgaria"]),
                 demonyms: None,
                 enterprises: None,
@@ -517,7 +517,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "BH"),
+                automated: get_automated_keyphrases(&region_map, "bh"),
                 names: Some(vec!["bahrain"]),
                 demonyms: None,
                 enterprises: Some(vec!["ahli united", "ahli bank"]),
@@ -533,7 +533,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "BI"),
+                automated: get_automated_keyphrases(&region_map, "bi"),
                 names: Some(vec!["burundi"]),
                 demonyms: None,
                 enterprises: None,
@@ -548,7 +548,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "BJ"),
+                automated: get_automated_keyphrases(&region_map, "bj"),
                 names: Some(vec!["benin"]),
                 demonyms: None,
                 enterprises: None,
@@ -559,7 +559,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "BL"),
+                automated: get_automated_keyphrases(&region_map, "bl"),
                 names: Some(vec!["saint barthelemy"]),
                 demonyms: Some(vec!["barthelemois"]),
                 enterprises: None,
@@ -570,7 +570,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "BM"),
+                automated: get_automated_keyphrases(&region_map, "bm"),
                 names: Some(vec!["bermuda"]),
                 demonyms: None,
                 enterprises: None,
@@ -581,7 +581,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "BN"),
+                automated: get_automated_keyphrases(&region_map, "bn"),
                 names: None, // Name comes from database.
                 demonyms: None,
                 enterprises: None,
@@ -592,7 +592,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "BO"),
+                automated: get_automated_keyphrases(&region_map, "bo"),
                 names: Some(vec!["bolivia"]),
                 demonyms: None,
                 enterprises: None,
@@ -603,7 +603,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "BQ"),
+                automated: get_automated_keyphrases(&region_map, "bq"),
                 names: Some(vec![
                     "bonaire",
                     "sint eustatius",
@@ -620,7 +620,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "BR"),
+                automated: get_automated_keyphrases(&region_map, "br"),
                 names: Some(vec!["brazil", "brasil"]),
                 demonyms: None,
                 enterprises: Some(vec![
@@ -651,7 +651,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "BS"),
+                automated: get_automated_keyphrases(&region_map, "bs"),
                 names: Some(vec!["bahama"]),
                 demonyms: Some(vec!["bahamian"]),
                 enterprises: None,
@@ -662,7 +662,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "BT"),
+                automated: get_automated_keyphrases(&region_map, "bt"),
                 names: Some(vec!["bhutan"]),
                 demonyms: None,
                 enterprises: None,
@@ -673,7 +673,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "BV"),
+                automated: get_automated_keyphrases(&region_map, "bv"),
                 names: Some(vec!["bouvet"]),
                 demonyms: None,
                 enterprises: None,
@@ -684,7 +684,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "BW"),
+                automated: get_automated_keyphrases(&region_map, "bw"),
                 names: Some(vec!["botswana"]),
                 demonyms: Some(vec!["batswana", "motswana"]),
                 enterprises: None,
@@ -695,7 +695,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "BY"),
+                automated: get_automated_keyphrases(&region_map, "by"),
                 names: Some(vec!["belarus"]),
                 demonyms: None,
                 enterprises: None,
@@ -706,7 +706,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "BZ"),
+                automated: get_automated_keyphrases(&region_map, "bz"),
                 names: Some(vec!["belize"]),
                 demonyms: None,
                 enterprises: None,
@@ -717,7 +717,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "CA"),
+                automated: get_automated_keyphrases(&region_map, "ca"),
                 names: None, // Name comes from database.
                 demonyms: Some(vec!["canadian"]),
                 enterprises: Some(vec![
@@ -788,7 +788,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "CC"),
+                automated: get_automated_keyphrases(&region_map, "cc"),
                 names: Some(vec!["cocos island", "keeling island"]),
                 demonyms: None,
                 enterprises: None,
@@ -799,7 +799,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "CD"),
+                automated: get_automated_keyphrases(&region_map, "cd"),
                 names: Some(vec!["democratic republic of the congo", "drc", "big congo"]),
                 demonyms: None,
                 enterprises: None,
@@ -817,7 +817,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "CF"),
+                automated: get_automated_keyphrases(&region_map, "cf"),
                 names: None,
                 demonyms: Some(vec!["central african"]),
                 enterprises: None,
@@ -833,7 +833,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "CG"),
+                automated: get_automated_keyphrases(&region_map, "cg"),
                 names: Some(vec!["little congo"]),
                 demonyms: None,
                 enterprises: None,
@@ -844,7 +844,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "CH"),
+                automated: get_automated_keyphrases(&region_map, "ch"),
                 names: Some(vec!["switzerland"]),
                 demonyms: Some(vec!["swiss"]),
                 enterprises: Some(vec![
@@ -891,7 +891,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "CI"),
+                automated: get_automated_keyphrases(&region_map, "ci"),
                 names: Some(vec!["ivory coast", "cote d'ivoire"]),
                 demonyms: Some(vec!["ivorian"]),
                 enterprises: None,
@@ -902,7 +902,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "CK"),
+                automated: get_automated_keyphrases(&region_map, "ck"),
                 names: Some(vec!["cook island"]),
                 demonyms: None,
                 enterprises: None,
@@ -913,7 +913,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "CL"),
+                automated: get_automated_keyphrases(&region_map, "cl"),
                 names: Some(vec!["chile"]),
                 demonyms: None,
                 enterprises: Some(vec!["quimica y minera", "enel americas", "empresas copec"]),
@@ -924,7 +924,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "CM"),
+                automated: get_automated_keyphrases(&region_map, "cm"),
                 names: Some(vec!["cameroon"]),
                 demonyms: None,
                 enterprises: None,
@@ -935,7 +935,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "CN"),
+                automated: get_automated_keyphrases(&region_map, "cn"),
                 names: Some(vec!["china", "prc"]),
                 demonyms: Some(vec!["chinese"]),
                 enterprises: Some(vec![
@@ -1050,7 +1050,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "CO"),
+                automated: get_automated_keyphrases(&region_map, "co"),
                 names: Some(vec!["colombia"]),
                 demonyms: None,
                 enterprises: None,
@@ -1061,7 +1061,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "CR"),
+                automated: get_automated_keyphrases(&region_map, "cr"),
                 names: Some(vec!["costa rica"]),
                 demonyms: None,
                 enterprises: None,
@@ -1077,7 +1077,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "CU"),
+                automated: get_automated_keyphrases(&region_map, "cu"),
                 names: Some(vec!["cuba"]),
                 demonyms: None,
                 enterprises: None,
@@ -1088,7 +1088,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "CV"),
+                automated: get_automated_keyphrases(&region_map, "cv"),
                 names: Some(vec!["cape verde"]),
                 demonyms: Some(vec!["cabo verdean"]),
                 enterprises: None,
@@ -1099,7 +1099,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "CW"),
+                automated: get_automated_keyphrases(&region_map, "cw"),
                 names: Some(vec!["curacao"]),
                 demonyms: None,
                 enterprises: None,
@@ -1110,7 +1110,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "CX"),
+                automated: get_automated_keyphrases(&region_map, "cx"),
                 names: Some(vec!["christmas island"]),
                 demonyms: None,
                 enterprises: None,
@@ -1121,7 +1121,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "CY"),
+                automated: get_automated_keyphrases(&region_map, "cy"),
                 names: Some(vec!["cyprus"]),
                 demonyms: Some(vec!["cypriot"]),
                 enterprises: None,
@@ -1132,7 +1132,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "CZ"),
+                automated: get_automated_keyphrases(&region_map, "cz"),
                 names: None,
                 demonyms: Some(vec!["czech"]),
                 enterprises: Some(vec!["cez"]),
@@ -1143,7 +1143,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "DE"),
+                automated: get_automated_keyphrases(&region_map, "de"),
                 names: None,
                 demonyms: Some(vec!["german", "deutsche"]),
                 enterprises: Some(vec![
@@ -1197,7 +1197,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "DJ"),
+                automated: get_automated_keyphrases(&region_map, "dj"),
                 names: Some(vec!["djibouti"]),
                 demonyms: None,
                 enterprises: None,
@@ -1208,7 +1208,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "DK"),
+                automated: get_automated_keyphrases(&region_map, "dk"),
                 names: Some(vec!["denmark"]),
                 demonyms: Some(vec!["danish", "dane"]),
                 enterprises: Some(vec![
@@ -1234,7 +1234,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "DM"),
+                automated: get_automated_keyphrases(&region_map, "dm"),
                 names: Some(vec![
                     "dominica ",
                     "dominica'",
@@ -1251,7 +1251,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "DO"),
+                automated: get_automated_keyphrases(&region_map, "do"),
                 names: Some(vec!["dominican republic"]),
                 demonyms: Some(vec!["quisqueyan"]),
                 enterprises: None,
@@ -1262,7 +1262,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "DZ"),
+                automated: get_automated_keyphrases(&region_map, "dz"),
                 names: Some(vec!["algeria"]),
                 demonyms: None,
                 enterprises: None,
@@ -1273,7 +1273,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "EC"),
+                automated: get_automated_keyphrases(&region_map, "ec"),
                 names: Some(vec!["ecuador"]),
                 demonyms: None,
                 enterprises: None,
@@ -1284,7 +1284,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "EE"),
+                automated: get_automated_keyphrases(&region_map, "ee"),
                 names: Some(vec!["estonia"]),
                 demonyms: None,
                 enterprises: None,
@@ -1295,7 +1295,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "EG"),
+                automated: get_automated_keyphrases(&region_map, "eg"),
                 names: Some(vec!["egypt"]),
                 demonyms: None,
                 enterprises: None,
@@ -1306,7 +1306,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "EH"),
+                automated: get_automated_keyphrases(&region_map, "eh"),
                 names: Some(vec!["western sahara"]),
                 demonyms: None,
                 enterprises: None,
@@ -1317,7 +1317,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "ER"),
+                automated: get_automated_keyphrases(&region_map, "er"),
                 names: Some(vec!["eritrea"]),
                 demonyms: None,
                 enterprises: None,
@@ -1328,7 +1328,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "ES"),
+                automated: get_automated_keyphrases(&region_map, "es"),
                 names: Some(vec!["spain"]),
                 demonyms: Some(vec!["spaniard"]),
                 enterprises: Some(vec![
@@ -1357,7 +1357,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "ET"),
+                automated: get_automated_keyphrases(&region_map, "et"),
                 names: Some(vec!["ethiopia"]),
                 demonyms: None,
                 enterprises: None,
@@ -1373,7 +1373,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "FI"),
+                automated: get_automated_keyphrases(&region_map, "fi"),
                 names: Some(vec!["finland"]),
                 demonyms: Some(vec!["finn"]),
                 enterprises: Some(vec![
@@ -1395,7 +1395,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "FJ"),
+                automated: get_automated_keyphrases(&region_map, "fj"),
                 names: Some(vec!["fiji"]),
                 demonyms: None,
                 enterprises: None,
@@ -1406,7 +1406,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "FK"),
+                automated: get_automated_keyphrases(&region_map, "fk"),
                 names: Some(vec!["falkland", "malvinas"]),
                 demonyms: None,
                 enterprises: None,
@@ -1417,7 +1417,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "FM"),
+                automated: get_automated_keyphrases(&region_map, "fm"),
                 names: Some(vec!["micronesia", "fsm"]),
                 demonyms: None,
                 enterprises: None,
@@ -1428,7 +1428,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "FO"),
+                automated: get_automated_keyphrases(&region_map, "fo"),
                 names: Some(vec!["faroe island"]),
                 demonyms: None,
                 enterprises: None,
@@ -1439,7 +1439,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "FR"),
+                automated: get_automated_keyphrases(&region_map, "fr"),
                 names: Some(vec!["france"]),
                 demonyms: None,
                 enterprises: Some(vec![
@@ -1494,7 +1494,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "GA"),
+                automated: get_automated_keyphrases(&region_map, "ga"),
                 names: Some(vec!["gabon"]),
                 demonyms: None,
                 enterprises: None,
@@ -1505,7 +1505,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "GB"),
+                automated: get_automated_keyphrases(&region_map, "gb"),
                 names: Some(vec![
                     "united kingdom",
                     "uk",
@@ -1581,7 +1581,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "GD"),
+                automated: get_automated_keyphrases(&region_map, "gd"),
                 names: Some(vec!["grenada"]),
                 demonyms: Some(vec!["grenadian"]),
                 enterprises: None,
@@ -1592,7 +1592,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "GE"),
+                automated: get_automated_keyphrases(&region_map, "ge"),
                 names: None,
                 demonyms: None,
                 enterprises: None,
@@ -1603,7 +1603,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "GF"),
+                automated: get_automated_keyphrases(&region_map, "gf"),
                 names: Some(vec!["french guiana"]),
                 demonyms: Some(vec!["french guianan", "french guinese"]),
                 enterprises: None,
@@ -1614,7 +1614,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "GG"),
+                automated: get_automated_keyphrases(&region_map, "gg"),
                 names: Some(vec!["guernsey"]),
                 demonyms: Some(vec!["giernesiais"]),
                 enterprises: None,
@@ -1625,7 +1625,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "GH"),
+                automated: get_automated_keyphrases(&region_map, "gh"),
                 names: Some(vec!["ghana"]),
                 demonyms: None,
                 enterprises: None,
@@ -1636,7 +1636,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "GI"),
+                automated: get_automated_keyphrases(&region_map, "gi"),
                 names: None, // Name comes from database.
                 demonyms: Some(vec!["llanito"]),
                 enterprises: None,
@@ -1647,7 +1647,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "GL"),
+                automated: get_automated_keyphrases(&region_map, "gl"),
                 names: Some(vec!["greenland"]),
                 demonyms: None,
                 enterprises: None,
@@ -1658,7 +1658,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "GM"),
+                automated: get_automated_keyphrases(&region_map, "gm"),
                 names: Some(vec!["gambia"]),
                 demonyms: None,
                 enterprises: None,
@@ -1669,7 +1669,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "GN"),
+                automated: get_automated_keyphrases(&region_map, "gn"),
                 names: None,
                 demonyms: None,
                 enterprises: None,
@@ -1680,7 +1680,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "GP"),
+                automated: get_automated_keyphrases(&region_map, "gp"),
                 names: Some(vec!["guadeloupe"]),
                 demonyms: None,
                 enterprises: None,
@@ -1691,7 +1691,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "GQ"),
+                automated: get_automated_keyphrases(&region_map, "gq"),
                 names: Some(vec!["equatorial guinea"]),
                 demonyms: Some(vec!["equatoguinean"]),
                 enterprises: None,
@@ -1702,7 +1702,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "GR"),
+                automated: get_automated_keyphrases(&region_map, "gr"),
                 names: Some(vec!["greece"]),
                 demonyms: Some(vec!["greek"]),
                 enterprises: None,
@@ -1713,7 +1713,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "GS"),
+                automated: get_automated_keyphrases(&region_map, "gs"),
                 names: Some(vec!["south georgia", "south sandwich"]),
                 demonyms: None,
                 enterprises: None,
@@ -1724,7 +1724,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "GT"),
+                automated: get_automated_keyphrases(&region_map, "gt"),
                 names: Some(vec!["guatemala"]),
                 demonyms: Some(vec!["chapin"]),
                 enterprises: None,
@@ -1735,7 +1735,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "GU"),
+                automated: get_automated_keyphrases(&region_map, "gu"),
                 names: Some(vec!["guam"]),
                 demonyms: None,
                 enterprises: None,
@@ -1746,7 +1746,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "GW"),
+                automated: get_automated_keyphrases(&region_map, "gw"),
                 names: Some(vec!["guinea-bissau"]),
                 demonyms: Some(vec!["bissau-guinean"]),
                 enterprises: None,
@@ -1757,7 +1757,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "GY"),
+                automated: get_automated_keyphrases(&region_map, "gy"),
                 names: Some(vec!["guyan"]),
                 demonyms: None,
                 enterprises: None,
@@ -1769,7 +1769,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         (
             RegionKeyphrases {
                 // I am not including "... China ..." keyphrases for this region, as I value the 'China" keyphrase more for the China region.
-                automated: get_automated_keyphrases(&region_map, "HK"),
+                automated: get_automated_keyphrases(&region_map, "hk"),
                 names: Some(vec!["hong kong"]),
                 demonyms: Some(vec!["hongkong"]),
                 enterprises: Some(vec![
@@ -1804,7 +1804,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "HM"),
+                automated: get_automated_keyphrases(&region_map, "hm"),
                 names: Some(vec!["heard island", "mcdonald island"]),
                 demonyms: None,
                 enterprises: None,
@@ -1815,7 +1815,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "HN"),
+                automated: get_automated_keyphrases(&region_map, "hn"),
                 names: Some(vec!["hondura"]),
                 demonyms: Some(vec!["catrach"]),
                 enterprises: None,
@@ -1826,7 +1826,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "HR"),
+                automated: get_automated_keyphrases(&region_map, "hr"),
                 names: Some(vec!["croatia"]),
                 demonyms: None,
                 enterprises: None,
@@ -1837,7 +1837,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "HT"),
+                automated: get_automated_keyphrases(&region_map, "ht"),
                 names: Some(vec!["haiti"]),
                 demonyms: None,
                 enterprises: None,
@@ -1848,7 +1848,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "HU"),
+                automated: get_automated_keyphrases(&region_map, "hu"),
                 names: Some(vec!["hungar"]),
                 demonyms: None,
                 enterprises: None,
@@ -1859,7 +1859,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "ID"),
+                automated: get_automated_keyphrases(&region_map, "id"),
                 names: Some(vec!["indonesia"]),
                 demonyms: None,
                 enterprises: Some(vec![
@@ -1877,7 +1877,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "IE"),
+                automated: get_automated_keyphrases(&region_map, "ie"),
                 names: None,
                 demonyms: Some(vec!["irish"]),
                 enterprises: Some(vec![
@@ -1911,7 +1911,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "IL"),
+                automated: get_automated_keyphrases(&region_map, "il"),
                 names: Some(vec!["israel"]),
                 demonyms: None,
                 enterprises: Some(vec![
@@ -1942,7 +1942,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "IM"),
+                automated: get_automated_keyphrases(&region_map, "im"),
                 names: Some(vec!["isle of man"]),
                 demonyms: Some(vec!["manx"]),
                 enterprises: None,
@@ -1953,7 +1953,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "IN"),
+                automated: get_automated_keyphrases(&region_map, "in"),
                 names: Some(vec!["india", "hindustan"]),
                 demonyms: None,
                 enterprises: Some(vec![
@@ -2039,7 +2039,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "IO"),
+                automated: get_automated_keyphrases(&region_map, "io"),
                 names: Some(vec!["british indian ocean territory"]),
                 demonyms: None,
                 enterprises: None,
@@ -2050,7 +2050,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "IQ"),
+                automated: get_automated_keyphrases(&region_map, "iq"),
                 names: Some(vec!["iraq"]),
                 demonyms: None,
                 enterprises: None,
@@ -2061,7 +2061,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "IR"),
+                automated: get_automated_keyphrases(&region_map, "ir"),
                 names: Some(vec!["iran ", "iran'", "iran\"", "iran.", "iran,"]),
                 demonyms: Some(vec!["iranian"]),
                 enterprises: None,
@@ -2072,7 +2072,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "IS"),
+                automated: get_automated_keyphrases(&region_map, "is"),
                 names: Some(vec!["iceland"]),
                 demonyms: None,
                 enterprises: None,
@@ -2083,7 +2083,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "IT"),
+                automated: get_automated_keyphrases(&region_map, "it"),
                 names: Some(vec!["italy"]),
                 demonyms: Some(vec!["italian"]),
                 enterprises: Some(vec![
@@ -2114,7 +2114,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "JE"),
+                automated: get_automated_keyphrases(&region_map, "je"),
                 names: None,
                 demonyms: Some(vec![
                     "jerseyman",
@@ -2131,7 +2131,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "JM"),
+                automated: get_automated_keyphrases(&region_map, "jm"),
                 names: None, // Name comes from database.
                 demonyms: None,
                 enterprises: None,
@@ -2142,7 +2142,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "JO"),
+                automated: get_automated_keyphrases(&region_map, "jo"),
                 names: None,
                 demonyms: Some(vec!["jordanian"]),
                 enterprises: None,
@@ -2153,7 +2153,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "JP"),
+                automated: get_automated_keyphrases(&region_map, "jp"),
                 names: Some(vec!["japan", "nippon"]),
                 demonyms: None,
                 enterprises: Some(vec![
@@ -2254,7 +2254,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "KE"),
+                automated: get_automated_keyphrases(&region_map, "ke"),
                 names: Some(vec!["kenya"]),
                 demonyms: None,
                 enterprises: None,
@@ -2265,7 +2265,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "KG"),
+                automated: get_automated_keyphrases(&region_map, "kg"),
                 names: None,
                 demonyms: Some(vec!["kyrgyz"]),
                 enterprises: None,
@@ -2276,7 +2276,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "KH"),
+                automated: get_automated_keyphrases(&region_map, "kh"),
                 names: Some(vec!["cambodia"]),
                 demonyms: Some(vec!["khmer"]),
                 enterprises: None,
@@ -2287,7 +2287,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "KI"),
+                automated: get_automated_keyphrases(&region_map, "ki"),
                 names: Some(vec!["kiribati"]),
                 demonyms: None,
                 enterprises: None,
@@ -2298,7 +2298,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "KM"),
+                automated: get_automated_keyphrases(&region_map, "km"),
                 names: Some(vec!["comoros"]),
                 demonyms: Some(vec!["comorian"]),
                 enterprises: None,
@@ -2309,7 +2309,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "KN"),
+                automated: get_automated_keyphrases(&region_map, "kn"),
                 names: Some(vec!["kitts", "nevis"]),
                 demonyms: Some(vec!["kittitian", "nevisian"]),
                 enterprises: None,
@@ -2320,7 +2320,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "KP"),
+                automated: get_automated_keyphrases(&region_map, "kp"),
                 names: Some(vec!["north korea"]),
                 demonyms: None,
                 enterprises: None,
@@ -2331,7 +2331,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "KR"),
+                automated: get_automated_keyphrases(&region_map, "kr"),
                 names: Some(vec!["south korea"]),
                 demonyms: None,
                 enterprises: Some(vec![
@@ -2358,7 +2358,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "KW"),
+                automated: get_automated_keyphrases(&region_map, "kw"),
                 names: Some(vec!["kuwait"]),
                 demonyms: None,
                 enterprises: None,
@@ -2369,7 +2369,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "KY"),
+                automated: get_automated_keyphrases(&region_map, "ky"),
                 names: Some(vec!["cayman"]),
                 demonyms: None,
                 enterprises: None,
@@ -2380,7 +2380,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "KZ"),
+                automated: get_automated_keyphrases(&region_map, "kz"),
                 names: None,
                 demonyms: Some(vec!["kazakh"]),
                 enterprises: None,
@@ -2391,7 +2391,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "LA"),
+                automated: get_automated_keyphrases(&region_map, "la"),
                 names: Some(vec!["laos"]),
                 demonyms: Some(vec!["lao", "laotian"]), // Strings with length 3 or less are processed before substring checking.
                 enterprises: None,
@@ -2402,7 +2402,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "LB"),
+                automated: get_automated_keyphrases(&region_map, "lb"),
                 names: Some(vec!["lebanon"]),
                 demonyms: Some(vec!["lebanese"]),
                 enterprises: None,
@@ -2419,7 +2419,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "LC"),
+                automated: get_automated_keyphrases(&region_map, "lc"),
                 names: Some(vec!["saint lucia"]),
                 demonyms: None,
                 enterprises: None,
@@ -2430,7 +2430,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "LI"),
+                automated: get_automated_keyphrases(&region_map, "li"),
                 names: Some(vec!["liechtenstein"]),
                 demonyms: None,
                 enterprises: None,
@@ -2441,7 +2441,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "LK"),
+                automated: get_automated_keyphrases(&region_map, "lk"),
                 names: Some(vec!["sri lanka"]),
                 demonyms: None,
                 enterprises: None,
@@ -2452,7 +2452,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "LR"),
+                automated: get_automated_keyphrases(&region_map, "lr"),
                 names: Some(vec!["liberia"]),
                 demonyms: None,
                 enterprises: None,
@@ -2463,7 +2463,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "LS"),
+                automated: get_automated_keyphrases(&region_map, "ls"),
                 names: None, // Name comes from database.
                 demonyms: Some(vec!["mosotho", "basotho"]),
                 enterprises: None,
@@ -2474,7 +2474,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "LT"),
+                automated: get_automated_keyphrases(&region_map, "lt"),
                 names: Some(vec!["lithuania"]),
                 demonyms: None,
                 enterprises: None,
@@ -2485,7 +2485,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "LU"),
+                automated: get_automated_keyphrases(&region_map, "lu"),
                 names: None, // Name comes from database.
                 demonyms: None,
                 enterprises: Some(vec!["arcelormittal", "tenaris", "eurofins"]),
@@ -2496,7 +2496,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "LV"),
+                automated: get_automated_keyphrases(&region_map, "lv"),
                 names: Some(vec!["latvia"]),
                 demonyms: None,
                 enterprises: None,
@@ -2507,7 +2507,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "LY"),
+                automated: get_automated_keyphrases(&region_map, "ly"),
                 names: None, // Name comes from database.
                 demonyms: None,
                 enterprises: None,
@@ -2518,7 +2518,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "MA"),
+                automated: get_automated_keyphrases(&region_map, "ma"),
                 names: Some(vec!["morocc"]),
                 demonyms: None,
                 enterprises: None,
@@ -2534,7 +2534,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "MC"),
+                automated: get_automated_keyphrases(&region_map, "mc"),
                 names: None, // Name comes from database.
                 demonyms: Some(vec!["monegasque", "monacan"]),
                 enterprises: None,
@@ -2545,7 +2545,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "MD"),
+                automated: get_automated_keyphrases(&region_map, "md"),
                 names: Some(vec!["moldova"]),
                 demonyms: None,
                 enterprises: None,
@@ -2556,7 +2556,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "ME"),
+                automated: get_automated_keyphrases(&region_map, "me"),
                 names: Some(vec!["monteneg"]),
                 demonyms: None,
                 enterprises: None,
@@ -2567,7 +2567,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "MF"),
+                automated: get_automated_keyphrases(&region_map, "mf"),
                 names: Some(vec!["saint martin"]),
                 demonyms: None,
                 enterprises: None,
@@ -2578,7 +2578,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "MG"),
+                automated: get_automated_keyphrases(&region_map, "mg"),
                 names: Some(vec!["madagas"]),
                 demonyms: Some(vec!["malagas"]),
                 enterprises: None,
@@ -2589,7 +2589,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "MH"),
+                automated: get_automated_keyphrases(&region_map, "mh"),
                 names: Some(vec!["marshall island"]),
                 demonyms: Some(vec!["marshallese"]),
                 enterprises: None,
@@ -2600,7 +2600,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "MK"),
+                automated: get_automated_keyphrases(&region_map, "mk"),
                 names: Some(vec!["north macedonia"]),
                 demonyms: None,
                 enterprises: None,
@@ -2611,7 +2611,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "ML"),
+                automated: get_automated_keyphrases(&region_map, "ml"),
                 names: Some(vec!["mali ", "mali'", "mali\"", "mali.", "mali,"]),
                 demonyms: Some(vec!["malian ", "malian'", "malian\"", "malian.", "malian,"]),
                 enterprises: None,
@@ -2622,7 +2622,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "MM"),
+                automated: get_automated_keyphrases(&region_map, "mm"),
                 names: Some(vec!["myanma"]),
                 demonyms: Some(vec!["burmese"]),
                 enterprises: None,
@@ -2633,7 +2633,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "MN"),
+                automated: get_automated_keyphrases(&region_map, "mn"),
                 names: Some(vec!["mongol"]),
                 demonyms: None,
                 enterprises: None,
@@ -2644,7 +2644,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "MO"),
+                automated: get_automated_keyphrases(&region_map, "mo"),
                 names: Some(vec!["macau", "macao"]),
                 demonyms: None,
                 enterprises: None,
@@ -2655,7 +2655,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "MP"),
+                automated: get_automated_keyphrases(&region_map, "mp"),
                 names: Some(vec!["northern mariana island"]),
                 demonyms: Some(vec!["marianan", "chamorro"]),
                 enterprises: None,
@@ -2666,7 +2666,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "MQ"),
+                automated: get_automated_keyphrases(&region_map, "mq"),
                 names: Some(vec!["martiniq"]),
                 demonyms: Some(vec!["martinic"]),
                 enterprises: None,
@@ -2677,7 +2677,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "MR"),
+                automated: get_automated_keyphrases(&region_map, "mr"),
                 names: Some(vec!["mauritania"]),
                 demonyms: None,
                 enterprises: None,
@@ -2688,7 +2688,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "MS"),
+                automated: get_automated_keyphrases(&region_map, "ms"),
                 names: Some(vec!["montserrat"]),
                 demonyms: None,
                 enterprises: None,
@@ -2699,7 +2699,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "MT"),
+                automated: get_automated_keyphrases(&region_map, "mt"),
                 names: Some(vec!["malta"]),
                 demonyms: Some(vec!["maltese"]),
                 enterprises: None,
@@ -2710,7 +2710,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "MU"),
+                automated: get_automated_keyphrases(&region_map, "mu"),
                 names: Some(vec!["mauriti"]),
                 demonyms: None,
                 enterprises: None,
@@ -2721,7 +2721,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "MV"),
+                automated: get_automated_keyphrases(&region_map, "mv"),
                 names: Some(vec!["maldiv"]),
                 demonyms: None,
                 enterprises: None,
@@ -2732,7 +2732,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "MW"),
+                automated: get_automated_keyphrases(&region_map, "mw"),
                 names: Some(vec!["malawi"]),
                 demonyms: None,
                 enterprises: None,
@@ -2743,7 +2743,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "MX"),
+                automated: get_automated_keyphrases(&region_map, "mx"),
                 names: None,
                 demonyms: Some(vec!["mexican"]),
                 enterprises: Some(vec![
@@ -2766,7 +2766,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "MY"),
+                automated: get_automated_keyphrases(&region_map, "my"),
                 names: Some(vec!["malaysia"]),
                 demonyms: None,
                 enterprises: Some(vec![
@@ -2786,7 +2786,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "MZ"),
+                automated: get_automated_keyphrases(&region_map, "mz"),
                 names: Some(vec!["mozambi"]),
                 demonyms: None,
                 enterprises: None,
@@ -2797,7 +2797,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "NA"),
+                automated: get_automated_keyphrases(&region_map, "na"),
                 names: Some(vec!["namibia"]),
                 demonyms: None,
                 enterprises: None,
@@ -2808,7 +2808,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "NC"),
+                automated: get_automated_keyphrases(&region_map, "nc"),
                 names: Some(vec!["new caledonia"]),
                 demonyms: Some(vec!["caledonian"]),
                 enterprises: None,
@@ -2819,7 +2819,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "NE"),
+                automated: get_automated_keyphrases(&region_map, "ne"),
                 names: None,
                 demonyms: Some(vec!["nigerien"]),
                 enterprises: None,
@@ -2830,7 +2830,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "NF"),
+                automated: get_automated_keyphrases(&region_map, "nf"),
                 names: Some(vec!["norfolk island"]),
                 demonyms: None,
                 enterprises: None,
@@ -2841,7 +2841,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "NG"),
+                automated: get_automated_keyphrases(&region_map, "ng"),
                 names: Some(vec!["nigeria"]),
                 demonyms: None,
                 enterprises: None,
@@ -2852,7 +2852,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "NI"),
+                automated: get_automated_keyphrases(&region_map, "ni"),
                 names: Some(vec!["nicaragua"]),
                 demonyms: Some(vec!["pinoler"]),
                 enterprises: None,
@@ -2863,7 +2863,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "NL"),
+                automated: get_automated_keyphrases(&region_map, "nl"),
                 names: Some(vec!["netherlands", "nederland"]),
                 demonyms: Some(vec!["dutch"]),
                 enterprises: Some(vec![
@@ -2907,7 +2907,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "NO"),
+                automated: get_automated_keyphrases(&region_map, "no"),
                 names: Some(vec!["norway"]),
                 demonyms: Some(vec!["norwegian"]),
                 enterprises: Some(vec![
@@ -2926,7 +2926,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "NP"),
+                automated: get_automated_keyphrases(&region_map, "np"),
                 names: Some(vec!["nepal"]),
                 demonyms: None,
                 enterprises: None,
@@ -2937,7 +2937,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "NR"),
+                automated: get_automated_keyphrases(&region_map, "nr"),
                 names: Some(vec!["nauru"]),
                 demonyms: None,
                 enterprises: None,
@@ -2948,7 +2948,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "NU"),
+                automated: get_automated_keyphrases(&region_map, "nu"),
                 names: Some(vec!["niue"]),
                 demonyms: None,
                 enterprises: None,
@@ -2959,7 +2959,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "NZ"),
+                automated: get_automated_keyphrases(&region_map, "nz"),
                 names: Some(vec!["new zealand"]),
                 demonyms: Some(vec!["kiwi"]),
                 enterprises: Some(vec!["xero", "fisher & paykel"]),
@@ -2970,7 +2970,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "OM"),
+                automated: get_automated_keyphrases(&region_map, "om"),
                 names: Some(vec!["oman"]),
                 demonyms: None,
                 enterprises: None,
@@ -2981,7 +2981,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "PA"),
+                automated: get_automated_keyphrases(&region_map, "pa"),
                 names: Some(vec!["panama"]),
                 demonyms: None,
                 enterprises: None,
@@ -2992,7 +2992,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "PE"),
+                automated: get_automated_keyphrases(&region_map, "pe"),
                 names: Some(vec!["peru"]),
                 demonyms: None,
                 enterprises: None,
@@ -3003,7 +3003,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "PF"),
+                automated: get_automated_keyphrases(&region_map, "pf"),
                 names: Some(vec!["french polynesia"]),
                 demonyms: None,
                 enterprises: None,
@@ -3014,7 +3014,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "PG"),
+                automated: get_automated_keyphrases(&region_map, "pg"),
                 names: Some(vec!["papua new guinea"]),
                 demonyms: None,
                 enterprises: None,
@@ -3025,7 +3025,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "PH"),
+                automated: get_automated_keyphrases(&region_map, "ph"),
                 names: Some(vec!["philippine"]),
                 demonyms: Some(vec!["filipin", "pinoy"]),
                 enterprises: Some(vec![
@@ -3044,7 +3044,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "PK"),
+                automated: get_automated_keyphrases(&region_map, "pk"),
                 names: Some(vec!["pakistan"]),
                 demonyms: None,
                 enterprises: None,
@@ -3055,7 +3055,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "PL"),
+                automated: get_automated_keyphrases(&region_map, "pl"),
                 names: Some(vec!["poland", "polsk"]),
                 demonyms: Some(vec!["polish"]),
                 enterprises: Some(vec![
@@ -3075,7 +3075,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "PM"),
+                automated: get_automated_keyphrases(&region_map, "pm"),
                 names: Some(vec!["saint pierre", "miquelon"]),
                 demonyms: Some(vec!["saint-pierrais", "miquelonnais", "pierrian"]),
                 enterprises: None,
@@ -3086,7 +3086,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "PN"),
+                automated: get_automated_keyphrases(&region_map, "pn"),
                 names: Some(vec!["pitcairn"]),
                 demonyms: Some(vec!["pitkern"]),
                 enterprises: None,
@@ -3097,7 +3097,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "PR"),
+                automated: get_automated_keyphrases(&region_map, "pr"),
                 names: Some(vec!["puerto ric"]),
                 demonyms: None,
                 enterprises: None,
@@ -3108,7 +3108,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "PS"),
+                automated: get_automated_keyphrases(&region_map, "ps"),
                 names: Some(vec!["palestin"]),
                 demonyms: None,
                 enterprises: None,
@@ -3119,7 +3119,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "PT"),
+                automated: get_automated_keyphrases(&region_map, "pt"),
                 names: Some(vec!["portugal"]),
                 demonyms: Some(vec!["portuguese"]),
                 enterprises: Some(vec!["edp group", "galp energ", "jeronimo martins"]),
@@ -3130,7 +3130,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "PW"),
+                automated: get_automated_keyphrases(&region_map, "pw"),
                 names: Some(vec!["palau"]),
                 demonyms: None,
                 enterprises: None,
@@ -3141,7 +3141,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "PY"),
+                automated: get_automated_keyphrases(&region_map, "py"),
                 names: Some(vec!["paraguay"]),
                 demonyms: None,
                 enterprises: None,
@@ -3152,7 +3152,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "QA"),
+                automated: get_automated_keyphrases(&region_map, "qa"),
                 names: Some(vec!["qatar"]),
                 demonyms: None,
                 enterprises: Some(vec!["qnb inc"]),
@@ -3163,7 +3163,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "RE"),
+                automated: get_automated_keyphrases(&region_map, "re"),
                 names: None,
                 demonyms: Some(vec!["reunionese"]),
                 enterprises: None,
@@ -3174,7 +3174,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "RO"),
+                automated: get_automated_keyphrases(&region_map, "ro"),
                 names: Some(vec!["romania"]),
                 demonyms: None,
                 enterprises: None,
@@ -3185,7 +3185,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "RS"),
+                automated: get_automated_keyphrases(&region_map, "rs"),
                 names: Some(vec!["serbia"]),
                 demonyms: None,
                 enterprises: None,
@@ -3196,7 +3196,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "RU"),
+                automated: get_automated_keyphrases(&region_map, "ru"),
                 names: Some(vec!["russia"]),
                 demonyms: None,
                 enterprises: Some(vec![
@@ -3219,7 +3219,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "RW"),
+                automated: get_automated_keyphrases(&region_map, "rw"),
                 names: Some(vec!["rwand"]),
                 demonyms: None,
                 enterprises: None,
@@ -3230,7 +3230,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "SA"),
+                automated: get_automated_keyphrases(&region_map, "sa"),
                 names: None,
                 demonyms: Some(vec!["saudi"]),
                 enterprises: Some(vec![
@@ -3256,7 +3256,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "SB"),
+                automated: get_automated_keyphrases(&region_map, "sb"),
                 names: Some(vec!["solomon island"]),
                 demonyms: None,
                 enterprises: None,
@@ -3267,7 +3267,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "SC"),
+                automated: get_automated_keyphrases(&region_map, "sc"),
                 names: Some(vec!["seychell"]),
                 demonyms: Some(vec!["seselwa"]),
                 enterprises: None,
@@ -3278,7 +3278,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "SD"),
+                automated: get_automated_keyphrases(&region_map, "sd"),
                 names: None,
                 demonyms: None,
                 enterprises: None,
@@ -3289,7 +3289,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "SE"),
+                automated: get_automated_keyphrases(&region_map, "se"),
                 names: None,
                 demonyms: Some(vec!["swedish", "swede"]),
                 enterprises: Some(vec![
@@ -3327,7 +3327,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "SG"),
+                automated: get_automated_keyphrases(&region_map, "sg"),
                 names: Some(vec!["singapore"]),
                 demonyms: None,
                 enterprises: Some(vec![
@@ -3348,7 +3348,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "SH"),
+                automated: get_automated_keyphrases(&region_map, "sh"),
                 names: Some(vec!["saint helen"]),
                 demonyms: Some(vec!["helenian"]),
                 enterprises: None,
@@ -3359,7 +3359,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "SI"),
+                automated: get_automated_keyphrases(&region_map, "si"),
                 names: Some(vec!["sloven"]),
                 demonyms: None,
                 enterprises: None,
@@ -3370,7 +3370,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "SJ"),
+                automated: get_automated_keyphrases(&region_map, "sj"),
                 names: Some(vec!["svalbard", "jan mayen"]),
                 demonyms: None,
                 enterprises: None,
@@ -3381,7 +3381,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "SK"),
+                automated: get_automated_keyphrases(&region_map, "sk"),
                 names: None,
                 demonyms: Some(vec!["slovak"]),
                 enterprises: None,
@@ -3392,7 +3392,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "SL"),
+                automated: get_automated_keyphrases(&region_map, "sl"),
                 names: Some(vec!["sierra leone"]),
                 demonyms: None,
                 enterprises: None,
@@ -3403,7 +3403,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "SM"),
+                automated: get_automated_keyphrases(&region_map, "sm"),
                 names: Some(vec!["san marino"]),
                 demonyms: Some(vec!["sammarinese"]),
                 enterprises: None,
@@ -3414,7 +3414,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "SN"),
+                automated: get_automated_keyphrases(&region_map, "sn"),
                 names: Some(vec!["senegal"]),
                 demonyms: None,
                 enterprises: None,
@@ -3425,7 +3425,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "SO"),
+                automated: get_automated_keyphrases(&region_map, "so"),
                 names: None,
                 demonyms: Some(vec!["somali"]),
                 enterprises: None,
@@ -3436,7 +3436,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "SR"),
+                automated: get_automated_keyphrases(&region_map, "sr"),
                 names: Some(vec!["suriname"]),
                 demonyms: None,
                 enterprises: None,
@@ -3447,7 +3447,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "SS"),
+                automated: get_automated_keyphrases(&region_map, "ss"),
                 names: Some(vec!["south sudan"]),
                 demonyms: None,
                 enterprises: None,
@@ -3458,7 +3458,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "ST"),
+                automated: get_automated_keyphrases(&region_map, "st"),
                 names: Some(vec!["sao tome", "principe"]),
                 demonyms: Some(vec!["santomean"]),
                 enterprises: None,
@@ -3469,7 +3469,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "SV"),
+                automated: get_automated_keyphrases(&region_map, "sv"),
                 names: Some(vec!["el salvador"]),
                 demonyms: Some(vec!["salvadoran"]),
                 enterprises: None,
@@ -3480,7 +3480,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "SX"),
+                automated: get_automated_keyphrases(&region_map, "sx"),
                 names: Some(vec!["maarten"]),
                 demonyms: None,
                 enterprises: None,
@@ -3491,7 +3491,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "SY"),
+                automated: get_automated_keyphrases(&region_map, "sy"),
                 names: Some(vec!["syria"]),
                 demonyms: None,
                 enterprises: None,
@@ -3502,7 +3502,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "SZ"),
+                automated: get_automated_keyphrases(&region_map, "sz"),
                 names: Some(vec!["eswatini"]),
                 demonyms: Some(vec!["swazi"]),
                 enterprises: None,
@@ -3513,7 +3513,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "TC"),
+                automated: get_automated_keyphrases(&region_map, "tc"),
                 names: Some(vec!["turks and c", "caicos"]),
                 demonyms: Some(vec!["turks islander"]),
                 enterprises: None,
@@ -3524,7 +3524,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "TD"),
+                automated: get_automated_keyphrases(&region_map, "td"),
                 names: None,
                 demonyms: Some(vec!["chadian"]),
                 enterprises: None,
@@ -3535,7 +3535,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "TF"),
+                automated: get_automated_keyphrases(&region_map, "tf"),
                 names: Some(vec![
                     "french southern territories",
                     "adelie land",
@@ -3553,7 +3553,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "TG"),
+                automated: get_automated_keyphrases(&region_map, "tg"),
                 names: Some(vec!["togo"]),
                 demonyms: None,
                 enterprises: None,
@@ -3564,7 +3564,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "TH"),
+                automated: get_automated_keyphrases(&region_map, "th"),
                 names: None,
                 demonyms: Some(vec!["thai"]),
                 enterprises: Some(vec![
@@ -3583,7 +3583,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "TJ"),
+                automated: get_automated_keyphrases(&region_map, "tj"),
                 names: None,
                 demonyms: Some(vec!["tajik"]),
                 enterprises: None,
@@ -3594,7 +3594,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "TK"),
+                automated: get_automated_keyphrases(&region_map, "tk"),
                 names: Some(vec!["tokelau"]),
                 demonyms: None,
                 enterprises: None,
@@ -3605,7 +3605,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "TL"),
+                automated: get_automated_keyphrases(&region_map, "tl"),
                 names: Some(vec!["timor-leste", "east timor"]),
                 demonyms: Some(vec!["timorese"]),
                 enterprises: None,
@@ -3616,7 +3616,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "TM"),
+                automated: get_automated_keyphrases(&region_map, "tm"),
                 names: None,
                 demonyms: Some(vec!["turkmen"]),
                 enterprises: None,
@@ -3627,7 +3627,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "TN"),
+                automated: get_automated_keyphrases(&region_map, "tn"),
                 names: Some(vec!["tunisia"]),
                 demonyms: None,
                 enterprises: None,
@@ -3641,7 +3641,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "TO"),
+                automated: get_automated_keyphrases(&region_map, "to"),
                 names: Some(vec!["tonga"]),
                 demonyms: None,
                 enterprises: None,
@@ -3653,7 +3653,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         (
             RegionKeyphrases {
                 // I did not add "Ford Otosan", as I value the 'Ford' keyphrase more for the United States region.
-                automated: get_automated_keyphrases(&region_map, "TR"),
+                automated: get_automated_keyphrases(&region_map, "tr"),
                 names: Some(vec!["turkey", "turkiye"]),
                 demonyms: Some(vec!["turkish"]),
                 enterprises: Some(vec!["qnb finansbank", "koc", "garantibank", "akbank"]),
@@ -3664,7 +3664,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "TT"),
+                automated: get_automated_keyphrases(&region_map, "tt"),
                 names: Some(vec!["tobago"]),
                 demonyms: Some(vec!["trini", "trinbagonian"]),
                 enterprises: None,
@@ -3675,7 +3675,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "TV"),
+                automated: get_automated_keyphrases(&region_map, "tv"),
                 names: Some(vec!["tuvalu"]),
                 demonyms: None,
                 enterprises: None,
@@ -3687,7 +3687,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         (
             RegionKeyphrases {
                 // I am not including "China Steel", as I value the 'China" keyphrase more for the China region.
-                automated: get_automated_keyphrases(&region_map, "TW"),
+                automated: get_automated_keyphrases(&region_map, "tw"),
                 names: Some(vec!["taiwan"]),
                 demonyms: None,
                 enterprises: Some(vec![
@@ -3730,7 +3730,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "TZ"),
+                automated: get_automated_keyphrases(&region_map, "tz"),
                 names: Some(vec!["tanzania"]),
                 demonyms: None,
                 enterprises: None,
@@ -3741,7 +3741,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "UA"),
+                automated: get_automated_keyphrases(&region_map, "ua"),
                 names: Some(vec!["ukrain"]),
                 demonyms: None,
                 enterprises: None,
@@ -3752,7 +3752,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "UG"),
+                automated: get_automated_keyphrases(&region_map, "ug"),
                 names: Some(vec!["uganda"]),
                 demonyms: None,
                 enterprises: None,
@@ -3763,7 +3763,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "UM"),
+                automated: get_automated_keyphrases(&region_map, "um"),
                 names: Some(vec![
                     "united states minor outlying islands",
                     "baker island",
@@ -3785,7 +3785,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "US"),
+                automated: get_automated_keyphrases(&region_map, "us"),
                 names: Some(vec!["usa", "u.s.a."]),
                 demonyms: None,
                 enterprises: Some(vec![
@@ -4425,7 +4425,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "UY"),
+                automated: get_automated_keyphrases(&region_map, "uy"),
                 names: Some(vec!["uruguay"]),
                 demonyms: None,
                 enterprises: None,
@@ -4436,7 +4436,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "UZ"),
+                automated: get_automated_keyphrases(&region_map, "uz"),
                 names: Some(vec!["uzbekistan"]),
                 demonyms: None,
                 enterprises: None,
@@ -4447,7 +4447,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "VA"),
+                automated: get_automated_keyphrases(&region_map, "va"),
                 names: None,
                 demonyms: Some(vec!["vatican"]),
                 enterprises: None,
@@ -4458,7 +4458,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "VC"),
+                automated: get_automated_keyphrases(&region_map, "vc"),
                 names: Some(vec!["saint vincent", "grenadines"]),
                 demonyms: Some(vec!["vincentian", "grenadian", "vincy"]),
                 enterprises: None,
@@ -4469,7 +4469,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "VE"),
+                automated: get_automated_keyphrases(&region_map, "ve"),
                 names: Some(vec!["venezuela"]),
                 demonyms: None,
                 enterprises: None,
@@ -4480,7 +4480,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "VG"),
+                automated: get_automated_keyphrases(&region_map, "vg"),
                 names: Some(vec!["british virgin islands"]),
                 demonyms: None,
                 enterprises: None,
@@ -4491,7 +4491,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "VI"),
+                automated: get_automated_keyphrases(&region_map, "vi"),
                 names: Some(vec![
                     "united states virgin islands",
                     "us virgin islands",
@@ -4506,7 +4506,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "VN"),
+                automated: get_automated_keyphrases(&region_map, "vn"),
                 names: None,
                 demonyms: Some(vec!["viet"]),
                 enterprises: None,
@@ -4517,7 +4517,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "VU"),
+                automated: get_automated_keyphrases(&region_map, "vu"),
                 names: Some(vec!["vanua"]),
                 demonyms: None,
                 enterprises: None,
@@ -4528,7 +4528,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "WF"),
+                automated: get_automated_keyphrases(&region_map, "wf"),
                 names: Some(vec!["wallis", "futuna"]),
                 demonyms: None,
                 enterprises: None,
@@ -4539,7 +4539,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "WS"),
+                automated: get_automated_keyphrases(&region_map, "ws"),
                 names: None,
                 demonyms: None,
                 enterprises: None,
@@ -4550,7 +4550,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "YE"),
+                automated: get_automated_keyphrases(&region_map, "ye"),
                 names: Some(vec!["yemen"]),
                 demonyms: None,
                 enterprises: None,
@@ -4561,7 +4561,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "YT"),
+                automated: get_automated_keyphrases(&region_map, "yt"),
                 names: Some(vec!["mayotte"]),
                 demonyms: Some(vec!["mahoran", "mahorais"]),
                 enterprises: None,
@@ -4572,7 +4572,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "XK"),
+                automated: get_automated_keyphrases(&region_map, "xk"),
                 names: Some(vec!["kosov"]),
                 demonyms: None,
                 enterprises: None,
@@ -4583,7 +4583,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "ZA"),
+                automated: get_automated_keyphrases(&region_map, "za"),
                 names: Some(vec!["south africa"]),
                 demonyms: None,
                 enterprises: Some(vec![
@@ -4602,7 +4602,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "ZM"),
+                automated: get_automated_keyphrases(&region_map, "zm"),
                 names: Some(vec!["zambia"]),
                 demonyms: None,
                 enterprises: None,
@@ -4613,7 +4613,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         ),
         (
             RegionKeyphrases {
-                automated: get_automated_keyphrases(&region_map, "ZW"),
+                automated: get_automated_keyphrases(&region_map, "zw"),
                 names: Some(vec!["zimbabwe"]),
                 demonyms: Some(vec!["zimbo"]),
                 enterprises: None,

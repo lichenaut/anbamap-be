@@ -1,6 +1,7 @@
 mod db {
     pub mod keyphrase;
-    pub mod redis;
+    pub mod media;
+    pub mod util;
 }
 mod scrape {
     pub mod scraper {
@@ -31,9 +32,9 @@ async fn main() -> Result<()> {
     tracing_subscriber::registry().with(fmt::layer()).init();
     let docker_volume = get_docker_volume().await?;
     create_venv(&docker_volume).await?;
-    gen_keyphrase_db(docker_volume).await?;
+    gen_keyphrase_db(&docker_volume).await?;
     //regions::show_region_map().await?;
-    run_scrapers().await?;
+    run_scrapers(&docker_volume).await?;
 
     Ok(())
 }

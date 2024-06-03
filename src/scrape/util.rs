@@ -2,18 +2,17 @@ use super::region::KEYPHRASE_REGION_MAP;
 use crate::{prelude::*, service::var_service::get_docker_volume};
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use std::{
-    collections::HashSet,
     process::Command,
     str::from_utf8,
     sync::{Arc, Mutex},
 };
 use unidecode::unidecode;
-
-pub(super) async fn get_regions(text: &[&str]) -> Result<HashSet<String>> {
+pub(super) async fn get_regions(text: &[&str]) -> Result<Vec<String>> {
     let text = text
         .join(" ")
         .replace('\'', r"\'")
         .replace("&#39;", r"\'")
+        .replace("&amp;", "&")
         .replace(['"', '`', '‘', '’', '–'], "")
         .replace("'s ", " ")
         .replace("s' ", " ");
