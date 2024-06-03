@@ -44,9 +44,9 @@ pool.execute(
 .await?;
 ```
 
-##### Field Descriptions
+##### Column Descriptions
 
-| Field       | Description                           |
+| Column      | Description                           |
 | ----------- | ------------------------------------- |
 | `timestamp` | UNIX time seconds of scrape.          |
 | `title`     | Primary text of scraped media.        |
