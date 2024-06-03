@@ -79,7 +79,12 @@ pub async fn scrape_youtube_channel(
         };
 
         let regions = get_regions(&[&title, &body]).await?;
-        videos.push((url, title, body, regions));
+        videos.push((
+            url,
+            title.replace("&#39;", r"'").replace("&amp;", "&"),
+            body.replace("&#39;", r"'").replace("&amp;", "&"),
+            regions,
+        ));
     }
 
     Ok(videos)

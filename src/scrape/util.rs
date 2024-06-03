@@ -10,12 +10,12 @@ use unidecode::unidecode;
 pub(super) async fn get_regions(text: &[&str]) -> Result<Vec<String>> {
     let text = text
         .join(" ")
+        .replace("'s ", " ")
+        .replace("s' ", " ")
         .replace('\'', r"\'")
         .replace("&#39;", r"\'")
         .replace("&amp;", "&")
-        .replace(['"', '`', '‘', '’', '–'], "")
-        .replace("'s ", " ")
-        .replace("s' ", " ");
+        .replace(['"', '`', '‘', '’', '–'], "");
     let identified_regions = get_flashgeotext_regions(&text).await?;
 
     let text = unidecode(&text.replace(r"\'", "'").to_lowercase());
