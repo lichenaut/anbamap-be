@@ -6,7 +6,7 @@ This repository contains the database utility software for Anbamap.
 
 ## Overview
 
-Anbamap Scraper scrapes text from configured media sources, uses two layers of region identification to determine which regions a piece of media is related to, and stores all of this information to a Docker volume SQLite database. It will also clear out any data aged older than one week.
+Anbamap Scraper scrapes text from [configured media sources](#environment-variables), uses two layers of region identification to determine which regions a piece of media is related to, and stores this information. By default, it will also clear out any data aged older than one week.
 
 #### Identification Layers
 
@@ -19,7 +19,7 @@ The two layers of identification are as follows:
 
 #### Database Structure
 
-Database will be located in a Docker volume as 'media_db.sqlite'. See (Deployment)[#deployment].
+The database will be located in a Docker volume as 'media_db.sqlite'. See [Deployment](#deployment).
 
 ##### Rust Code
 
@@ -62,7 +62,7 @@ pool.execute(
 ```bash
 docker volume create anbamap_vol
 docker pull lichenaut/anbamap-scraper:latest
-docker run -v anbamap_vol:/scraper/data -e DOCKER_VOLUME=/scraper/data -e YOUTUBE_API_KEY= -e YOUTUBE_CHANNEL_IDS= image-id
+docker run -v anbamap_vol:/scraper/data -e DOCKER_VOLUME=/scraper/data image-id
 ```
 
 The first run will take a few minutes to set up files.
@@ -73,8 +73,9 @@ The first run will take a few minutes to set up files.
 
 ## Environment Variables
 
-| Environment Variable  | Description                          | Necessity |
-| --------------------- | ------------------------------------ | --------- |
-| `DOCKER_VOLUME`       | Arbitrarily-valued path.             | Mandatory |
-| `YOUTUBE_API_KEY`     | Your Youtube Data API key.           | Optional  |
-| `YOUTUBE_CHANNEL_IDS` | Comma-separated Youtube channel IDs. | Optional  |
+| Environment Variable  | Description                                  | Necessity |
+| --------------------- | -------------------------------------------- | --------- |
+| `DOCKER_VOLUME`       | Arbitrarily-valued path.                     | Mandatory |
+| `AGE_LIMIT`           | UNIX time seconds for media data. Range: i32 | Optional  |
+| `YOUTUBE_API_KEY`     | Your Youtube Data API key.                   | Optional  |
+| `YOUTUBE_CHANNEL_IDS` | Comma-separated Youtube channel IDs.         | Optional  |

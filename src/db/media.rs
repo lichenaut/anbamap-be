@@ -1,5 +1,5 @@
 use super::util::get_db_pool;
-use crate::prelude::*;
+use crate::{prelude::*, service::var_service::get_age_limit};
 use sqlx::Executor;
 use std::{
     path::Path,
@@ -12,8 +12,6 @@ pub async fn update_media_db(
 ) -> Result<()> {
     let db_path = format!("{}/media_db.sqlite", docker_volume);
     let db_path = Path::new(&db_path);
-
-    println!("ml: {}", media.len());
 
     let pool = get_db_pool(db_path).await?;
     pool.execute(
@@ -40,7 +38,7 @@ pub async fn update_media_db(
         .as_secs()
         .try_into()?;
     sqlx::query("DELETE FROM urls WHERE timestamp < ?")
-        .bind(now - 604800)
+        .bind(now - get_age_limit().await?)
         .execute(&pool)
         .await?;
 
