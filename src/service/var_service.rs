@@ -2,20 +2,6 @@ use crate::prelude::*;
 use anyhow::anyhow;
 use std::env::var;
 
-pub async fn get_age_limit() -> Result<i32> {
-    match var("AGE_LIMIT") {
-        Ok(age_limit) => match age_limit.parse::<i32>() {
-            Ok(age_limit) => Ok(age_limit),
-            Err(e) => {
-                let err = format!("Failed to parse AGE_LIMIT to i32: {}", e);
-                tracing::error!(err);
-                Err(anyhow!(err))
-            }
-        },
-        Err(_) => Ok(604800),
-    }
-}
-
 pub async fn get_docker_volume() -> Result<String> {
     match var("DOCKER_VOLUME") {
         Ok(volume) => match volume.is_empty() {

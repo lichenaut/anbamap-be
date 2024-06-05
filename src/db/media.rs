@@ -1,5 +1,5 @@
 use super::util::get_db_pool;
-use crate::{prelude::*, service::var_service::get_age_limit};
+use crate::prelude::*;
 use sqlx::Executor;
 use std::{
     path::Path,
@@ -38,7 +38,7 @@ pub async fn update_media_db(
         .as_secs()
         .try_into()?;
     sqlx::query("DELETE FROM urls WHERE timestamp < ?")
-        .bind(now - get_age_limit().await?)
+        .bind(now - 604800)
         .execute(&pool)
         .await?;
 

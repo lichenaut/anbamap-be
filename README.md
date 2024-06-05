@@ -73,9 +73,8 @@ The first run will take a few minutes to set up files.
 
 ## Environment Variables
 
-| Environment Variable  | Description                                    | Necessity |
-| --------------------- | ---------------------------------------------- | --------- |
-| `DOCKER_VOLUME`       | Arbitrarily-valued path.                       | Mandatory |
-| `AGE_LIMIT`           | UNIX second limit for media data. Range: `i32` | Optional  |
-| `YOUTUBE_API_KEY`     | Your Youtube Data API key.                     | Optional  |
-| `YOUTUBE_CHANNEL_IDS` | Comma-separated Youtube channel IDs.           | Optional  |
+| Environment Variable  | Description                          | Necessity |
+| --------------------- | ------------------------------------ | --------- |
+| `DOCKER_VOLUME`       | Arbitrarily-valued path.             | Mandatory |
+| `YOUTUBE_API_KEY`     | Your Youtube Data API key.           | Optional  |
+| `YOUTUBE_CHANNEL_IDS` | Comma-separated Youtube channel IDs. | Optional  |
