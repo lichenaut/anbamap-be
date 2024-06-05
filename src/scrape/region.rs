@@ -123,7 +123,19 @@ fn get_automated_keyphrases(
 ) -> Option<Vec<String>> {
     region_map.get(region_code).map(|g| {
         g.iter()
-            .flat_map(|s| s.split(',').map(|s| s.trim().to_string()))
+            .flat_map(|s| {
+                s.split(',').map(|s| {
+                    let mut s = s.trim().to_string();
+                    if s == "arges" || s == "gard" || s == "marche" || s == "wien" {
+                        s += " ";
+                        s.push_str(&(s.clone() + "'"));
+                        s.push_str(&(s.clone() + "\""));
+                        s.push_str(&(s.clone() + "."));
+                        s.push_str(&(s.clone() + ","));
+                    }
+                    s
+                })
+            })
             .collect::<Vec<_>>()
     })
 }
@@ -4418,7 +4430,14 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                     "jefferies financial",
                     "catalent",
                 ]),
-                misc: Some(vec!["donald trump", "medicaid", "medicare"]),
+                misc: Some(vec![
+                    "donald trump",
+                    "medicaid",
+                    "medicare",
+                    "biden",
+                    "nuland",
+                    "blinken",
+                ]),
             }
             .get_region_vec(),
             "us",
@@ -4429,7 +4448,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 names: Some(vec!["uruguay"]),
                 demonyms: None,
                 enterprises: None,
-                misc: Some(vec!["biden", "nuland", "blinken"]),
+                misc: None,
             }
             .get_region_vec(),
             "uy",
@@ -4625,10 +4644,6 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
     ];
 
     let blacklist: HashSet<&'static str> = vec![
-        "chad",
-        "georgia",
-        "jordan",
-        "turkey",
         "north east",
         "north west",
         "south east",
@@ -4686,14 +4701,11 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         "south island",
         "west island",
         "centre island",
-        "arges",
-        "gard",
+        "georgia",
         "georgetown",
         "nice",
         "saint john's",
         "st. john's",
-        "stanley",
-        "wien",
     ]
     .into_par_iter()
     .collect();

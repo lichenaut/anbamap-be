@@ -59,5 +59,13 @@ pub async fn get_largest_billionaires_map(client: &Client) -> Result<HashMap<Str
         billionaires.entry(citizenship).or_default().push(name);
     }
 
+    for (_, names) in billionaires.iter_mut() {
+        names.retain(|name| {
+            !name.to_lowercase().contains("chad")
+                && !name.to_lowercase().contains("israel")
+                && !name.to_lowercase().contains("jordan")
+        });
+    }
+
     Ok(billionaires)
 }

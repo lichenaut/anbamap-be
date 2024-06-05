@@ -84,9 +84,6 @@ pub async fn gen_keyphrase_db(docker_volume: &str) -> Result<()> {
         if region_code == "MZ" && ascii_name.contains("aza") {
             continue;
         } // "Gaza" is a better keyphrase for Palestine than Mozambique.
-        if ascii_name.contains("israel") && region_code != "IL" {
-            continue;
-        } // "Israel" is a better keyphrase for Israel than someone's name.
 
         let population = match fields.nth(5) {
             Some(population) => match population.parse::<u32>() {
@@ -192,13 +189,17 @@ async fn update_region(
     pool: &sqlx::Pool<sqlx::Sqlite>,
     region: Region,
 ) -> Result<SqliteQueryResult> {
+    let region = Region {
+        region_code: region.region_code.to_lowercase(),
+        keyphrases: region.keyphrases.to_lowercase(),
+    };
     let row: Option<(String,)> =
         sqlx::query_as("SELECT keyphrases FROM regions WHERE region_code = $1")
             .bind(&region.region_code)
             .fetch_optional(pool)
             .await?;
 
-    let region_keyphrases = unidecode(&region.keyphrases.to_lowercase());
+    let region_keyphrases = unidecode(&region.keyphrases);
     match row {
         Some((existing_keyphrases,)) => {
             let mut keyphrases = existing_keyphrases.split(',').collect::<Vec<&str>>();

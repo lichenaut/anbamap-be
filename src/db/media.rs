@@ -43,18 +43,16 @@ pub async fn update_media_db(
         .await?;
 
     for (url, title, body, regions) in &media {
-        sqlx::query(
-            "INSERT OR REPLACE INTO urls (url, timestamp, title, body) VALUES (?, ?, ?, ?)",
-        )
-        .bind(url)
-        .bind(now)
-        .bind(title)
-        .bind(body)
-        .execute(&pool)
-        .await?;
+        sqlx::query("INSERT OR IGNORE INTO urls (url, timestamp, title, body) VALUES (?, ?, ?, ?)")
+            .bind(url)
+            .bind(now)
+            .bind(title)
+            .bind(body)
+            .execute(&pool)
+            .await?;
 
         for region in regions {
-            sqlx::query("INSERT OR REPLACE INTO url_regions (url, region_code) VALUES (?, ?)")
+            sqlx::query("INSERT OR IGNORE INTO url_regions (url, region_code) VALUES (?, ?)")
                 .bind(url)
                 .bind(region)
                 .execute(&pool)

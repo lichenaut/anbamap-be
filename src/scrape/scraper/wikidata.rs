@@ -1,4 +1,5 @@
 use crate::prelude::*;
+use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use reqwest::Client;
 use serde_json::Value;
 
@@ -67,7 +68,15 @@ pub async fn region_code_to_figures(client: &Client, iso_code: &str) -> Result<V
         None => return Ok(figures),
     };
 
-    Ok(figures)
+    Ok(figures
+        .par_iter()
+        .filter(|figure| {
+            !figure.to_lowercase().contains("chad")
+                && !figure.to_lowercase().contains("israel")
+                && !figure.to_lowercase().contains("jordan")
+        })
+        .cloned()
+        .collect())
 }
 
 fn push_to_figures(mut figure_name: &str, figures: &mut Vec<String>) -> Result<()> {
@@ -86,255 +95,255 @@ fn push_to_figures(mut figure_name: &str, figures: &mut Vec<String>) -> Result<(
 
 fn get_property_from_iso(iso_code: &str) -> Option<&str> {
     match iso_code {
-        "AD" => Some("228"),
-        "AE" => Some("878"),
-        "AF" => Some("889"),
-        "AG" => Some("781"),
-        "AI" => Some("25228"),
-        "AL" => Some("222"),
-        "AM" => Some("399"),
-        "AO" => Some("916"),
-        "AQ" => Some("51"),
-        "AR" => Some("414"),
-        "AS" => Some("16641"),
-        "AT" => Some("40"),
-        "AU" => Some("408"),
-        "AW" => Some("21203"),
-        "AX" => Some("5689"),
-        "AZ" => Some("227"),
-        "BA" => Some("225"),
-        "BB" => Some("244"),
-        "BD" => Some("902"),
-        "BE" => Some("31"),
-        "BF" => Some("965"),
-        "BG" => Some("219"),
-        "BH" => Some("398"),
-        "BI" => Some("967"),
-        "BJ" => Some("962"),
-        "BL" => Some("25362"),
-        "BM" => Some("23635"),
-        "BN" => Some("921"),
-        "BO" => Some("750"),
-        "BQ" => Some("25396"),
-        "BR" => Some("155"),
-        "BS" => Some("778"),
-        "BT" => Some("917"),
-        "BV" => Some("23408"),
-        "BW" => Some("963"),
-        "BY" => Some("184"),
-        "BZ" => Some("242"),
-        "CA" => Some("16"),
-        "CC" => Some("36004"),
-        "CD" => Some("974"),
-        "CF" => Some("929"),
-        "CG" => Some("971"),
-        "CH" => Some("39"),
-        "CI" => Some("1008"),
-        "CK" => Some("26988"),
-        "CL" => Some("298"),
-        "CM" => Some("1009"),
-        "CN" => Some("148"),
-        "CO" => Some("739"),
-        "CR" => Some("800"),
-        "CU" => Some("241"),
-        "CV" => Some("1011"),
-        "CW" => Some("25279"),
-        "CX" => Some("31063"),
-        "CY" => Some("229"),
-        "CZ" => Some("213"),
-        "DE" => Some("183"),
-        "DJ" => Some("977"),
-        "DK" => Some("35"),
-        "DM" => Some("784"),
-        "DO" => Some("786"),
-        "DZ" => Some("262"),
-        "EC" => Some("736"),
-        "EE" => Some("191"),
-        "EG" => Some("79"),
-        "EH" => Some("6250"),
-        "ER" => Some("986"),
-        "ES" => Some("29"),
-        "ET" => Some("115"),
-        "FI" => Some("33"),
-        "FJ" => Some("712"),
-        "FK" => Some("9648"),
-        "FM" => Some("3359409"),
-        "FO" => Some("4628"),
-        "FR" => Some("142"),
-        "GA" => Some("1000"),
-        "GB" => Some("145"),
-        "GD" => Some("769"),
-        "GE" => Some("230"),
-        "GF" => Some("3769"),
-        "GG" => Some("3311985"),
-        "GH" => Some("117"),
-        "GI" => Some("1410"),
-        "GL" => Some("223"),
-        "GM" => Some("1005"),
-        "GN" => Some("1006"),
-        "GP" => Some("17012"),
-        "GQ" => Some("983"),
-        "GR" => Some("41"),
-        "GS" => Some("35086"),
-        "GT" => Some("774"),
-        "GU" => Some("16635"),
-        "GW" => Some("1007"),
-        "GY" => Some("734"),
-        "HK" => Some("8646"),
-        "HM" => Some("131198"),
-        "HN" => Some("783"),
-        "HR" => Some("224"),
-        "HT" => Some("790"),
-        "HU" => Some("28"),
-        "ID" => Some("252"),
-        "IE" => Some("22890"),
-        "IL" => Some("801"),
-        "IM" => Some("9676"),
-        "IN" => Some("668"),
-        "IO" => Some("43448"),
-        "IQ" => Some("796"),
-        "IR" => Some("794"),
-        "IS" => Some("189"),
-        "IT" => Some("38"),
-        "JE" => Some("785"),
-        "JM" => Some("766"),
-        "JO" => Some("810"),
-        "JP" => Some("17"),
-        "KE" => Some("114"),
-        "KG" => Some("813"),
-        "KH" => Some("424"),
-        "KI" => Some("710"),
-        "KM" => Some("970"),
-        "KN" => Some("763"),
-        "KP" => Some("423"),
-        "KR" => Some("884"),
-        "KW" => Some("817"),
-        "KY" => Some("5785"),
-        "KZ" => Some("232"),
-        "LA" => Some("819"),
-        "LB" => Some("822"),
-        "LC" => Some("760"),
-        "LI" => Some("347"),
-        "LK" => Some("854"),
-        "LR" => Some("1014"),
-        "LS" => Some("1013"),
-        "LT" => Some("37"),
-        "LU" => Some("32"),
-        "LV" => Some("211"),
-        "LY" => Some("1016"),
-        "MA" => Some("1028"),
-        "MC" => Some("235"),
-        "MD" => Some("217"),
-        "ME" => Some("236"),
-        "MF" => Some("25596"),
-        "MG" => Some("1019"),
-        "MH" => Some("709"),
-        "MK" => Some("221"),
-        "ML" => Some("912"),
-        "MM" => Some("836"),
-        "MN" => Some("711"),
-        "MO" => Some("14773"),
-        "MP" => Some("16644"),
-        "MQ" => Some("17054"),
-        "MR" => Some("1025"),
-        "MS" => Some("732115"),
-        "MT" => Some("233"),
-        "MU" => Some("1027"),
-        "MV" => Some("826"),
-        "MW" => Some("1020"),
-        "MX" => Some("96"),
-        "MY" => Some("833"),
-        "MZ" => Some("1029"),
-        "NA" => Some("1030"),
-        "NC" => Some("33788"),
-        "NE" => Some("1032"),
-        "NF" => Some("31057"),
-        "NG" => Some("1033"),
-        "NI" => Some("811"),
-        "NL" => Some("55"),
-        "NO" => Some("20"),
-        "NP" => Some("837"),
-        "NR" => Some("697"),
-        "NU" => Some("34020"),
-        "NZ" => Some("664"),
-        "OM" => Some("842"),
-        "PA" => Some("804"),
-        "PE" => Some("419"),
-        "PF" => Some("30971"),
-        "PG" => Some("691"),
-        "PH" => Some("928"),
-        "PK" => Some("843"),
-        "PL" => Some("36"),
-        "PM" => Some("34617"),
-        "PN" => Some("35672"),
-        "PR" => Some("1183"),
-        "PS" => Some("219060"),
-        "PT" => Some("45"),
-        "PW" => Some("695"),
-        "PY" => Some("733"),
-        "QA" => Some("846"),
-        "RE" => Some("17070"),
-        "RO" => Some("218"),
-        "RS" => Some("403"),
-        "RU" => Some("159"),
-        "RW" => Some("1037"),
-        "SA" => Some("851"),
-        "SB" => Some("685"),
-        "SC" => Some("1042"),
-        "SD" => Some("1049"),
-        "SE" => Some("34"),
-        "SG" => Some("334"),
-        "SH" => Some("34497"),
-        "SI" => Some("215"),
-        "SJ" => Some("842829"),
-        "SK" => Some("214"),
-        "SL" => Some("1044"),
-        "SM" => Some("238"),
-        "SN" => Some("1041"),
-        "SO" => Some("1045"),
-        "SR" => Some("730"),
-        "SS" => Some("958"),
-        "ST" => Some("1039"),
-        "SV" => Some("792"),
-        "SX" => Some("26273"),
-        "SY" => Some("858"),
-        "SZ" => Some("1050"),
-        "TC" => Some("18221"),
-        "TD" => Some("657"),
-        "TF" => Some("129003"),
-        "TG" => Some("945"),
-        "TH" => Some("869"),
-        "TJ" => Some("863"),
-        "TK" => Some("36823"),
-        "TL" => Some("574"),
-        "TM" => Some("874"),
-        "TN" => Some("948"),
-        "TO" => Some("678"),
-        "TR" => Some("43"),
-        "TT" => Some("754"),
-        "TV" => Some("672"),
-        "TW" => Some("865"),
-        "TZ" => Some("924"),
-        "UA" => Some("212"),
-        "UG" => Some("1036"),
-        "UM" => Some("16645"),
-        "US" => Some("30"),
-        "UY" => Some("77"),
-        "UZ" => Some("265"),
-        "VA" => Some("237"),
-        "VC" => Some("757"),
-        "VE" => Some("717"),
-        "VG" => Some("25305"),
-        "VI" => Some("11703"),
-        "VN" => Some("881"),
-        "VU" => Some("686"),
-        "WF" => Some("35555"),
-        "WS" => Some("683"),
-        "YE" => Some("805"),
-        "YT" => Some("17063"),
-        "ZA" => Some("258"),
-        "ZM" => Some("953"),
-        "ZW" => Some("954"),
+        "ad" => Some("228"),
+        "ae" => Some("878"),
+        "af" => Some("889"),
+        "ag" => Some("781"),
+        "ai" => Some("25228"),
+        "al" => Some("222"),
+        "am" => Some("399"),
+        "ao" => Some("916"),
+        "aq" => Some("51"),
+        "ar" => Some("414"),
+        "as" => Some("16641"),
+        "at" => Some("40"),
+        "au" => Some("408"),
+        "aw" => Some("21203"),
+        "ax" => Some("5689"),
+        "az" => Some("227"),
+        "ba" => Some("225"),
+        "bb" => Some("244"),
+        "bd" => Some("902"),
+        "be" => Some("31"),
+        "bf" => Some("965"),
+        "bg" => Some("219"),
+        "bh" => Some("398"),
+        "bi" => Some("967"),
+        "bj" => Some("962"),
+        "bl" => Some("25362"),
+        "bm" => Some("23635"),
+        "bn" => Some("921"),
+        "bo" => Some("750"),
+        "bq" => Some("25396"),
+        "br" => Some("155"),
+        "bs" => Some("778"),
+        "bt" => Some("917"),
+        "bv" => Some("23408"),
+        "bw" => Some("963"),
+        "by" => Some("184"),
+        "bz" => Some("242"),
+        "ca" => Some("16"),
+        "cc" => Some("36004"),
+        "cd" => Some("974"),
+        "cf" => Some("929"),
+        "cg" => Some("971"),
+        "ch" => Some("39"),
+        "ci" => Some("1008"),
+        "ck" => Some("26988"),
+        "cl" => Some("298"),
+        "cm" => Some("1009"),
+        "cn" => Some("148"),
+        "co" => Some("739"),
+        "cr" => Some("800"),
+        "cu" => Some("241"),
+        "cv" => Some("1011"),
+        "cw" => Some("25279"),
+        "cx" => Some("31063"),
+        "cy" => Some("229"),
+        "cz" => Some("213"),
+        "de" => Some("183"),
+        "dj" => Some("977"),
+        "dk" => Some("35"),
+        "dm" => Some("784"),
+        "do" => Some("786"),
+        "dz" => Some("262"),
+        "ec" => Some("736"),
+        "ee" => Some("191"),
+        "eg" => Some("79"),
+        "eh" => Some("6250"),
+        "er" => Some("986"),
+        "es" => Some("29"),
+        "et" => Some("115"),
+        "fi" => Some("33"),
+        "fj" => Some("712"),
+        "fk" => Some("9648"),
+        "fm" => Some("3359409"),
+        "fo" => Some("4628"),
+        "fr" => Some("142"),
+        "ga" => Some("1000"),
+        "gb" => Some("145"),
+        "gd" => Some("769"),
+        "ge" => Some("230"),
+        "gf" => Some("3769"),
+        "gg" => Some("3311985"),
+        "gh" => Some("117"),
+        "gi" => Some("1410"),
+        "gl" => Some("223"),
+        "gm" => Some("1005"),
+        "gn" => Some("1006"),
+        "gp" => Some("17012"),
+        "gq" => Some("983"),
+        "gr" => Some("41"),
+        "gs" => Some("35086"),
+        "gt" => Some("774"),
+        "gu" => Some("16635"),
+        "gw" => Some("1007"),
+        "gy" => Some("734"),
+        "hk" => Some("8646"),
+        "hm" => Some("131198"),
+        "hn" => Some("783"),
+        "hr" => Some("224"),
+        "ht" => Some("790"),
+        "hu" => Some("28"),
+        "id" => Some("252"),
+        "ie" => Some("22890"),
+        "il" => Some("801"),
+        "im" => Some("9676"),
+        "in" => Some("668"),
+        "io" => Some("43448"),
+        "iq" => Some("796"),
+        "ir" => Some("794"),
+        "is" => Some("189"),
+        "it" => Some("38"),
+        "je" => Some("785"),
+        "jm" => Some("766"),
+        "jo" => Some("810"),
+        "jp" => Some("17"),
+        "ke" => Some("114"),
+        "kg" => Some("813"),
+        "kh" => Some("424"),
+        "ki" => Some("710"),
+        "km" => Some("970"),
+        "kn" => Some("763"),
+        "kp" => Some("423"),
+        "kr" => Some("884"),
+        "kw" => Some("817"),
+        "ky" => Some("5785"),
+        "kz" => Some("232"),
+        "la" => Some("819"),
+        "lb" => Some("822"),
+        "lc" => Some("760"),
+        "li" => Some("347"),
+        "lk" => Some("854"),
+        "lr" => Some("1014"),
+        "ls" => Some("1013"),
+        "lt" => Some("37"),
+        "lu" => Some("32"),
+        "lv" => Some("211"),
+        "ly" => Some("1016"),
+        "ma" => Some("1028"),
+        "mc" => Some("235"),
+        "md" => Some("217"),
+        "me" => Some("236"),
+        "mf" => Some("25596"),
+        "mg" => Some("1019"),
+        "mh" => Some("709"),
+        "mk" => Some("221"),
+        "ml" => Some("912"),
+        "mm" => Some("836"),
+        "mn" => Some("711"),
+        "mo" => Some("14773"),
+        "mp" => Some("16644"),
+        "mq" => Some("17054"),
+        "mr" => Some("1025"),
+        "ms" => Some("732115"),
+        "mt" => Some("233"),
+        "mu" => Some("1027"),
+        "mv" => Some("826"),
+        "mw" => Some("1020"),
+        "mx" => Some("96"),
+        "my" => Some("833"),
+        "mz" => Some("1029"),
+        "na" => Some("1030"),
+        "nc" => Some("33788"),
+        "ne" => Some("1032"),
+        "nf" => Some("31057"),
+        "ng" => Some("1033"),
+        "ni" => Some("811"),
+        "nl" => Some("55"),
+        "no" => Some("20"),
+        "np" => Some("837"),
+        "nr" => Some("697"),
+        "nu" => Some("34020"),
+        "nz" => Some("664"),
+        "om" => Some("842"),
+        "pa" => Some("804"),
+        "pe" => Some("419"),
+        "pf" => Some("30971"),
+        "pg" => Some("691"),
+        "ph" => Some("928"),
+        "pk" => Some("843"),
+        "pl" => Some("36"),
+        "pm" => Some("34617"),
+        "pn" => Some("35672"),
+        "pr" => Some("1183"),
+        "ps" => Some("219060"),
+        "pt" => Some("45"),
+        "pw" => Some("695"),
+        "py" => Some("733"),
+        "qa" => Some("846"),
+        "re" => Some("17070"),
+        "ro" => Some("218"),
+        "rs" => Some("403"),
+        "ru" => Some("159"),
+        "rw" => Some("1037"),
+        "sa" => Some("851"),
+        "sb" => Some("685"),
+        "sc" => Some("1042"),
+        "sd" => Some("1049"),
+        "se" => Some("34"),
+        "sg" => Some("334"),
+        "sh" => Some("34497"),
+        "si" => Some("215"),
+        "sj" => Some("842829"),
+        "sk" => Some("214"),
+        "sl" => Some("1044"),
+        "sm" => Some("238"),
+        "sn" => Some("1041"),
+        "so" => Some("1045"),
+        "sr" => Some("730"),
+        "ss" => Some("958"),
+        "st" => Some("1039"),
+        "sv" => Some("792"),
+        "sx" => Some("26273"),
+        "sy" => Some("858"),
+        "sz" => Some("1050"),
+        "tc" => Some("18221"),
+        "td" => Some("657"),
+        "tf" => Some("129003"),
+        "tg" => Some("945"),
+        "th" => Some("869"),
+        "tj" => Some("863"),
+        "tk" => Some("36823"),
+        "tl" => Some("574"),
+        "tm" => Some("874"),
+        "tn" => Some("948"),
+        "to" => Some("678"),
+        "tr" => Some("43"),
+        "tt" => Some("754"),
+        "tv" => Some("672"),
+        "tw" => Some("865"),
+        "tz" => Some("924"),
+        "ua" => Some("212"),
+        "ug" => Some("1036"),
+        "um" => Some("16645"),
+        "us" => Some("30"),
+        "uy" => Some("77"),
+        "uz" => Some("265"),
+        "va" => Some("237"),
+        "vc" => Some("757"),
+        "ve" => Some("717"),
+        "vg" => Some("25305"),
+        "vi" => Some("11703"),
+        "vn" => Some("881"),
+        "vu" => Some("686"),
+        "wf" => Some("35555"),
+        "ws" => Some("683"),
+        "ye" => Some("805"),
+        "yt" => Some("17063"),
+        "za" => Some("258"),
+        "zm" => Some("953"),
+        "zw" => Some("954"),
         _ => None,
     }
 }
@@ -382,539 +391,540 @@ async fn verify_iso_match(client: &Client, wikidata_id: &str, name: &str) -> boo
     label == name
 }
 
+#[allow(unused)]
 pub async fn verify_codes() {
-    // Uses Geonames names by default, but this is overrided with Wikidata names when there is a difference. This occurence is tagged with a comment.
+    // Uses Geonames names by default, but this is overrided with Wikidata names when there is a difference. This occurence is tagged with '//tag'.
     let client = reqwest::Client::new();
     print_result(
         "Andorra",
-        "AD",
-        &verify_iso_match(&client, "AD", "Andorra").await,
+        "ad",
+        &verify_iso_match(&client, "ad", "Andorra").await,
     )
     .await;
     print_result(
         "United Arab Emirates",
-        "AE",
-        &verify_iso_match(&client, "AE", "United Arab Emirates").await,
+        "ae",
+        &verify_iso_match(&client, "ae", "United Arab Emirates").await,
     )
     .await;
     print_result(
         "Afghanistan",
-        "AF",
-        &verify_iso_match(&client, "AF", "Afghanistan").await,
+        "af",
+        &verify_iso_match(&client, "af", "Afghanistan").await,
     )
     .await;
     print_result(
         "Antigua and Barbuda",
-        "AG",
-        &verify_iso_match(&client, "AG", "Antigua and Barbuda").await,
+        "ag",
+        &verify_iso_match(&client, "ag", "Antigua and Barbuda").await,
     )
     .await;
     print_result(
         "Anguilla",
-        "AI",
-        &verify_iso_match(&client, "AI", "Anguilla").await,
+        "ai",
+        &verify_iso_match(&client, "ai", "Anguilla").await,
     )
     .await;
     print_result(
         "Albania",
-        "AL",
-        &verify_iso_match(&client, "AL", "Albania").await,
+        "al",
+        &verify_iso_match(&client, "al", "Albania").await,
     )
     .await;
     print_result(
         "Armenia",
-        "AM",
-        &verify_iso_match(&client, "AM", "Armenia").await,
+        "am",
+        &verify_iso_match(&client, "am", "Armenia").await,
     )
     .await;
     print_result(
         "Angola",
-        "AO",
-        &verify_iso_match(&client, "AO", "Angola").await,
+        "ao",
+        &verify_iso_match(&client, "ao", "Angola").await,
     )
     .await;
     print_result(
         "Antarctica",
-        "AQ",
-        &verify_iso_match(&client, "AQ", "Antarctica").await,
+        "aq",
+        &verify_iso_match(&client, "aq", "Antarctica").await,
     )
     .await;
     print_result(
         "Argentina",
-        "AR",
-        &verify_iso_match(&client, "AR", "Argentina").await,
+        "ar",
+        &verify_iso_match(&client, "ar", "Argentina").await,
     )
     .await;
     print_result(
         "American Samoa",
-        "AS",
-        &verify_iso_match(&client, "AS", "American Samoa").await,
+        "as",
+        &verify_iso_match(&client, "as", "American Samoa").await,
     )
     .await;
     print_result(
         "Austria",
-        "AT",
-        &verify_iso_match(&client, "AT", "Austria").await,
+        "at",
+        &verify_iso_match(&client, "at", "Austria").await,
     )
     .await;
     print_result(
         "Australia",
-        "AU",
-        &verify_iso_match(&client, "AU", "Australia").await,
+        "au",
+        &verify_iso_match(&client, "au", "Australia").await,
     )
     .await;
     print_result(
         "Aruba",
-        "AW",
-        &verify_iso_match(&client, "AW", "Aruba").await,
+        "aw",
+        &verify_iso_match(&client, "aw", "Aruba").await,
     )
     .await;
     print_result(
         "Åland Islands",
-        "AX",
-        &verify_iso_match(&client, "AX", "Åland").await,
+        "ax",
+        &verify_iso_match(&client, "ax", "Åland").await,
     )
     .await; //tag
     print_result(
         "Azerbaijan",
-        "AZ",
-        &verify_iso_match(&client, "AZ", "Azerbaijan").await,
+        "az",
+        &verify_iso_match(&client, "az", "Azerbaijan").await,
     )
     .await;
     print_result(
         "Bosnia and Herzegovina",
-        "BA",
-        &verify_iso_match(&client, "BA", "Bosnia and Herzegovina").await,
+        "ba",
+        &verify_iso_match(&client, "ba", "Bosnia and Herzegovina").await,
     )
     .await;
     print_result(
         "Barbados",
-        "BB",
-        &verify_iso_match(&client, "BB", "Barbados").await,
+        "bb",
+        &verify_iso_match(&client, "bb", "Barbados").await,
     )
     .await;
     print_result(
         "Bangladesh",
-        "BD",
-        &verify_iso_match(&client, "BD", "Bangladesh").await,
+        "bd",
+        &verify_iso_match(&client, "bd", "Bangladesh").await,
     )
     .await;
     print_result(
         "Belgium",
-        "BE",
-        &verify_iso_match(&client, "BE", "Belgium").await,
+        "be",
+        &verify_iso_match(&client, "be", "Belgium").await,
     )
     .await;
     print_result(
         "Burkina Faso",
-        "BF",
-        &verify_iso_match(&client, "BF", "Burkina Faso").await,
+        "bf",
+        &verify_iso_match(&client, "bf", "Burkina Faso").await,
     )
     .await;
     print_result(
         "Bulgaria",
-        "BG",
-        &verify_iso_match(&client, "BG", "Bulgaria").await,
+        "bg",
+        &verify_iso_match(&client, "bg", "Bulgaria").await,
     )
     .await;
     print_result(
         "Bahrain",
-        "BH",
-        &verify_iso_match(&client, "BH", "Bahrain").await,
+        "bh",
+        &verify_iso_match(&client, "bh", "Bahrain").await,
     )
     .await;
     print_result(
         "Burundi",
-        "BI",
-        &verify_iso_match(&client, "BI", "Burundi").await,
+        "bi",
+        &verify_iso_match(&client, "bi", "Burundi").await,
     )
     .await;
     print_result(
         "Benin",
-        "BJ",
-        &verify_iso_match(&client, "BJ", "Benin").await,
+        "bj",
+        &verify_iso_match(&client, "bj", "Benin").await,
     )
     .await;
     print_result(
         "Saint Barthélemy",
-        "BL",
-        &verify_iso_match(&client, "BL", "Saint Barthélemy").await,
+        "bl",
+        &verify_iso_match(&client, "bl", "Saint Barthélemy").await,
     )
     .await;
     print_result(
         "Bermuda",
-        "BM",
-        &verify_iso_match(&client, "BM", "Bermuda").await,
+        "bm",
+        &verify_iso_match(&client, "bm", "Bermuda").await,
     )
     .await;
     print_result(
         "Brunei",
-        "BN",
-        &verify_iso_match(&client, "BN", "Brunei Darussalam").await,
+        "bn",
+        &verify_iso_match(&client, "bn", "Brunei Darussalam").await,
     )
     .await; //tag
     print_result(
         "Bolivia",
-        "BO",
-        &verify_iso_match(&client, "BO", "Bolivia").await,
+        "bo",
+        &verify_iso_match(&client, "bo", "Bolivia").await,
     )
     .await;
     print_result(
         "Bonaire",
-        "BQ",
-        &verify_iso_match(&client, "BQ", "Bonaire").await,
+        "bq",
+        &verify_iso_match(&client, "bq", "Bonaire").await,
     )
     .await;
     print_result(
         "Brazil",
-        "BR",
-        &verify_iso_match(&client, "BR", "Brazil").await,
+        "br",
+        &verify_iso_match(&client, "br", "Brazil").await,
     )
     .await;
     print_result(
         "Bahamas",
-        "BS",
-        &verify_iso_match(&client, "BS", "The Bahamas").await,
+        "bs",
+        &verify_iso_match(&client, "bs", "The Bahamas").await,
     )
     .await; //tag
     print_result(
         "Bhutan",
-        "BT",
-        &verify_iso_match(&client, "BT", "Bhutan").await,
+        "bt",
+        &verify_iso_match(&client, "bt", "Bhutan").await,
     )
     .await;
     print_result(
         "Bouvet Island",
-        "BV",
-        &verify_iso_match(&client, "BV", "Bouvet Island").await,
+        "bv",
+        &verify_iso_match(&client, "bv", "Bouvet Island").await,
     )
     .await;
     print_result(
         "Botswana",
-        "BW",
-        &verify_iso_match(&client, "BW", "Botswana").await,
+        "bw",
+        &verify_iso_match(&client, "bw", "Botswana").await,
     )
     .await;
     print_result(
         "Belarus",
-        "BY",
-        &verify_iso_match(&client, "BY", "Belarus").await,
+        "by",
+        &verify_iso_match(&client, "by", "Belarus").await,
     )
     .await;
     print_result(
         "Belize",
-        "BZ",
-        &verify_iso_match(&client, "BZ", "Belize").await,
+        "bz",
+        &verify_iso_match(&client, "bz", "Belize").await,
     )
     .await;
     print_result(
         "Canada",
-        "CA",
-        &verify_iso_match(&client, "CA", "Canada").await,
+        "ca",
+        &verify_iso_match(&client, "ca", "Canada").await,
     )
     .await;
     print_result(
         "Cocos (Keeling) Islands",
-        "CC",
-        &verify_iso_match(&client, "CC", "Cocos (Keeling) Islands").await,
+        "cc",
+        &verify_iso_match(&client, "cc", "Cocos (Keeling) Islands").await,
     )
     .await;
     print_result(
         "Democratic Republic of the Congo",
-        "CD",
-        &verify_iso_match(&client, "CD", "Democratic Republic of the Congo").await,
+        "cd",
+        &verify_iso_match(&client, "cd", "Democratic Republic of the Congo").await,
     )
     .await;
     print_result(
         "Central African Republic",
-        "CF",
-        &verify_iso_match(&client, "CF", "Central African Republic").await,
+        "cf",
+        &verify_iso_match(&client, "cf", "Central African Republic").await,
     )
     .await;
     print_result(
         "Republic of the Congo",
-        "CG",
-        &verify_iso_match(&client, "CG", "Republic of the Congo").await,
+        "cg",
+        &verify_iso_match(&client, "cg", "Republic of the Congo").await,
     )
     .await;
     print_result(
         "Switzerland",
-        "CH",
-        &verify_iso_match(&client, "CH", "Switzerland").await,
+        "ch",
+        &verify_iso_match(&client, "ch", "Switzerland").await,
     )
     .await;
     print_result(
         "Ivory Coast",
-        "CI",
-        &verify_iso_match(&client, "CI", "Ivory Coast").await,
+        "ci",
+        &verify_iso_match(&client, "ci", "Ivory Coast").await,
     )
     .await;
     print_result(
         "Cook Islands",
-        "CK",
-        &verify_iso_match(&client, "CK", "Cook Islands").await,
+        "ck",
+        &verify_iso_match(&client, "ck", "Cook Islands").await,
     )
     .await;
     print_result(
         "Chile",
-        "CL",
-        &verify_iso_match(&client, "CL", "Chile").await,
+        "cl",
+        &verify_iso_match(&client, "cl", "Chile").await,
     )
     .await;
     print_result(
         "Cameroon",
-        "CM",
-        &verify_iso_match(&client, "CM", "Cameroon").await,
+        "cm",
+        &verify_iso_match(&client, "cm", "Cameroon").await,
     )
     .await;
     print_result(
         "China",
-        "CN",
-        &verify_iso_match(&client, "CN", "People's Republic of China").await,
+        "cn",
+        &verify_iso_match(&client, "cn", "People's Republic of China").await,
     )
     .await; //tag
     print_result(
         "Colombia",
-        "CO",
-        &verify_iso_match(&client, "CO", "Colombia").await,
+        "co",
+        &verify_iso_match(&client, "co", "Colombia").await,
     )
     .await;
     print_result(
         "Costa Rica",
-        "CR",
-        &verify_iso_match(&client, "CR", "Costa Rica").await,
+        "cr",
+        &verify_iso_match(&client, "cr", "Costa Rica").await,
     )
     .await;
-    print_result("Cuba", "CU", &verify_iso_match(&client, "CU", "Cuba").await).await;
+    print_result("Cuba", "cu", &verify_iso_match(&client, "cu", "Cuba").await).await;
     print_result(
         "Cape Verde",
-        "CV",
-        &verify_iso_match(&client, "CV", "Cape Verde").await,
+        "cv",
+        &verify_iso_match(&client, "cv", "Cape Verde").await,
     )
     .await;
     print_result(
         "Curaçao",
-        "CW",
-        &verify_iso_match(&client, "CW", "Curaçao").await,
+        "cw",
+        &verify_iso_match(&client, "cw", "Curaçao").await,
     )
     .await;
     print_result(
         "Christmas Island",
-        "CX",
-        &verify_iso_match(&client, "CX", "Christmas Island").await,
+        "cx",
+        &verify_iso_match(&client, "cx", "Christmas Island").await,
     )
     .await;
     print_result(
         "Cyprus",
-        "CY",
-        &verify_iso_match(&client, "CY", "Cyprus").await,
+        "cy",
+        &verify_iso_match(&client, "cy", "Cyprus").await,
     )
     .await;
     print_result(
         "Czech Republic",
-        "CZ",
-        &verify_iso_match(&client, "CZ", "Czech Republic").await,
+        "cz",
+        &verify_iso_match(&client, "cz", "Czech Republic").await,
     )
     .await;
     print_result(
         "Germany",
-        "DE",
-        &verify_iso_match(&client, "DE", "Germany").await,
+        "de",
+        &verify_iso_match(&client, "de", "Germany").await,
     )
     .await;
     print_result(
         "Djibouti",
-        "DJ",
-        &verify_iso_match(&client, "DJ", "Djibouti").await,
+        "dj",
+        &verify_iso_match(&client, "dj", "Djibouti").await,
     )
     .await;
     print_result(
         "Denmark",
-        "DK",
-        &verify_iso_match(&client, "DK", "Denmark").await,
+        "dk",
+        &verify_iso_match(&client, "dk", "Denmark").await,
     )
     .await;
     print_result(
         "Dominica",
-        "DM",
-        &verify_iso_match(&client, "DM", "Dominica").await,
+        "dm",
+        &verify_iso_match(&client, "dm", "Dominica").await,
     )
     .await;
     print_result(
         "Dominican Republic",
-        "DO",
-        &verify_iso_match(&client, "DO", "Dominican Republic").await,
+        "do",
+        &verify_iso_match(&client, "do", "Dominican Republic").await,
     )
     .await;
     print_result(
         "Algeria",
-        "DZ",
-        &verify_iso_match(&client, "DZ", "Algeria").await,
+        "dz",
+        &verify_iso_match(&client, "dz", "Algeria").await,
     )
     .await;
     print_result(
         "Ecuador",
-        "EC",
-        &verify_iso_match(&client, "EC", "Ecuador").await,
+        "ec",
+        &verify_iso_match(&client, "ec", "Ecuador").await,
     )
     .await;
     print_result(
         "Estonia",
-        "EE",
-        &verify_iso_match(&client, "EE", "Estonia").await,
+        "ee",
+        &verify_iso_match(&client, "ee", "Estonia").await,
     )
     .await;
     print_result(
         "Egypt",
-        "EG",
-        &verify_iso_match(&client, "EG", "Egypt").await,
+        "eg",
+        &verify_iso_match(&client, "eg", "Egypt").await,
     )
     .await;
     print_result(
         "Western Sahara",
-        "EH",
-        &verify_iso_match(&client, "EH", "Western Sahara").await,
+        "eh",
+        &verify_iso_match(&client, "eh", "Western Sahara").await,
     )
     .await;
     print_result(
         "Eritrea",
-        "ER",
-        &verify_iso_match(&client, "ER", "Eritrea").await,
+        "er",
+        &verify_iso_match(&client, "er", "Eritrea").await,
     )
     .await;
     print_result(
         "Spain",
-        "ES",
-        &verify_iso_match(&client, "ES", "Spain").await,
+        "es",
+        &verify_iso_match(&client, "es", "Spain").await,
     )
     .await;
     print_result(
         "Ethiopia",
-        "ET",
-        &verify_iso_match(&client, "ET", "Ethiopia").await,
+        "et",
+        &verify_iso_match(&client, "et", "Ethiopia").await,
     )
     .await;
     print_result(
         "Finland",
-        "FI",
-        &verify_iso_match(&client, "FI", "Finland").await,
+        "fi",
+        &verify_iso_match(&client, "fi", "Finland").await,
     )
     .await;
-    print_result("Fiji", "FJ", &verify_iso_match(&client, "FJ", "Fiji").await).await;
+    print_result("Fiji", "fj", &verify_iso_match(&client, "fj", "Fiji").await).await;
     print_result(
         "Falkland Islands",
-        "FK",
-        &verify_iso_match(&client, "FK", "Falkland Islands").await,
+        "fk",
+        &verify_iso_match(&client, "fk", "Falkland Islands").await,
     )
     .await;
     print_result(
         "Micronesia",
-        "FM",
-        &verify_iso_match(&client, "FM", "Micronesia").await,
+        "fm",
+        &verify_iso_match(&client, "fm", "Micronesia").await,
     )
     .await;
     print_result(
         "Faroe Islands",
-        "FO",
-        &verify_iso_match(&client, "FO", "Faroe Islands").await,
+        "fo",
+        &verify_iso_match(&client, "fo", "Faroe Islands").await,
     )
     .await;
     print_result(
         "France",
-        "FR",
-        &verify_iso_match(&client, "FR", "France").await,
+        "fr",
+        &verify_iso_match(&client, "fr", "France").await,
     )
     .await;
     print_result(
         "Gabon",
-        "GA",
-        &verify_iso_match(&client, "GA", "Gabon").await,
+        "ga",
+        &verify_iso_match(&client, "ga", "Gabon").await,
     )
     .await;
     print_result(
         "United Kingdom",
-        "GB",
-        &verify_iso_match(&client, "GB", "United Kingdom").await,
+        "gb",
+        &verify_iso_match(&client, "gb", "United Kingdom").await,
     )
     .await;
     print_result(
         "Grenada",
-        "GD",
-        &verify_iso_match(&client, "GD", "Grenada").await,
+        "gd",
+        &verify_iso_match(&client, "gd", "Grenada").await,
     )
     .await;
     print_result(
         "Georgia",
-        "GE",
-        &verify_iso_match(&client, "GE", "Georgia").await,
+        "ge",
+        &verify_iso_match(&client, "ge", "Georgia").await,
     )
     .await;
     print_result(
         "French Guiana",
-        "GF",
-        &verify_iso_match(&client, "GF", "French Guiana").await,
+        "gf",
+        &verify_iso_match(&client, "gf", "French Guiana").await,
     )
     .await;
     print_result(
         "Guernsey",
-        "GG",
-        &verify_iso_match(&client, "GG", "Guernsey").await,
+        "gg",
+        &verify_iso_match(&client, "gg", "Guernsey").await,
     )
     .await;
     print_result(
         "Ghana",
-        "GH",
-        &verify_iso_match(&client, "GH", "Ghana").await,
+        "gh",
+        &verify_iso_match(&client, "gh", "Ghana").await,
     )
     .await;
     print_result(
         "Gibraltar",
-        "GI",
-        &verify_iso_match(&client, "GI", "Gibraltar").await,
+        "gi",
+        &verify_iso_match(&client, "gi", "Gibraltar").await,
     )
     .await;
     print_result(
         "Greenland",
-        "GL",
-        &verify_iso_match(&client, "GL", "Greenland").await,
+        "gl",
+        &verify_iso_match(&client, "gl", "Greenland").await,
     )
     .await;
     print_result(
         "Gambia",
-        "GM",
-        &verify_iso_match(&client, "GM", "The Gambia").await,
+        "gm",
+        &verify_iso_match(&client, "gm", "The Gambia").await,
     )
     .await; //tag
     print_result(
         "Guinea",
-        "GN",
-        &verify_iso_match(&client, "GN", "Guinea").await,
+        "gn",
+        &verify_iso_match(&client, "gn", "Guinea").await,
     )
     .await;
     print_result(
         "Guadeloupe",
-        "GP",
-        &verify_iso_match(&client, "GP", "Guadeloupe").await,
+        "gp",
+        &verify_iso_match(&client, "gp", "Guadeloupe").await,
     )
     .await;
     print_result(
         "Equatorial Guinea",
-        "GQ",
-        &verify_iso_match(&client, "GQ", "Equatorial Guinea").await,
+        "gq",
+        &verify_iso_match(&client, "gq", "Equatorial Guinea").await,
     )
     .await;
     print_result(
         "Greece",
-        "GR",
-        &verify_iso_match(&client, "GR", "Greece").await,
+        "gr",
+        &verify_iso_match(&client, "gr", "Greece").await,
     )
     .await;
     print_result(
         "South Georgia and the South Sandwich Islands",
-        "GS",
+        "gs",
         &verify_iso_match(
             &client,
-            "GS",
+            "gs",
             "South Georgia and the South Sandwich Islands",
         )
         .await,
@@ -922,906 +932,906 @@ pub async fn verify_codes() {
     .await;
     print_result(
         "Guatemala",
-        "GT",
-        &verify_iso_match(&client, "GT", "Guatemala").await,
+        "gt",
+        &verify_iso_match(&client, "gt", "Guatemala").await,
     )
     .await;
-    print_result("Guam", "GU", &verify_iso_match(&client, "GU", "Guam").await).await;
+    print_result("Guam", "gu", &verify_iso_match(&client, "gu", "Guam").await).await;
     print_result(
         "Guinea-Bissau",
-        "GW",
-        &verify_iso_match(&client, "GW", "Guinea-Bissau").await,
+        "gw",
+        &verify_iso_match(&client, "gw", "Guinea-Bissau").await,
     )
     .await;
     print_result(
         "Guyana",
-        "GY",
-        &verify_iso_match(&client, "GY", "Guyana").await,
+        "gy",
+        &verify_iso_match(&client, "gy", "Guyana").await,
     )
     .await;
     print_result(
         "Hong Kong",
-        "HK",
-        &verify_iso_match(&client, "HK", "Hong Kong").await,
+        "hk",
+        &verify_iso_match(&client, "hk", "Hong Kong").await,
     )
     .await;
     print_result(
         "Heard Island and McDonald Islands",
-        "HM",
-        &verify_iso_match(&client, "HM", "Heard Island and McDonald Islands").await,
+        "hm",
+        &verify_iso_match(&client, "hm", "Heard Island and McDonald Islands").await,
     )
     .await;
     print_result(
         "Honduras",
-        "HN",
-        &verify_iso_match(&client, "HN", "Honduras").await,
+        "hn",
+        &verify_iso_match(&client, "hn", "Honduras").await,
     )
     .await;
     print_result(
         "Croatia",
-        "HR",
-        &verify_iso_match(&client, "HR", "Croatia").await,
+        "hr",
+        &verify_iso_match(&client, "hr", "Croatia").await,
     )
     .await;
     print_result(
         "Haiti",
-        "HT",
-        &verify_iso_match(&client, "HT", "Haiti").await,
+        "ht",
+        &verify_iso_match(&client, "ht", "Haiti").await,
     )
     .await;
     print_result(
         "Hungary",
-        "HU",
-        &verify_iso_match(&client, "HU", "Hungary").await,
+        "hu",
+        &verify_iso_match(&client, "hu", "Hungary").await,
     )
     .await;
     print_result(
         "Indonesia",
-        "ID",
-        &verify_iso_match(&client, "ID", "Indonesia").await,
+        "id",
+        &verify_iso_match(&client, "id", "Indonesia").await,
     )
     .await;
     print_result(
         "Ireland",
-        "IE",
-        &verify_iso_match(&client, "IE", "Ireland").await,
+        "ie",
+        &verify_iso_match(&client, "ie", "Ireland").await,
     )
     .await;
     print_result(
         "Israel",
-        "IL",
-        &verify_iso_match(&client, "IL", "Israel").await,
+        "il",
+        &verify_iso_match(&client, "il", "Israel").await,
     )
     .await;
     print_result(
         "Isle of Man",
-        "IM",
-        &verify_iso_match(&client, "IM", "Isle of Man").await,
+        "im",
+        &verify_iso_match(&client, "im", "Isle of Man").await,
     )
     .await;
     print_result(
         "India",
-        "IN",
-        &verify_iso_match(&client, "IN", "India").await,
+        "in",
+        &verify_iso_match(&client, "in", "India").await,
     )
     .await;
     print_result(
         "British Indian Ocean Territory",
-        "IO",
-        &verify_iso_match(&client, "IO", "British Indian Ocean Territory").await,
+        "io",
+        &verify_iso_match(&client, "io", "British Indian Ocean Territory").await,
     )
     .await;
-    print_result("Iraq", "IQ", &verify_iso_match(&client, "IQ", "Iraq").await).await;
-    print_result("Iran", "IR", &verify_iso_match(&client, "IR", "Iran").await).await;
+    print_result("Iraq", "iq", &verify_iso_match(&client, "iq", "Iraq").await).await;
+    print_result("Iran", "ir", &verify_iso_match(&client, "ir", "Iran").await).await;
     print_result(
         "Iceland",
-        "IS",
-        &verify_iso_match(&client, "IS", "Iceland").await,
+        "is",
+        &verify_iso_match(&client, "is", "Iceland").await,
     )
     .await;
     print_result(
         "Italy",
-        "IT",
-        &verify_iso_match(&client, "IT", "Italy").await,
+        "it",
+        &verify_iso_match(&client, "it", "Italy").await,
     )
     .await;
     print_result(
         "Jersey",
-        "JE",
-        &verify_iso_match(&client, "JE", "Jersey").await,
+        "je",
+        &verify_iso_match(&client, "je", "Jersey").await,
     )
     .await;
     print_result(
         "Jamaica",
-        "JM",
-        &verify_iso_match(&client, "JM", "Jamaica").await,
+        "jm",
+        &verify_iso_match(&client, "jm", "Jamaica").await,
     )
     .await;
     print_result(
         "Jordan",
-        "JO",
-        &verify_iso_match(&client, "JO", "Jordan").await,
+        "jo",
+        &verify_iso_match(&client, "jo", "Jordan").await,
     )
     .await;
     print_result(
         "Japan",
-        "JP",
-        &verify_iso_match(&client, "JP", "Japan").await,
+        "jp",
+        &verify_iso_match(&client, "jp", "Japan").await,
     )
     .await;
     print_result(
         "Kenya",
-        "KE",
-        &verify_iso_match(&client, "KE", "Kenya").await,
+        "ke",
+        &verify_iso_match(&client, "ke", "Kenya").await,
     )
     .await;
     print_result(
         "Kyrgyzstan",
-        "KG",
-        &verify_iso_match(&client, "KG", "Kyrgyzstan").await,
+        "kg",
+        &verify_iso_match(&client, "kg", "Kyrgyzstan").await,
     )
     .await;
     print_result(
         "Cambodia",
-        "KH",
-        &verify_iso_match(&client, "KH", "Cambodia").await,
+        "kh",
+        &verify_iso_match(&client, "kh", "Cambodia").await,
     )
     .await;
     print_result(
         "Kiribati",
-        "KI",
-        &verify_iso_match(&client, "KI", "Kiribati").await,
+        "ki",
+        &verify_iso_match(&client, "ki", "Kiribati").await,
     )
     .await;
     print_result(
         "Comoros",
-        "KM",
-        &verify_iso_match(&client, "KM", "Comoros").await,
+        "km",
+        &verify_iso_match(&client, "km", "Comoros").await,
     )
     .await;
     print_result(
         "Saint Kitts and Nevis",
-        "KN",
-        &verify_iso_match(&client, "KN", "Saint Kitts and Nevis").await,
+        "kn",
+        &verify_iso_match(&client, "kn", "Saint Kitts and Nevis").await,
     )
     .await;
     print_result(
         "North Korea",
-        "KP",
-        &verify_iso_match(&client, "KP", "North Korea").await,
+        "kp",
+        &verify_iso_match(&client, "kp", "North Korea").await,
     )
     .await;
     print_result(
         "South Korea",
-        "KR",
-        &verify_iso_match(&client, "KR", "South Korea").await,
+        "kr",
+        &verify_iso_match(&client, "kr", "South Korea").await,
     )
     .await;
     print_result(
         "Kuwait",
-        "KW",
-        &verify_iso_match(&client, "KW", "Kuwait").await,
+        "kw",
+        &verify_iso_match(&client, "kw", "Kuwait").await,
     )
     .await;
     print_result(
         "Cayman Islands",
-        "KY",
-        &verify_iso_match(&client, "KY", "Cayman Islands").await,
+        "ky",
+        &verify_iso_match(&client, "ky", "Cayman Islands").await,
     )
     .await;
     print_result(
         "Kazakhstan",
-        "KZ",
-        &verify_iso_match(&client, "KZ", "Kazakhstan").await,
+        "kz",
+        &verify_iso_match(&client, "kz", "Kazakhstan").await,
     )
     .await;
-    print_result("Laos", "LA", &verify_iso_match(&client, "LA", "Laos").await).await;
+    print_result("Laos", "la", &verify_iso_match(&client, "la", "Laos").await).await;
     print_result(
         "Lebanon",
-        "LB",
-        &verify_iso_match(&client, "LB", "Lebanon").await,
+        "lb",
+        &verify_iso_match(&client, "lb", "Lebanon").await,
     )
     .await;
     print_result(
         "Saint Lucia",
-        "LC",
-        &verify_iso_match(&client, "LC", "Saint Lucia").await,
+        "lc",
+        &verify_iso_match(&client, "lc", "Saint Lucia").await,
     )
     .await;
     print_result(
         "Liechtenstein",
-        "LI",
-        &verify_iso_match(&client, "LI", "Liechtenstein").await,
+        "li",
+        &verify_iso_match(&client, "li", "Liechtenstein").await,
     )
     .await;
     print_result(
         "Sri Lanka",
-        "LK",
-        &verify_iso_match(&client, "LK", "Sri Lanka").await,
+        "lk",
+        &verify_iso_match(&client, "lk", "Sri Lanka").await,
     )
     .await;
     print_result(
         "Liberia",
-        "LR",
-        &verify_iso_match(&client, "LR", "Liberia").await,
+        "lr",
+        &verify_iso_match(&client, "lr", "Liberia").await,
     )
     .await;
     print_result(
         "Lesotho",
-        "LS",
-        &verify_iso_match(&client, "LS", "Lesotho").await,
+        "ls",
+        &verify_iso_match(&client, "ls", "Lesotho").await,
     )
     .await;
     print_result(
         "Lithuania",
-        "LT",
-        &verify_iso_match(&client, "LT", "Lithuania").await,
+        "lt",
+        &verify_iso_match(&client, "lt", "Lithuania").await,
     )
     .await;
     print_result(
         "Luxembourg",
-        "LU",
-        &verify_iso_match(&client, "LU", "Luxembourg").await,
+        "lu",
+        &verify_iso_match(&client, "lu", "Luxembourg").await,
     )
     .await;
     print_result(
         "Latvia",
-        "LV",
-        &verify_iso_match(&client, "LV", "Latvia").await,
+        "lv",
+        &verify_iso_match(&client, "lv", "Latvia").await,
     )
     .await;
     print_result(
         "Libya",
-        "LY",
-        &verify_iso_match(&client, "LY", "Libya").await,
+        "ly",
+        &verify_iso_match(&client, "ly", "Libya").await,
     )
     .await;
     print_result(
         "Morocco",
-        "MA",
-        &verify_iso_match(&client, "MA", "Morocco").await,
+        "ma",
+        &verify_iso_match(&client, "ma", "Morocco").await,
     )
     .await;
     print_result(
         "Monaco",
-        "MC",
-        &verify_iso_match(&client, "MC", "Monaco").await,
+        "mc",
+        &verify_iso_match(&client, "mc", "Monaco").await,
     )
     .await;
     print_result(
         "Moldova",
-        "MD",
-        &verify_iso_match(&client, "MD", "Moldova").await,
+        "md",
+        &verify_iso_match(&client, "md", "Moldova").await,
     )
     .await;
     print_result(
         "Montenegro",
-        "ME",
-        &verify_iso_match(&client, "ME", "Montenegro").await,
+        "me",
+        &verify_iso_match(&client, "me", "Montenegro").await,
     )
     .await;
     print_result(
         "Saint Martin",
-        "MF",
-        &verify_iso_match(&client, "MF", "Saint Martin").await,
+        "mf",
+        &verify_iso_match(&client, "mf", "Saint Martin").await,
     )
     .await;
     print_result(
         "Madagascar",
-        "MG",
-        &verify_iso_match(&client, "MG", "Madagascar").await,
+        "mg",
+        &verify_iso_match(&client, "mg", "Madagascar").await,
     )
     .await;
     print_result(
         "Marshall Islands",
-        "MH",
-        &verify_iso_match(&client, "MH", "Marshall Islands").await,
+        "mh",
+        &verify_iso_match(&client, "mh", "Marshall Islands").await,
     )
     .await;
     print_result(
         "North Macedonia",
-        "MK",
-        &verify_iso_match(&client, "MK", "North Macedonia").await,
+        "mk",
+        &verify_iso_match(&client, "mk", "North Macedonia").await,
     )
     .await;
-    print_result("Mali", "ML", &verify_iso_match(&client, "ML", "Mali").await).await;
+    print_result("Mali", "ml", &verify_iso_match(&client, "ml", "Mali").await).await;
     print_result(
         "Myanmar",
-        "MM",
-        &verify_iso_match(&client, "MM", "Myanmar").await,
+        "mm",
+        &verify_iso_match(&client, "mm", "Myanmar").await,
     )
     .await;
     print_result(
         "Mongolia",
-        "MN",
-        &verify_iso_match(&client, "MN", "Mongolia").await,
+        "mn",
+        &verify_iso_match(&client, "mn", "Mongolia").await,
     )
     .await;
     print_result(
         "Macao",
-        "MO",
-        &verify_iso_match(&client, "MO", "Macau").await,
+        "mo",
+        &verify_iso_match(&client, "mo", "Macau").await,
     )
     .await; //tag
     print_result(
         "Northern Mariana Islands",
-        "MP",
-        &verify_iso_match(&client, "MP", "Northern Mariana Islands").await,
+        "mp",
+        &verify_iso_match(&client, "mp", "Northern Mariana Islands").await,
     )
     .await;
     print_result(
         "Martinique",
-        "MQ",
-        &verify_iso_match(&client, "MQ", "Martinique").await,
+        "mq",
+        &verify_iso_match(&client, "mq", "Martinique").await,
     )
     .await;
     print_result(
         "Mauritania",
-        "MR",
-        &verify_iso_match(&client, "MR", "Mauritania").await,
+        "mr",
+        &verify_iso_match(&client, "mr", "Mauritania").await,
     )
     .await;
     print_result(
         "Montserrat",
-        "MS",
-        &verify_iso_match(&client, "MS", "Montserrat").await,
+        "ms",
+        &verify_iso_match(&client, "ms", "Montserrat").await,
     )
     .await;
     print_result(
         "Malta",
-        "MT",
-        &verify_iso_match(&client, "MT", "Malta").await,
+        "mt",
+        &verify_iso_match(&client, "mt", "Malta").await,
     )
     .await;
     print_result(
         "Mauritius",
-        "MU",
-        &verify_iso_match(&client, "MU", "Mauritius").await,
+        "mu",
+        &verify_iso_match(&client, "mu", "Mauritius").await,
     )
     .await;
     print_result(
         "Maldives",
-        "MV",
-        &verify_iso_match(&client, "MV", "Maldives").await,
+        "mv",
+        &verify_iso_match(&client, "mv", "Maldives").await,
     )
     .await;
     print_result(
         "Malawi",
-        "MW",
-        &verify_iso_match(&client, "MW", "Malawi").await,
+        "mw",
+        &verify_iso_match(&client, "mw", "Malawi").await,
     )
     .await;
     print_result(
         "Mexico",
-        "MX",
-        &verify_iso_match(&client, "MX", "Mexico").await,
+        "mx",
+        &verify_iso_match(&client, "mx", "Mexico").await,
     )
     .await;
     print_result(
         "Malaysia",
-        "MY",
-        &verify_iso_match(&client, "MY", "Malaysia").await,
+        "my",
+        &verify_iso_match(&client, "my", "Malaysia").await,
     )
     .await;
     print_result(
         "Mozambique",
-        "MZ",
-        &verify_iso_match(&client, "MZ", "Mozambique").await,
+        "mz",
+        &verify_iso_match(&client, "mz", "Mozambique").await,
     )
     .await;
     print_result(
         "Namibia",
-        "NA",
-        &verify_iso_match(&client, "NA", "Namibia").await,
+        "na",
+        &verify_iso_match(&client, "na", "Namibia").await,
     )
     .await;
     print_result(
         "New Caledonia",
-        "NC",
-        &verify_iso_match(&client, "NC", "New Caledonia").await,
+        "nc",
+        &verify_iso_match(&client, "nc", "New Caledonia").await,
     )
     .await;
     print_result(
         "Niger",
-        "NE",
-        &verify_iso_match(&client, "NE", "Niger").await,
+        "ne",
+        &verify_iso_match(&client, "ne", "Niger").await,
     )
     .await;
     print_result(
         "Norfolk Island",
-        "NF",
-        &verify_iso_match(&client, "NF", "Norfolk Island").await,
+        "nf",
+        &verify_iso_match(&client, "nf", "Norfolk Island").await,
     )
     .await;
     print_result(
         "Nigeria",
-        "NG",
-        &verify_iso_match(&client, "NG", "Nigeria").await,
+        "ng",
+        &verify_iso_match(&client, "ng", "Nigeria").await,
     )
     .await;
     print_result(
         "Nicaragua",
-        "NI",
-        &verify_iso_match(&client, "NI", "Nicaragua").await,
+        "ni",
+        &verify_iso_match(&client, "ni", "Nicaragua").await,
     )
     .await;
     print_result(
         "Netherlands",
-        "NL",
-        &verify_iso_match(&client, "NL", "Netherlands").await,
+        "nl",
+        &verify_iso_match(&client, "nl", "Netherlands").await,
     )
     .await;
     print_result(
         "Norway",
-        "NO",
-        &verify_iso_match(&client, "NO", "Norway").await,
+        "no",
+        &verify_iso_match(&client, "no", "Norway").await,
     )
     .await;
     print_result(
         "Nepal",
-        "NP",
-        &verify_iso_match(&client, "NP", "Nepal").await,
+        "np",
+        &verify_iso_match(&client, "np", "Nepal").await,
     )
     .await;
     print_result(
         "Nauru",
-        "NR",
-        &verify_iso_match(&client, "NR", "Nauru").await,
+        "nr",
+        &verify_iso_match(&client, "nr", "Nauru").await,
     )
     .await;
-    print_result("Niue", "NU", &verify_iso_match(&client, "NU", "Niue").await).await;
+    print_result("Niue", "nu", &verify_iso_match(&client, "nu", "Niue").await).await;
     print_result(
         "New Zealand",
-        "NZ",
-        &verify_iso_match(&client, "NZ", "New Zealand").await,
+        "nz",
+        &verify_iso_match(&client, "nz", "New Zealand").await,
     )
     .await;
-    print_result("Oman", "OM", &verify_iso_match(&client, "OM", "Oman").await).await;
+    print_result("Oman", "om", &verify_iso_match(&client, "om", "Oman").await).await;
     print_result(
         "Panama",
-        "PA",
-        &verify_iso_match(&client, "PA", "Panama").await,
+        "pa",
+        &verify_iso_match(&client, "pa", "Panama").await,
     )
     .await;
-    print_result("Peru", "PE", &verify_iso_match(&client, "PE", "Peru").await).await;
+    print_result("Peru", "pe", &verify_iso_match(&client, "pe", "Peru").await).await;
     print_result(
         "French Polynesia",
-        "PF",
-        &verify_iso_match(&client, "PF", "French Polynesia").await,
+        "pf",
+        &verify_iso_match(&client, "pf", "French Polynesia").await,
     )
     .await;
     print_result(
         "Papua New Guinea",
-        "PG",
-        &verify_iso_match(&client, "PG", "Papua New Guinea").await,
+        "pg",
+        &verify_iso_match(&client, "pg", "Papua New Guinea").await,
     )
     .await;
     print_result(
         "Philippines",
-        "PH",
-        &verify_iso_match(&client, "PH", "Philippines").await,
+        "ph",
+        &verify_iso_match(&client, "ph", "Philippines").await,
     )
     .await;
     print_result(
         "Pakistan",
-        "PK",
-        &verify_iso_match(&client, "PK", "Pakistan").await,
+        "pk",
+        &verify_iso_match(&client, "pk", "Pakistan").await,
     )
     .await;
     print_result(
         "Poland",
-        "PL",
-        &verify_iso_match(&client, "PL", "Poland").await,
+        "pl",
+        &verify_iso_match(&client, "pl", "Poland").await,
     )
     .await;
     print_result(
         "Saint Pierre and Miquelon",
-        "PM",
-        &verify_iso_match(&client, "PM", "Saint Pierre and Miquelon").await,
+        "pm",
+        &verify_iso_match(&client, "pm", "Saint Pierre and Miquelon").await,
     )
     .await;
     print_result(
         "Pitcairn Islands",
-        "PN",
-        &verify_iso_match(&client, "PN", "Pitcairn Islands").await,
+        "pn",
+        &verify_iso_match(&client, "pn", "Pitcairn Islands").await,
     )
     .await;
     print_result(
         "Puerto Rico",
-        "PR",
-        &verify_iso_match(&client, "PR", "Puerto Rico").await,
+        "pr",
+        &verify_iso_match(&client, "pr", "Puerto Rico").await,
     )
     .await;
     print_result(
         "Palestinian Territory",
-        "PS",
-        &verify_iso_match(&client, "PS", "State of Palestine").await,
+        "ps",
+        &verify_iso_match(&client, "ps", "State of Palestine").await,
     )
     .await;
     print_result(
         "Portugal",
-        "PT",
-        &verify_iso_match(&client, "PT", "Portugal").await,
+        "pt",
+        &verify_iso_match(&client, "pt", "Portugal").await,
     )
     .await;
     print_result(
         "Palau",
-        "PW",
-        &verify_iso_match(&client, "PW", "Palau").await,
+        "pw",
+        &verify_iso_match(&client, "pw", "Palau").await,
     )
     .await;
     print_result(
         "Paraguay",
-        "PY",
-        &verify_iso_match(&client, "PY", "Paraguay").await,
+        "py",
+        &verify_iso_match(&client, "py", "Paraguay").await,
     )
     .await;
     print_result(
         "Qatar",
-        "QA",
-        &verify_iso_match(&client, "QA", "Qatar").await,
+        "qa",
+        &verify_iso_match(&client, "qa", "Qatar").await,
     )
     .await;
     print_result(
         "Réunion",
-        "RE",
-        &verify_iso_match(&client, "RE", "Réunion").await,
+        "re",
+        &verify_iso_match(&client, "re", "Réunion").await,
     )
     .await;
     print_result(
         "Romania",
-        "RO",
-        &verify_iso_match(&client, "RO", "Romania").await,
+        "ro",
+        &verify_iso_match(&client, "ro", "Romania").await,
     )
     .await;
     print_result(
         "Serbia",
-        "RS",
-        &verify_iso_match(&client, "RS", "Serbia").await,
+        "rs",
+        &verify_iso_match(&client, "rs", "Serbia").await,
     )
     .await;
     print_result(
         "Russia",
-        "RU",
-        &verify_iso_match(&client, "RU", "Russia").await,
+        "ru",
+        &verify_iso_match(&client, "ru", "Russia").await,
     )
     .await;
     print_result(
         "Rwanda",
-        "RW",
-        &verify_iso_match(&client, "RW", "Rwanda").await,
+        "rw",
+        &verify_iso_match(&client, "rw", "Rwanda").await,
     )
     .await;
     print_result(
         "Saudi Arabia",
-        "SA",
-        &verify_iso_match(&client, "SA", "Saudi Arabia").await,
+        "sa",
+        &verify_iso_match(&client, "sa", "Saudi Arabia").await,
     )
     .await;
     print_result(
         "Solomon Islands",
-        "SB",
-        &verify_iso_match(&client, "SB", "Solomon Islands").await,
+        "sb",
+        &verify_iso_match(&client, "sb", "Solomon Islands").await,
     )
     .await;
     print_result(
         "Seychelles",
-        "SC",
-        &verify_iso_match(&client, "SC", "Seychelles").await,
+        "sc",
+        &verify_iso_match(&client, "sc", "Seychelles").await,
     )
     .await;
     print_result(
         "Sudan",
-        "SD",
-        &verify_iso_match(&client, "SD", "Sudan").await,
+        "sd",
+        &verify_iso_match(&client, "sd", "Sudan").await,
     )
     .await;
     print_result(
         "Sweden",
-        "SE",
-        &verify_iso_match(&client, "SE", "Sweden").await,
+        "se",
+        &verify_iso_match(&client, "se", "Sweden").await,
     )
     .await;
     print_result(
         "Singapore",
-        "SG",
-        &verify_iso_match(&client, "SG", "Singapore").await,
+        "sg",
+        &verify_iso_match(&client, "sg", "Singapore").await,
     )
     .await;
     print_result(
         "Saint Helena",
-        "SH",
-        &verify_iso_match(&client, "SH", "Saint Helena").await,
+        "sh",
+        &verify_iso_match(&client, "sh", "Saint Helena").await,
     )
     .await;
     print_result(
         "Slovenia",
-        "SI",
-        &verify_iso_match(&client, "SI", "Slovenia").await,
+        "si",
+        &verify_iso_match(&client, "si", "Slovenia").await,
     )
     .await;
     print_result(
         "Svalbard and Jan Mayen",
-        "SJ",
-        &verify_iso_match(&client, "SJ", "Svalbard and Jan Mayen").await,
+        "sj",
+        &verify_iso_match(&client, "sj", "Svalbard and Jan Mayen").await,
     )
     .await;
     print_result(
         "Slovakia",
-        "SK",
-        &verify_iso_match(&client, "SK", "Slovakia").await,
+        "sk",
+        &verify_iso_match(&client, "sk", "Slovakia").await,
     )
     .await;
     print_result(
         "Sierra Leone",
-        "SL",
-        &verify_iso_match(&client, "SL", "Sierra Leone").await,
+        "sl",
+        &verify_iso_match(&client, "sl", "Sierra Leone").await,
     )
     .await;
     print_result(
         "San Marino",
-        "SM",
-        &verify_iso_match(&client, "SM", "San Marino").await,
+        "sm",
+        &verify_iso_match(&client, "sm", "San Marino").await,
     )
     .await;
     print_result(
         "Senegal",
-        "SN",
-        &verify_iso_match(&client, "SN", "Senegal").await,
+        "sn",
+        &verify_iso_match(&client, "sn", "Senegal").await,
     )
     .await;
     print_result(
         "Somalia",
-        "SO",
-        &verify_iso_match(&client, "SO", "Somalia").await,
+        "so",
+        &verify_iso_match(&client, "so", "Somalia").await,
     )
     .await;
     print_result(
         "Suriname",
-        "SR",
-        &verify_iso_match(&client, "SR", "Suriname").await,
+        "sr",
+        &verify_iso_match(&client, "sr", "Suriname").await,
     )
     .await;
     print_result(
         "South Sudan",
-        "SS",
-        &verify_iso_match(&client, "SS", "South Sudan").await,
+        "ss",
+        &verify_iso_match(&client, "ss", "South Sudan").await,
     )
     .await;
     print_result(
         "São Tomé and Príncipe",
-        "ST",
-        &verify_iso_match(&client, "ST", "São Tomé and Príncipe").await,
+        "st",
+        &verify_iso_match(&client, "st", "São Tomé and Príncipe").await,
     )
     .await;
     print_result(
         "El Salvador",
-        "SV",
-        &verify_iso_match(&client, "SV", "El Salvador").await,
+        "sv",
+        &verify_iso_match(&client, "sv", "El Salvador").await,
     )
     .await;
     print_result(
         "Sint Maarten",
-        "SX",
-        &verify_iso_match(&client, "SX", "Sint Maarten").await,
+        "sx",
+        &verify_iso_match(&client, "sx", "Sint Maarten").await,
     )
     .await;
     print_result(
         "Syria",
-        "SY",
-        &verify_iso_match(&client, "SY", "Syria").await,
+        "sy",
+        &verify_iso_match(&client, "sy", "Syria").await,
     )
     .await;
     print_result(
         "Swaziland",
-        "SZ",
-        &verify_iso_match(&client, "SZ", "Eswatini").await,
+        "sz",
+        &verify_iso_match(&client, "sz", "Eswatini").await,
     )
     .await;
     print_result(
         "Turks and Caicos Islands",
-        "TC",
-        &verify_iso_match(&client, "TC", "Turks and Caicos Islands").await,
+        "tc",
+        &verify_iso_match(&client, "tc", "Turks and Caicos Islands").await,
     )
     .await;
-    print_result("Chad", "TD", &verify_iso_match(&client, "TD", "Chad").await).await;
+    print_result("Chad", "td", &verify_iso_match(&client, "td", "Chad").await).await;
     print_result(
         "French Southern Territories",
-        "TF",
-        &verify_iso_match(&client, "TF", "French Southern and Antarctic Lands").await,
+        "tf",
+        &verify_iso_match(&client, "tf", "French Southern and Antarctic Lands").await,
     )
     .await; //tag
-    print_result("Togo", "TG", &verify_iso_match(&client, "TG", "Togo").await).await;
+    print_result("Togo", "tg", &verify_iso_match(&client, "tg", "Togo").await).await;
     print_result(
         "Thailand",
-        "TH",
-        &verify_iso_match(&client, "TH", "Thailand").await,
+        "th",
+        &verify_iso_match(&client, "th", "Thailand").await,
     )
     .await;
     print_result(
         "Tajikistan",
-        "TJ",
-        &verify_iso_match(&client, "TJ", "Tajikistan").await,
+        "tj",
+        &verify_iso_match(&client, "tj", "Tajikistan").await,
     )
     .await;
     print_result(
         "Tokelau",
-        "TK",
-        &verify_iso_match(&client, "TK", "Tokelau").await,
+        "tk",
+        &verify_iso_match(&client, "tk", "Tokelau").await,
     )
     .await;
     print_result(
         "Timor-Leste",
-        "TL",
-        &verify_iso_match(&client, "TL", "East Timor").await,
+        "tl",
+        &verify_iso_match(&client, "tl", "East Timor").await,
     )
     .await; //tag
     print_result(
         "Turkmenistan",
-        "TM",
-        &verify_iso_match(&client, "TM", "Turkmenistan").await,
+        "tm",
+        &verify_iso_match(&client, "tm", "Turkmenistan").await,
     )
     .await;
     print_result(
         "Tunisia",
-        "TN",
-        &verify_iso_match(&client, "TN", "Tunisia").await,
+        "tn",
+        &verify_iso_match(&client, "tn", "Tunisia").await,
     )
     .await;
     print_result(
         "Tonga",
-        "TO",
-        &verify_iso_match(&client, "TO", "Tonga").await,
+        "to",
+        &verify_iso_match(&client, "to", "Tonga").await,
     )
     .await;
     print_result(
         "Turkey",
-        "TR",
-        &verify_iso_match(&client, "TR", "Turkey").await,
+        "tr",
+        &verify_iso_match(&client, "tr", "Turkey").await,
     )
     .await;
     print_result(
         "Trinidad and Tobago",
-        "TT",
-        &verify_iso_match(&client, "TT", "Trinidad and Tobago").await,
+        "tt",
+        &verify_iso_match(&client, "tt", "Trinidad and Tobago").await,
     )
     .await;
     print_result(
         "Tuvalu",
-        "TV",
-        &verify_iso_match(&client, "TV", "Tuvalu").await,
+        "tv",
+        &verify_iso_match(&client, "tv", "Tuvalu").await,
     )
     .await;
     print_result(
         "Taiwan",
-        "TW",
-        &verify_iso_match(&client, "TW", "Taiwan").await,
+        "tw",
+        &verify_iso_match(&client, "tw", "Taiwan").await,
     )
     .await;
     print_result(
         "Tanzania",
-        "TZ",
-        &verify_iso_match(&client, "TZ", "Tanzania").await,
+        "tz",
+        &verify_iso_match(&client, "tz", "Tanzania").await,
     )
     .await;
     print_result(
         "Ukraine",
-        "UA",
-        &verify_iso_match(&client, "UA", "Ukraine").await,
+        "ua",
+        &verify_iso_match(&client, "ua", "Ukraine").await,
     )
     .await;
     print_result(
         "Uganda",
-        "UG",
-        &verify_iso_match(&client, "UG", "Uganda").await,
+        "ug",
+        &verify_iso_match(&client, "ug", "Uganda").await,
     )
     .await;
     print_result(
         "United States Minor Outlying Islands",
-        "UM",
-        &verify_iso_match(&client, "UM", "United States Minor Outlying Islands").await,
+        "um",
+        &verify_iso_match(&client, "um", "United States Minor Outlying Islands").await,
     )
     .await;
     print_result(
         "United States",
-        "US",
-        &verify_iso_match(&client, "US", "United States of America").await,
+        "us",
+        &verify_iso_match(&client, "us", "United States of America").await,
     )
     .await; //tag
     print_result(
         "Uruguay",
-        "UY",
-        &verify_iso_match(&client, "UY", "Uruguay").await,
+        "uy",
+        &verify_iso_match(&client, "uy", "Uruguay").await,
     )
     .await;
     print_result(
         "Uzbekistan",
-        "UZ",
-        &verify_iso_match(&client, "UZ", "Uzbekistan").await,
+        "uz",
+        &verify_iso_match(&client, "uz", "Uzbekistan").await,
     )
     .await;
     print_result(
         "Vatican City",
-        "VA",
-        &verify_iso_match(&client, "VA", "Vatican City").await,
+        "va",
+        &verify_iso_match(&client, "va", "Vatican City").await,
     )
     .await;
     print_result(
         "Saint Vincent and the Grenadines",
-        "VC",
-        &verify_iso_match(&client, "VC", "Saint Vincent and the Grenadines").await,
+        "vc",
+        &verify_iso_match(&client, "vc", "Saint Vincent and the Grenadines").await,
     )
     .await;
     print_result(
         "Venezuela",
-        "VE",
-        &verify_iso_match(&client, "VE", "Venezuela").await,
+        "ve",
+        &verify_iso_match(&client, "ve", "Venezuela").await,
     )
     .await;
     print_result(
         "British Virgin Islands",
-        "VG",
-        &verify_iso_match(&client, "VG", "British Virgin Islands").await,
+        "vg",
+        &verify_iso_match(&client, "vg", "British Virgin Islands").await,
     )
     .await;
     print_result(
         "United States Virgin Islands",
-        "VI",
-        &verify_iso_match(&client, "VI", "United States Virgin Islands").await,
+        "vi",
+        &verify_iso_match(&client, "vi", "United States Virgin Islands").await,
     )
     .await;
     print_result(
         "Vietnam",
-        "VN",
-        &verify_iso_match(&client, "VN", "Vietnam").await,
+        "vn",
+        &verify_iso_match(&client, "vn", "Vietnam").await,
     )
     .await;
     print_result(
         "Vanuatu",
-        "VU",
-        &verify_iso_match(&client, "VU", "Vanuatu").await,
+        "vu",
+        &verify_iso_match(&client, "vu", "Vanuatu").await,
     )
     .await;
     print_result(
         "Wallis and Futuna",
-        "WF",
-        &verify_iso_match(&client, "WF", "Wallis and Futuna").await,
+        "wf",
+        &verify_iso_match(&client, "wf", "Wallis and Futuna").await,
     )
     .await;
     print_result(
         "Samoa",
-        "WS",
-        &verify_iso_match(&client, "WS", "Samoa").await,
+        "ws",
+        &verify_iso_match(&client, "ws", "Samoa").await,
     )
     .await;
     print_result(
         "Yemen",
-        "YE",
-        &verify_iso_match(&client, "YE", "Yemen").await,
+        "ye",
+        &verify_iso_match(&client, "ye", "Yemen").await,
     )
     .await;
     print_result(
         "Mayotte",
-        "YT",
-        &verify_iso_match(&client, "YT", "Mayotte").await,
+        "yt",
+        &verify_iso_match(&client, "yt", "Mayotte").await,
     )
     .await;
     print_result(
         "South Africa",
-        "ZA",
-        &verify_iso_match(&client, "ZA", "South Africa").await,
+        "za",
+        &verify_iso_match(&client, "za", "South Africa").await,
     )
     .await;
     print_result(
         "Zambia",
-        "ZM",
-        &verify_iso_match(&client, "ZM", "Zambia").await,
+        "zm",
+        &verify_iso_match(&client, "zm", "Zambia").await,
     )
     .await;
     print_result(
         "Zimbabwe",
-        "ZW",
-        &verify_iso_match(&client, "ZW", "Zimbabwe").await,
+        "zw",
+        &verify_iso_match(&client, "zw", "Zimbabwe").await,
     )
     .await;
 }

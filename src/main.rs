@@ -22,6 +22,7 @@ mod service {
 mod prelude;
 use crate::prelude::*;
 use db::keyphrase::gen_keyphrase_db;
+//use scrape::region;
 use service::{
     scrape_service::run_scrapers, var_service::get_docker_volume, venv_service::create_venv,
 };
@@ -33,7 +34,7 @@ async fn main() -> Result<()> {
     let docker_volume = get_docker_volume().await?;
     create_venv(&docker_volume).await?;
     gen_keyphrase_db(&docker_volume).await?;
-    //regions::show_region_map().await?;
+    //region::show_region_map().await?;
     run_scrapers(&docker_volume).await?;
 
     Ok(())
