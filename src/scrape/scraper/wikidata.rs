@@ -339,6 +339,7 @@ fn get_property_from_iso(iso_code: &str) -> Option<&str> {
         "vu" => Some("686"),
         "wf" => Some("35555"),
         "ws" => Some("683"),
+        "xk" => Some("1246"),
         "ye" => Some("805"),
         "yt" => Some("17063"),
         "za" => Some("258"),
@@ -1802,6 +1803,12 @@ pub async fn verify_codes() {
         "Samoa",
         "ws",
         &verify_iso_match(&client, "ws", "Samoa").await,
+    )
+    .await;
+    print_result(
+        "Kosovo",
+        "xk",
+        &verify_iso_match(&client, "xk", "Kosovo").await,
     )
     .await;
     print_result(

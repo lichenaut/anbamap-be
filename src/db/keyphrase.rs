@@ -138,7 +138,7 @@ pub async fn gen_keyphrase_db(docker_volume: &str) -> Result<()> {
         "sd", "se", "sg", "sh", "si", "sj", "sk", "sl", "sm", "sn", "so", "sr", "ss", "st", "sv",
         "sx", "sy", "sz", "tc", "td", "tf", "tg", "th", "tj", "tk", "tl", "tm", "tn", "to", "tr",
         "tt", "tv", "tw", "tz", "ua", "ug", "um", "us", "uy", "uz", "va", "vc", "ve", "vg", "vi",
-        "vn", "vu", "wf", "ws", "ye", "yt", "za", "zm", "zw",
+        "vn", "vu", "wf", "ws", "xk", "ye", "yt", "za", "zm", "zw",
     ];
     for region_code in region_codes {
         let heads_of_state = region_code_to_figures(&client, region_code).await?;
