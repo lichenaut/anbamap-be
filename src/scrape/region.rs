@@ -126,7 +126,7 @@ fn get_automated_keyphrases(
             .flat_map(|s| {
                 s.split(',').map(|s| {
                     let mut s = s.trim().to_string();
-                    if s == "arges" || s == "gard" || s == "marche" || s == "wien" {
+                    if s == "acre" || s == "arges" || s == "gard" || s == "marche" || s == "wien" {
                         s += " ";
                         s.push_str(&(s.clone() + "'"));
                         s.push_str(&(s.clone() + "\""));
