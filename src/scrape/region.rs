@@ -129,11 +129,7 @@ fn get_automated_keyphrases(
                     let s = s.trim().to_string();
                     match s.as_str() {
                         "acre" | "arges" | "gard" | "marche" | "wien" => {
-                            results.push(s.clone() + " ");
-                            results.push(s.clone() + "'");
-                            results.push(s.clone() + "\"");
-                            results.push(s.clone() + ".");
-                            results.push(s.clone() + ",");
+                            results.push(" ".to_owned() + &s.clone() + " ");
                         }
                         _ => results.push(s.clone()),
                     }
