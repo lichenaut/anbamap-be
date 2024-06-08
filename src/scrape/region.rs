@@ -124,17 +124,21 @@ fn get_automated_keyphrases(
     region_map.get(region_code).map(|g| {
         g.iter()
             .flat_map(|s| {
-                s.split(',').map(|s| {
-                    let mut s = s.trim().to_string();
-                    if s == "acre" || s == "arges" || s == "gard" || s == "marche" || s == "wien" {
-                        s += " ";
-                        s.push_str(&(s.clone() + "'"));
-                        s.push_str(&(s.clone() + "\""));
-                        s.push_str(&(s.clone() + "."));
-                        s.push_str(&(s.clone() + ","));
+                let mut results = Vec::new();
+                for s in s.split(',') {
+                    let s = s.trim().to_string();
+                    match s.as_str() {
+                        "acre" | "arges" | "gard" | "marche" | "wien" => {
+                            results.push(s.clone() + " ");
+                            results.push(s.clone() + "'");
+                            results.push(s.clone() + "\"");
+                            results.push(s.clone() + ".");
+                            results.push(s.clone() + ",");
+                        }
+                        _ => results.push(s.clone()),
                     }
-                    s
-                })
+                }
+                results
             })
             .collect::<Vec<_>>()
     })
