@@ -62,6 +62,12 @@ pub async fn scrape_youtube_channel(
             continue;
         }
 
+        let id = item["id"]["videoId"].as_str();
+        let url = match id {
+            Some(id) => format!("https://www.youtube.com/watch?v={}", id),
+            None => continue,
+        };
+
         let title = match snippet["title"].as_str() {
             Some(title) => title.to_string(),
             None => continue,
@@ -69,12 +75,6 @@ pub async fn scrape_youtube_channel(
 
         let body = match snippet["description"].as_str() {
             Some(body) => body.to_string(),
-            None => continue,
-        };
-
-        let id = item["id"]["videoId"].as_str();
-        let url = match id {
-            Some(id) => format!("https://www.youtube.com/watch?v={}", id),
             None => continue,
         };
 

@@ -51,3 +51,19 @@ pub async fn get_youtube_channel_ids() -> Result<Option<String>> {
         }
     }
 }
+
+pub async fn get_substack_urls() -> Result<Option<String>> {
+    match var("SUBSTACK_URLS") {
+        Ok(urls) => match urls.is_empty() {
+            true => {
+                tracing::info!("SUBSTACK_URLS is empty");
+                Ok(None)
+            }
+            false => Ok(Some(urls)),
+        },
+        Err(e) => {
+            tracing::info!("SUBSTACK_URLS not found in environment: {}", e);
+            Ok(None)
+        }
+    }
+}

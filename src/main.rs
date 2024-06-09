@@ -6,6 +6,7 @@ mod db {
 mod scrape {
     pub mod scraper {
         pub mod forbes400;
+        pub mod substack;
         pub mod wikidata;
         pub mod wikipedia;
         pub mod youtube;
