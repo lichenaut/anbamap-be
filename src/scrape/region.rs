@@ -4437,6 +4437,8 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                     "biden",
                     "nuland",
                     "blinken",
+                    "nyc",
+                    "wall street",
                 ]),
             }
             .get_region_vec(),

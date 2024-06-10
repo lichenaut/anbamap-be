@@ -56,9 +56,9 @@ pub async fn scrape_substack_archive(
             None => continue,
         };
 
-        // if date_time != now {
-        //     continue;
-        // }
+        if date_time != now {
+            continue;
+        }
 
         let mut intermediate = match second.splitn(2, '>').last() {
             Some(intermediate) => intermediate,
