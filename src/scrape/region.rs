@@ -124,6 +124,7 @@ fn get_automated_keyphrases(
     region_map.get(region_code).map(|g| {
         g.iter()
             .flat_map(|s| {
+                // For automatically generated keyphrases that are also subwords, add spaces around them.
                 let mut results = Vec::new();
                 for s in s.split(',') {
                     let s = s.trim().to_string();
@@ -147,7 +148,7 @@ fn remove_ambiguities(
     // let mut map = HashMap::new();
     // for (key, _) in &vec {
     //     for s in key {
-    //         let count = map.entry(s.clone()).or_insert(0);
+    //         let count = map.entry(s).or_insert(0);
     //         *count += 1;
     //         if *count > 1 {
     //             tracing::debug!("Duplicate map-level keyphrase: {}", s);
@@ -320,7 +321,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 names: Some(vec!["angola"]),
                 demonyms: None,
                 enterprises: None,
-                misc: Some(vec!["mpla", "unita"]),
+                misc: Some(vec![" mpla ", "unita"]),
             }
             .get_region_vec(),
             "ao",
@@ -4705,7 +4706,9 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         "centre island",
         "georgia",
         "georgetown",
+        "kent",
         "nice",
+        "reading",
         "saint john's",
         "st. john's",
     ]

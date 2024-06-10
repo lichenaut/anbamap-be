@@ -1,24 +1,19 @@
 use super::region::KEYPHRASE_REGION_MAP;
 use crate::{prelude::*, service::var_service::get_docker_volume};
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
+use regex::Regex;
 use std::{
     process::Command,
     str::from_utf8,
     sync::{Arc, Mutex},
 };
 use unidecode::unidecode;
+
 pub(super) async fn get_regions(text: &[&str]) -> Result<Vec<String>> {
-    let text = text
-        .join(" ")
-        .replace("'s ", " ")
-        .replace("s' ", " ")
-        .replace('\'', r"\'")
-        .replace("&#39;", r"\'")
-        .replace("&amp;", "&")
-        .replace(['"', '`', '‘', '’', '–'], "");
+    let text = text.join(" ");
     let identified_regions = get_flashgeotext_regions(&text).await?;
 
-    let text = unidecode(&text.replace(r"\'", "'").to_lowercase());
+    let text = &text.replace(r"\'", "'").to_lowercase();
     let identified_regions = Arc::new(Mutex::new(identified_regions));
     KEYPHRASE_REGION_MAP
         .par_iter()
@@ -61,11 +56,47 @@ pub(super) async fn get_regions(text: &[&str]) -> Result<Vec<String>> {
     if text.contains("mexico") && !text.contains("new mexico") && !regions.contains(&"mx") {
         regions.push("mx");
     }
-    if text.contains("trump") && !regions.is_empty() {
+    if regions.is_empty() {
         regions.push("us");
     }
 
     Ok(regions.iter().map(|s| s.to_string()).collect())
+}
+
+pub async fn look_between(text: &str, this: String, that: String) -> Result<Option<String>> {
+    match text.splitn(2, &this).last() {
+        Some(text) => Ok(text.split(&that).next().map(|text| text.to_string())),
+        None => Ok(None),
+    }
+}
+
+pub async fn strip_content<T: ToString>(input: T) -> Result<String> {
+    let input = input.to_string();
+    Ok(unidecode(
+        Regex::new(r"<[^>]*>")?
+            .replace_all(&input, "")
+            .replace("&amp;", "&")
+            .replace("&#39;", "'")
+            .replace("&#8220;", "\"")
+            .replace("&#8221;", "\"")
+            .replace("&#8217;", "'")
+            .replace("'s ", " ")
+            .replace("s' ", " ")
+            .replace('\'', r"\'")
+            .replace(['"', '`', '‘', '’', '–', '[', ']'], "")
+            .as_str(),
+    ))
+}
+
+pub async fn truncate_string(input: String) -> Result<String> {
+    let mut words: Vec<&str> = input.split_whitespace().collect();
+    while words.join(" ").len() > 130 {
+        words.pop();
+    }
+    if words.len() < input.len() {
+        words.push("...");
+    }
+    Ok(words.join(" "))
 }
 
 async fn get_flashgeotext_regions(text: &String) -> Result<Vec<&'static str>> {
@@ -79,12 +110,7 @@ async fn get_flashgeotext_regions(text: &String) -> Result<Vec<&'static str>> {
     .output()?;
 
     let output = from_utf8(&regions.stdout)?;
-    if output.is_empty() {
-        tracing::error!("Flashgeotext error from body: {}", text);
-        return Ok(Vec::new());
-    }
-
-    if output == "[]\n" {
+    if output.is_empty() || output == "[]\n" {
         return Ok(Vec::new());
     }
 

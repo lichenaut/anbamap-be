@@ -1,5 +1,5 @@
 use crate::prelude::*;
-use crate::scrape::util::get_regions;
+use crate::scrape::util::{get_regions, look_between, strip_content, truncate_string};
 use crate::service::var_service::get_substack_urls;
 
 pub async fn scrape_substack(media: &mut Vec<(String, String, String, Vec<String>)>) -> Result<()> {
@@ -12,7 +12,6 @@ pub async fn scrape_substack(media: &mut Vec<(String, String, String, Vec<String
         .split(',')
         .filter(|&s| !s.is_empty())
         .collect::<Vec<&str>>();
-
     for substack_url in substack_urls {
         media.extend(scrape_substack_archive(substack_url).await?);
     }
@@ -32,80 +31,72 @@ pub async fn scrape_substack_archive(
 
     let mut response: String = response.text().await?;
     response = match look_between(
-        response,
-        "<div class=\"portable-archive-list\">",
-        "<div class=\"footer-wrap publication-footer\">",
-    ) {
+        &response,
+        "<div class=\"portable-archive-list\">".to_string(),
+        "<div class=\"footer-wrap publication-footer\">".to_string(),
+    )
+    .await?
+    {
         Some(response) => response,
         None => return Ok(letters),
     };
 
-    let now: String = chrono::Utc::now().format("%Y-%m-%d").to_string();
+    let today: String = chrono::Utc::now().format("%Y-%m-%d").to_string();
     let items: Vec<&str> = response
         .split("<div class=\"pencraft pc-display-flex pc-flexDirection-column pc-reset")
         .skip(1)
         .collect::<Vec<&str>>();
     for chunk in items.chunks(3) {
-        let second = match chunk.get(1) {
-            Some(second) => second,
+        let second: String = match chunk.get(1) {
+            Some(second) => second.to_string(),
             None => continue,
         };
 
-        let date_time: String = match look_between(second, "dateTime=\"", "\"") {
-            Some(date_time) => date_time.chars().take(10).collect::<String>(),
-            None => continue,
-        };
+        let date_time: String =
+            match look_between(&second, "dateTime=\"".to_string(), "\"".to_string()).await? {
+                Some(date_time) => date_time.chars().take(10).collect::<String>(),
+                None => continue,
+            };
 
-        if date_time != now {
-            continue;
+        if date_time != today {
+            break;
         }
 
-        let mut intermediate = match second.splitn(2, '>').last() {
-            Some(intermediate) => intermediate,
+        let mut intermediate: String = match second.splitn(2, '>').last() {
+            Some(intermediate) => intermediate.to_string(),
             None => continue,
         };
 
-        let body: String = match look_between(intermediate, ">", "<") {
-            Some(body) => body,
+        let body: String =
+            match look_between(&intermediate, ">".to_string(), "<".to_string()).await? {
+                Some(body) => truncate_string(strip_content(body).await?).await?,
+                None => continue,
+            };
+
+        let first: String = match chunk.first() {
+            Some(first) => first.to_string(),
             None => continue,
         };
 
-        let first = match chunk.first() {
-            Some(first) => first,
-            None => continue,
-        };
-
-        let url = match look_between(first, "href=\"", "\"") {
-            Some(url) => url,
-            None => continue,
-        };
+        let url: String =
+            match look_between(&first, "href=\"".to_string(), "\"".to_string()).await? {
+                Some(url) => url,
+                None => continue,
+            };
 
         intermediate = match first.splitn(2, '>').last() {
-            Some(intermediate) => intermediate,
+            Some(intermediate) => intermediate.to_string(),
             None => continue,
         };
 
-        let title = match look_between(intermediate, ">", "<") {
-            Some(title) => title,
+        let title = match look_between(&intermediate, ">".to_string(), "<".to_string()).await? {
+            Some(title) => strip_content(title).await?,
             None => continue,
         };
 
         let regions = get_regions(&[&title, &body]).await?;
-        letters.push((
-            url,
-            title.replace("&#39;", r"'").replace("&amp;", "&"),
-            body.replace("&#39;", r"'").replace("&amp;", "&"),
-            regions,
-        ));
+        letters.push((url, title, body, regions));
     }
 
     Ok(letters)
-}
-
-fn look_between<T: ToString>(text: T, this: &str, that: &str) -> Option<String> {
-    let text = text.to_string();
-    match text.splitn(2, this).last() {
-        Some(text) => text.split(that).next().map(|text| text.to_string()),
-        None => None,
-    }
 }

@@ -1,5 +1,5 @@
 use crate::prelude::*;
-use crate::scrape::util::get_regions;
+use crate::scrape::util::{get_regions, strip_content, truncate_string};
 use crate::service::var_service::{get_youtube_api_key, get_youtube_channel_ids};
 use chrono::Utc;
 use serde_json::Value;
@@ -43,7 +43,7 @@ pub async fn scrape_youtube_channel(
     }
 
     let json: Value = response.json().await?;
-    let today = Utc::now();
+    let today: String = Utc::now().format("%Y-%m-%d").to_string();
     let Some(items) = json["items"].as_array() else {
         return Ok(videos);
     };
@@ -57,9 +57,8 @@ pub async fn scrape_youtube_channel(
             continue;
         };
 
-        if published_at.chars().take(10).collect::<String>() != today.format("%Y-%m-%d").to_string()
-        {
-            continue;
+        if published_at.chars().take(10).collect::<String>() != today {
+            break;
         }
 
         let id = item["id"]["videoId"].as_str();
@@ -69,22 +68,17 @@ pub async fn scrape_youtube_channel(
         };
 
         let title = match snippet["title"].as_str() {
-            Some(title) => title.to_string(),
+            Some(title) => strip_content(title).await?,
             None => continue,
         };
 
         let body = match snippet["description"].as_str() {
-            Some(body) => body.to_string(),
+            Some(body) => truncate_string(strip_content(body).await?).await?,
             None => continue,
         };
 
         let regions = get_regions(&[&title, &body]).await?;
-        videos.push((
-            url,
-            title.replace("&#39;", r"'").replace("&amp;", "&"),
-            body.replace("&#39;", r"'").replace("&amp;", "&"),
-            regions,
-        ));
+        videos.push((url, title, body, regions));
     }
 
     Ok(videos)

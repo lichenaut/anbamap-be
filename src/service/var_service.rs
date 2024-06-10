@@ -20,6 +20,45 @@ pub async fn get_docker_volume() -> Result<String> {
     }
 }
 
+pub async fn is_accuracy_enabled() -> Result<bool> {
+    match var("ACCURACY_ENABLED") {
+        Ok(enabled) => match enabled.is_empty() {
+            true => {
+                tracing::info!("ACCURACY_ENABLED is empty");
+                Ok(false)
+            }
+            false => match enabled.parse::<bool>() {
+                Ok(enabled) => Ok(enabled),
+                Err(e) => {
+                    let err = format!("Failed to parse ACCURACY_ENABLED: {}", e);
+                    tracing::error!(err);
+                    Err(anyhow!(err))
+                }
+            },
+        },
+        Err(e) => {
+            tracing::info!("ACCURACY_ENABLED not found in environment: {}", e);
+            Ok(false)
+        }
+    }
+}
+
+pub async fn get_substack_urls() -> Result<Option<String>> {
+    match var("SUBSTACK_URLS") {
+        Ok(urls) => match urls.is_empty() {
+            true => {
+                tracing::info!("SUBSTACK_URLS is empty");
+                Ok(None)
+            }
+            false => Ok(Some(urls)),
+        },
+        Err(e) => {
+            tracing::info!("SUBSTACK_URLS not found in environment: {}", e);
+            Ok(None)
+        }
+    }
+}
+
 pub async fn get_youtube_api_key() -> Result<Option<String>> {
     match var("YOUTUBE_API_KEY") {
         Ok(api_key) => match api_key.is_empty() {
@@ -47,22 +86,6 @@ pub async fn get_youtube_channel_ids() -> Result<Option<String>> {
         },
         Err(e) => {
             tracing::info!("YOUTUBE_CHANNEL_IDS not found in environment: {}", e);
-            Ok(None)
-        }
-    }
-}
-
-pub async fn get_substack_urls() -> Result<Option<String>> {
-    match var("SUBSTACK_URLS") {
-        Ok(urls) => match urls.is_empty() {
-            true => {
-                tracing::info!("SUBSTACK_URLS is empty");
-                Ok(None)
-            }
-            false => Ok(Some(urls)),
-        },
-        Err(e) => {
-            tracing::info!("SUBSTACK_URLS not found in environment: {}", e);
             Ok(None)
         }
     }
