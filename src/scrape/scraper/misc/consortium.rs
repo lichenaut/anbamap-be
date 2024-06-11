@@ -85,9 +85,8 @@ pub async fn scrape_consortium_posts(
             None => continue,
         };
 
-        let tags: String = match look_between(&response, "category".to_string(), "\"".to_string())?
-        {
-            Some(response) => response
+        let tags: String = match look_between(item, "category".to_string(), "\"".to_string())? {
+            Some(tags) => tags
                 .replace('-', " ")
                 .replace("category", "")
                 .replace("tag", ""),
