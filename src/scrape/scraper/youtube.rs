@@ -68,21 +68,21 @@ pub async fn scrape_youtube_channel(
         }
 
         let id = item["id"]["videoId"].as_str();
-        let url = match id {
+        let url: String = match id {
             Some(id) => format!("https://www.youtube.com/watch?v={}", id),
             None => continue,
         };
 
         if url_exists(pool, &url).await? {
-            continue;
+            break;
         }
 
-        let title = match snippet["title"].as_str() {
+        let title: String = match snippet["title"].as_str() {
             Some(title) => strip_html(title).await?,
             None => continue,
         };
 
-        let body = match snippet["description"].as_str() {
+        let body: String = match snippet["description"].as_str() {
             Some(body) => truncate_string(strip_html(body).await?).await?,
             None => continue,
         };

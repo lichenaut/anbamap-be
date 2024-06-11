@@ -82,10 +82,10 @@ pub async fn scrape_antiwar_features(
         };
 
         if url_exists(pool, &url).await? {
-            continue;
+            break;
         }
 
-        let title = match look_between(item, ">".to_string(), "<".to_string()).await? {
+        let title: String = match look_between(item, ">".to_string(), "<".to_string()).await? {
             Some(title) => strip_html(title).await?,
             None => continue,
         };

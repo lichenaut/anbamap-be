@@ -1,6 +1,5 @@
-use sqlx::SqlitePool;
-
 use crate::prelude::*;
+use sqlx::SqlitePool;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 pub async fn update_media_db(
@@ -17,6 +16,10 @@ pub async fn update_media_db(
         .await?;
 
     for (url, title, body, regions) in &media {
+        if url.is_empty() || title.is_empty() || body.is_empty() || regions.is_empty() {
+            continue;
+        }
+
         sqlx::query("INSERT OR IGNORE INTO urls (url, timestamp, title, body) VALUES (?, ?, ?, ?)")
             .bind(url)
             .bind(now)

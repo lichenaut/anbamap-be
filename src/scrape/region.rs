@@ -1017,6 +1017,10 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                     "sany industry",
                     "beigene",
                     "longi ",
+                    "longi, ",
+                    "longi.",
+                    "longi'",
+                    "longi\"",
                     "seres group",
                     "anhui conch",
                     "zte",
@@ -4703,6 +4707,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         "south island",
         "west island",
         "centre island",
+        "banan",
         "erode",
         "georgia",
         "georgetown",
@@ -4714,6 +4719,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         "reading",
         "saint john's",
         "salem",
+        "smic",
         "st. john's",
     ]
     .into_par_iter()

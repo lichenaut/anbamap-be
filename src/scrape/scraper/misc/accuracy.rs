@@ -70,13 +70,14 @@ pub async fn scrape_accuracy_releases(
             };
 
         if url_exists(pool, &url).await? {
-            continue;
+            break;
         }
 
-        let title = match look_between(item, "title=\"".to_string(), "\"".to_string()).await? {
-            Some(title) => strip_html(title).await?.replace("Permanent Link to ", ""),
-            None => continue,
-        };
+        let title: String =
+            match look_between(item, "title=\"".to_string(), "\"".to_string()).await? {
+                Some(title) => strip_html(title).await?.replace("Permanent Link to ", ""),
+                None => continue,
+            };
 
         let body: String =
             match look_between(item, "</div></div>".to_string(), "</p>".to_string()).await? {

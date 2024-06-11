@@ -81,7 +81,7 @@ pub async fn scrape_substack_archive(
             };
 
         if url_exists(pool, &url).await? {
-            continue;
+            break;
         }
 
         let mut intermediate: String = match first.splitn(2, '>').last() {

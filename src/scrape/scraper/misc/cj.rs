@@ -69,10 +69,10 @@ pub async fn scrape_cj_resources(
         };
 
         if url_exists(pool, &url).await? {
-            continue;
+            break;
         }
 
-        let title =
+        let title: String =
             match look_between(item, "target=\"_self\" >".to_string(), "<".to_string()).await? {
                 Some(title) => strip_html(title).await?,
                 None => continue,

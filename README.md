@@ -80,5 +80,6 @@ The first run will take a few minutes to set up files.
 | `AMNESTY_B`           | `boolean` value for [https://www.amnestyusa.org/news/](https://www.amnestyusa.org/news/)                                   | Optional  |
 | `ANTIWAR_B`           | `boolean` value for [https://www.antiwar.com/latest.php](https://www.antiwar.com/latest.php)                               | Optional  |
 | `CJ_B`                | `boolean` value for [https://caitlinjohnstone.com.au/category/article/](https://caitlinjohnstone.com.au/category/article/) | Optional  |
+| `CONSORTIUM_B`        | `boolean` value for [https://consortiumnews.com/yyyy/mm/dd/](https://consortiumnews.com/yyyy/mm/dd/)                       | Optional  |
 | `YOUTUBE_API_KEY`     | Your Youtube Data API key.                                                                                                 | Optional  |
 | `YOUTUBE_CHANNEL_IDS` | Comma-separated Youtube channel IDs.                                                                                       | Optional  |

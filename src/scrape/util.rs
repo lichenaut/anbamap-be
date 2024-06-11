@@ -35,6 +35,7 @@ pub(super) async fn get_regions(text: &[&str]) -> Result<Vec<String>> {
 
             for keyphrase in keyphrases.iter() {
                 if text.contains(keyphrase) {
+                    //println!("{}: {}", keyphrase, region);
                     identified_regions_locked.push(region);
                     break;
                 }
@@ -57,6 +58,9 @@ pub(super) async fn get_regions(text: &[&str]) -> Result<Vec<String>> {
     }
     if text.contains("mexico") && !text.contains("new mexico") && !regions.contains(&"mx") {
         regions.push("mx");
+    }
+    if text.contains("sudan") && !text.contains("south sudan") && !regions.contains(&"sd") {
+        regions.push("sd");
     }
     if regions.is_empty() {
         regions.push("us");

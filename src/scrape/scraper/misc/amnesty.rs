@@ -72,10 +72,10 @@ pub async fn scrape_amnesty_resources(
         };
 
         if url_exists(pool, &url).await? {
-            continue;
+            break;
         }
 
-        let title = match look_between(
+        let title: String = match look_between(
             item,
             "<h3 class=\"utility-md\">".to_string(),
             "<".to_string(),

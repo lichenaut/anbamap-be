@@ -10,6 +10,7 @@ mod scrape {
             pub mod amnesty;
             pub mod antiwar;
             pub mod cj;
+            pub mod consortium;
         }
         pub mod forbes400;
         pub mod substack;
