@@ -16,7 +16,7 @@ pub async fn run_scrapers(docker_volume: &str) -> Result<()> {
     let mut media = Vec::new();
     scrape_accuracy(&pool, &mut media).await?;
     scrape_amnesty(&pool, &mut media).await?;
-    scrape_antiwar(&pool, &mut media).await?;
+    scrape_antiwar(&pool, docker_volume, &mut media).await?;
     scrape_substack(&pool, &mut media).await?;
     scrape_youtube(&pool, &mut media).await?;
     update_media_db(&pool, media).await?;

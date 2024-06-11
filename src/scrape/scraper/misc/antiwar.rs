@@ -8,12 +8,13 @@ use crate::prelude::*;
 use crate::scrape::util::{
     get_base_url, get_regions, look_between, strip_content, truncate_string,
 };
-use crate::service::var_service::{get_docker_volume, is_source_enabled};
+use crate::service::var_service::is_source_enabled;
 use chrono::Local;
 use sqlx::SqlitePool;
 
 pub async fn scrape_antiwar(
     pool: &SqlitePool,
+    docker_volume: &str,
     media: &mut Vec<(String, String, String, Vec<String>)>,
 ) -> Result<()> {
     let antiwar_enabled: bool = is_source_enabled("ANTIWAR_B").await?;
@@ -21,7 +22,9 @@ pub async fn scrape_antiwar(
         return Ok(());
     }
 
-    media.extend(scrape_antiwar_features(pool, "https://www.antiwar.com/latest.php").await?);
+    media.extend(
+        scrape_antiwar_features(pool, docker_volume, "https://www.antiwar.com/latest.php").await?,
+    );
 
     Ok(())
 }
@@ -29,6 +32,7 @@ pub async fn scrape_antiwar(
 #[allow(unused_assignments)]
 pub async fn scrape_antiwar_features(
     pool: &SqlitePool,
+    docker_volume: &str,
     url: &str,
 ) -> Result<Vec<(String, String, String, Vec<String>)>> {
     let mut features: Vec<(String, String, String, Vec<String>)> = Vec::new();
@@ -115,7 +119,6 @@ pub async fn scrape_antiwar_features(
                 },
             );
         } else {
-            let docker_volume = get_docker_volume().await?;
             let output = Command::new(format!("{}/p3venv/bin/python", docker_volume))
             .arg("-c")
             .arg(format!(
