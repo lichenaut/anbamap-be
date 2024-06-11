@@ -73,10 +73,12 @@ The first run will take a few minutes to set up files.
 
 ## Environment Variables
 
-| Environment Variable  | Description                                                                                    | Necessity |
-| --------------------- | ---------------------------------------------------------------------------------------------- | --------- |
-| `DOCKER_VOLUME`       | Arbitrarily-valued path.                                                                       | Mandatory |
-| `ACCURACY_B`          | `boolean` value for [https://accuracy.org/news-releases/](https://accuracy.org/news-releases/) | Optional  |
-| `AMNESTY_B`           | `boolean` value for [https://www.amnestyusa.org/news/](https://www.amnestyusa.org/news/)       | Optional  |
-| `YOUTUBE_API_KEY`     | Your Youtube Data API key.                                                                     | Optional  |
-| `YOUTUBE_CHANNEL_IDS` | Comma-separated Youtube channel IDs.                                                           | Optional  |
+| Environment Variable  | Description                                                                                                                | Necessity |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------- | --------- |
+| `DOCKER_VOLUME`       | Arbitrarily-valued path.                                                                                                   | Mandatory |
+| `ACCURACY_B`          | `boolean` value for [https://accuracy.org/news-releases/](https://accuracy.org/news-releases/)                             | Optional  |
+| `AMNESTY_B`           | `boolean` value for [https://www.amnestyusa.org/news/](https://www.amnestyusa.org/news/)                                   | Optional  |
+| `ANTIWAR_B`           | `boolean` value for [https://www.antiwar.com/latest.php](https://www.antiwar.com/latest.php)                               | Optional  |
+| `CJ_B`                | `boolean` value for [https://caitlinjohnstone.com.au/category/article/](https://caitlinjohnstone.com.au/category/article/) | Optional  |
+| `YOUTUBE_API_KEY`     | Your Youtube Data API key.                                                                                                 | Optional  |
+| `YOUTUBE_CHANNEL_IDS` | Comma-separated Youtube channel IDs.                                                                                       | Optional  |
