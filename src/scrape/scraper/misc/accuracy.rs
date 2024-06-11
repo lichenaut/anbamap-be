@@ -1,9 +1,10 @@
 use crate::prelude::*;
 use crate::scrape::util::{get_regions, look_between, strip_content, truncate_string};
-use crate::service::var_service::is_accuracy_enabled;
+use crate::service::var_service::is_source_enabled;
+use chrono::Local;
 
 pub async fn scrape_accuracy(media: &mut Vec<(String, String, String, Vec<String>)>) -> Result<()> {
-    let accuracy_enabled: bool = is_accuracy_enabled().await?;
+    let accuracy_enabled: bool = is_source_enabled("ACCURACY_B").await?;
     if !accuracy_enabled {
         return Ok(());
     }
@@ -35,7 +36,7 @@ pub async fn scrape_accuracy_releases(
         None => return Ok(releases),
     };
 
-    let today: String = chrono::Utc::now().format("%Y-%m-%d").to_string();
+    let today: String = Local::now().format("%Y-%m-%d").to_string();
     let items: Vec<&str> = response
         .split("<div class=\"post list_container\">")
         .skip(1)

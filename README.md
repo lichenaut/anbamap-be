@@ -73,9 +73,10 @@ The first run will take a few minutes to set up files.
 
 ## Environment Variables
 
-| Environment Variable  | Description                                                                                    | Necessity |
-| --------------------- | ---------------------------------------------------------------------------------------------- | --------- |
-| `DOCKER_VOLUME`       | Arbitrarily-valued path.                                                                       | Mandatory |
-| `ACCURACY_ENABLED`    | `boolean` value for [https://accuracy.org/news-releases/](https://accuracy.org/news-releases/) | Optional  |
-| `YOUTUBE_API_KEY`     | Your Youtube Data API key.                                                                     | Optional  |
-| `YOUTUBE_CHANNEL_IDS` | Comma-separated Youtube channel IDs.                                                           | Optional  |
+| Environment Variable  | Description                                                                                            | Necessity |
+| --------------------- | ------------------------------------------------------------------------------------------------------ | --------- |
+| `DOCKER_VOLUME`       | Arbitrarily-valued path.                                                                               | Mandatory |
+| `ACCURACY_B`          | `boolean` value for [https://accuracy.org/news-releases/](https://accuracy.org/news-releases/)         | Optional  |
+| `AMNESTY_B`           | `boolean` value for [https://www.amnesty.org/en/latest/news/](https://www.amnesty.org/en/latest/news/) | Optional  |
+| `YOUTUBE_API_KEY`     | Your Youtube Data API key.                                                                             | Optional  |
+| `YOUTUBE_CHANNEL_IDS` | Comma-separated Youtube channel IDs.                                                                   | Optional  |

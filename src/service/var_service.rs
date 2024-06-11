@@ -20,24 +20,24 @@ pub async fn get_docker_volume() -> Result<String> {
     }
 }
 
-pub async fn is_accuracy_enabled() -> Result<bool> {
-    match var("ACCURACY_ENABLED") {
+pub async fn is_source_enabled(key: &str) -> Result<bool> {
+    match var(key) {
         Ok(enabled) => match enabled.is_empty() {
             true => {
-                tracing::info!("ACCURACY_ENABLED is empty");
+                tracing::info!("{key} is empty");
                 Ok(false)
             }
             false => match enabled.parse::<bool>() {
                 Ok(enabled) => Ok(enabled),
                 Err(e) => {
-                    let err = format!("Failed to parse ACCURACY_ENABLED: {}", e);
+                    let err = format!("Failed to parse {key}: {e}");
                     tracing::error!(err);
                     Err(anyhow!(err))
                 }
             },
         },
         Err(e) => {
-            tracing::info!("ACCURACY_ENABLED not found in environment: {}", e);
+            tracing::info!("{key} not found in environment: {e}");
             Ok(false)
         }
     }
@@ -53,7 +53,7 @@ pub async fn get_substack_urls() -> Result<Option<String>> {
             false => Ok(Some(urls)),
         },
         Err(e) => {
-            tracing::info!("SUBSTACK_URLS not found in environment: {}", e);
+            tracing::info!("SUBSTACK_URLS not found in environment: {e}");
             Ok(None)
         }
     }
@@ -69,7 +69,7 @@ pub async fn get_youtube_api_key() -> Result<Option<String>> {
             false => Ok(Some(api_key)),
         },
         Err(e) => {
-            tracing::info!("YOUTUBE_API_KEY not found in environment: {}", e);
+            tracing::info!("YOUTUBE_API_KEY not found in environment: {e}");
             Ok(None)
         }
     }
@@ -85,7 +85,7 @@ pub async fn get_youtube_channel_ids() -> Result<Option<String>> {
             false => Ok(Some(channel_ids)),
         },
         Err(e) => {
-            tracing::info!("YOUTUBE_CHANNEL_IDS not found in environment: {}", e);
+            tracing::info!("YOUTUBE_CHANNEL_IDS not found in environment: {e}");
             Ok(None)
         }
     }

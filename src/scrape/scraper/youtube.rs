@@ -1,7 +1,7 @@
 use crate::prelude::*;
 use crate::scrape::util::{get_regions, strip_content, truncate_string};
 use crate::service::var_service::{get_youtube_api_key, get_youtube_channel_ids};
-use chrono::Utc;
+use chrono::Local;
 use serde_json::Value;
 
 pub async fn scrape_youtube(media: &mut Vec<(String, String, String, Vec<String>)>) -> Result<()> {
@@ -43,7 +43,7 @@ pub async fn scrape_youtube_channel(
     }
 
     let json: Value = response.json().await?;
-    let today: String = Utc::now().format("%Y-%m-%d").to_string();
+    let today: String = Local::now().format("%Y-%m-%d").to_string();
     let Some(items) = json["items"].as_array() else {
         return Ok(videos);
     };
