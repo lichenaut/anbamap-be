@@ -1,10 +1,15 @@
+use crate::db::util::url_exists;
 use crate::prelude::*;
 use crate::scrape::util::{get_regions, strip_content, truncate_string};
 use crate::service::var_service::{get_youtube_api_key, get_youtube_channel_ids};
 use chrono::Local;
 use serde_json::Value;
+use sqlx::SqlitePool;
 
-pub async fn scrape_youtube(media: &mut Vec<(String, String, String, Vec<String>)>) -> Result<()> {
+pub async fn scrape_youtube(
+    pool: &SqlitePool,
+    media: &mut Vec<(String, String, String, Vec<String>)>,
+) -> Result<()> {
     let youtube_api_key = match get_youtube_api_key().await? {
         Some(api_key) => api_key,
         None => return Ok(()),
@@ -20,13 +25,14 @@ pub async fn scrape_youtube(media: &mut Vec<(String, String, String, Vec<String>
         .filter(|&s| !s.is_empty())
         .collect::<Vec<&str>>();
     for youtube_channel_id in youtube_channel_ids {
-        media.extend(scrape_youtube_channel(&youtube_api_key, youtube_channel_id).await?);
+        media.extend(scrape_youtube_channel(pool, &youtube_api_key, youtube_channel_id).await?);
     }
 
     Ok(())
 }
 
 pub async fn scrape_youtube_channel(
+    pool: &SqlitePool,
     api_key: &str,
     channel_id: &str,
 ) -> Result<Vec<(String, String, String, Vec<String>)>> {
@@ -66,6 +72,10 @@ pub async fn scrape_youtube_channel(
             Some(id) => format!("https://www.youtube.com/watch?v={}", id),
             None => continue,
         };
+
+        if url_exists(pool, &url).await? {
+            continue;
+        }
 
         let title = match snippet["title"].as_str() {
             Some(title) => strip_content(title).await?,

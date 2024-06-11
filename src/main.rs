@@ -8,6 +8,7 @@ mod scrape {
         pub mod misc {
             pub mod accuracy;
             pub mod amnesty;
+            pub mod antiwar;
         }
         pub mod forbes400;
         pub mod substack;

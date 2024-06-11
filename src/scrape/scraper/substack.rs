@@ -1,9 +1,14 @@
+use crate::db::util::url_exists;
 use crate::prelude::*;
 use crate::scrape::util::{get_regions, look_between, strip_content, truncate_string};
 use crate::service::var_service::get_substack_urls;
 use chrono::Local;
+use sqlx::SqlitePool;
 
-pub async fn scrape_substack(media: &mut Vec<(String, String, String, Vec<String>)>) -> Result<()> {
+pub async fn scrape_substack(
+    pool: &SqlitePool,
+    media: &mut Vec<(String, String, String, Vec<String>)>,
+) -> Result<()> {
     let substack_urls = match get_substack_urls().await? {
         Some(urls) => urls,
         None => return Ok(()),
@@ -14,13 +19,14 @@ pub async fn scrape_substack(media: &mut Vec<(String, String, String, Vec<String
         .filter(|&s| !s.is_empty())
         .collect::<Vec<&str>>();
     for substack_url in substack_urls {
-        media.extend(scrape_substack_archive(substack_url).await?);
+        media.extend(scrape_substack_archive(pool, substack_url).await?);
     }
 
     Ok(())
 }
 
 pub async fn scrape_substack_archive(
+    pool: &SqlitePool,
     url: &str,
 ) -> Result<Vec<(String, String, String, Vec<String>)>> {
     let mut letters: Vec<(String, String, String, Vec<String>)> = Vec::new();
@@ -63,17 +69,6 @@ pub async fn scrape_substack_archive(
             break;
         }
 
-        let mut intermediate: String = match second.splitn(2, '>').last() {
-            Some(intermediate) => intermediate.to_string(),
-            None => continue,
-        };
-
-        let body: String =
-            match look_between(&intermediate, ">".to_string(), "<".to_string()).await? {
-                Some(body) => truncate_string(strip_content(body).await?).await?,
-                None => continue,
-            };
-
         let first: String = match chunk.first() {
             Some(first) => first.to_string(),
             None => continue,
@@ -85,7 +80,11 @@ pub async fn scrape_substack_archive(
                 None => continue,
             };
 
-        intermediate = match first.splitn(2, '>').last() {
+        if url_exists(pool, &url).await? {
+            continue;
+        }
+
+        let mut intermediate: String = match first.splitn(2, '>').last() {
             Some(intermediate) => intermediate.to_string(),
             None => continue,
         };
@@ -95,6 +94,16 @@ pub async fn scrape_substack_archive(
             None => continue,
         };
 
+        intermediate = match second.splitn(2, '>').last() {
+            Some(intermediate) => intermediate.to_string(),
+            None => continue,
+        };
+
+        let body: String =
+            match look_between(&intermediate, ">".to_string(), "<".to_string()).await? {
+                Some(body) => truncate_string(strip_content(body).await?).await?,
+                None => continue,
+            };
         let regions = get_regions(&[&title, &body]).await?;
         letters.push((url, title, body, regions));
     }

@@ -1,20 +1,26 @@
+use crate::db::util::url_exists;
 use crate::prelude::*;
 use crate::scrape::util::{get_regions, look_between, strip_content, truncate_string};
 use crate::service::var_service::is_source_enabled;
 use chrono::Local;
+use sqlx::SqlitePool;
 
-pub async fn scrape_amnesty(media: &mut Vec<(String, String, String, Vec<String>)>) -> Result<()> {
+pub async fn scrape_amnesty(
+    pool: &SqlitePool,
+    media: &mut Vec<(String, String, String, Vec<String>)>,
+) -> Result<()> {
     let amnesty_enabled: bool = is_source_enabled("AMNESTY_B").await?;
     if !amnesty_enabled {
         return Ok(());
     }
 
-    media.extend(scrape_amnesty_resources("https://www.amnestyusa.org/news/").await?);
+    media.extend(scrape_amnesty_resources(pool, "https://www.amnestyusa.org/news/").await?);
 
     Ok(())
 }
 
 pub async fn scrape_amnesty_resources(
+    pool: &SqlitePool,
     url: &str,
 ) -> Result<Vec<(String, String, String, Vec<String>)>> {
     let mut resources: Vec<(String, String, String, Vec<String>)> = Vec::new();
@@ -64,6 +70,10 @@ pub async fn scrape_amnesty_resources(
             Some(url) => url,
             None => continue,
         };
+
+        if url_exists(pool, &url).await? {
+            continue;
+        }
 
         let title = match look_between(
             item,

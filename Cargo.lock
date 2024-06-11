@@ -66,6 +66,7 @@ dependencies = [
  "tracing",
  "tracing-subscriber",
  "unidecode",
+ "url",
  "wikitext_table_parser",
 ]
 

@@ -1,5 +1,5 @@
 use crate::prelude::*;
-use sqlx::{sqlite::SqliteConnectOptions, SqlitePool};
+use sqlx::{sqlite::SqliteConnectOptions, Executor, Row, SqlitePool};
 use std::path::Path;
 
 pub async fn get_db_pool(db_path: &Path) -> Result<SqlitePool> {
@@ -12,4 +12,39 @@ pub async fn get_db_pool(db_path: &Path) -> Result<SqlitePool> {
             .synchronous(sqlx::sqlite::SqliteSynchronous::Normal),
     )
     .await?)
+}
+
+pub async fn create_media_db(pool: &SqlitePool) -> Result<()> {
+    pool.execute(
+        "CREATE TABLE IF NOT EXISTS urls (
+            url TEXT PRIMARY KEY,
+            timestamp INTEGER,
+            title TEXT,
+            body TEXT
+        )",
+    )
+    .await?;
+    pool.execute(
+        "CREATE TABLE IF NOT EXISTS url_regions (
+            url TEXT,
+            region_code TEXT,
+            PRIMARY KEY (url, region_code),
+            FOREIGN KEY (url) REFERENCES urls (url)
+        )",
+    )
+    .await?;
+
+    Ok(())
+}
+
+pub async fn url_exists(pool: &SqlitePool, url: &str) -> Result<bool> {
+    let row = sqlx::query("SELECT EXISTS(SELECT 1 FROM urls WHERE url = ?)")
+        .bind(url)
+        .fetch_one(pool)
+        .await?;
+
+    match row.try_get::<bool, _>(0) {
+        Ok(exists) => Ok(exists),
+        Err(e) => Err(e.into()),
+    }
 }

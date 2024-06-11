@@ -8,12 +8,13 @@ use std::{
     sync::{Arc, Mutex},
 };
 use unidecode::unidecode;
+use url::Url;
 
 pub(super) async fn get_regions(text: &[&str]) -> Result<Vec<String>> {
     let text = text.join(" ");
     let identified_regions = get_flashgeotext_regions(&text).await?;
 
-    let text = &text.replace(r"\'", "'").to_lowercase();
+    let text = &text.replace("\\'", "'").to_lowercase(); //TODO check for correct behavior
     let identified_regions = Arc::new(Mutex::new(identified_regions));
     KEYPHRASE_REGION_MAP
         .par_iter()
@@ -99,16 +100,24 @@ pub async fn truncate_string(input: String) -> Result<String> {
     Ok(words.join(" "))
 }
 
-async fn get_flashgeotext_regions(text: &String) -> Result<Vec<&'static str>> {
+pub async fn get_base_url(url: &str) -> Result<String> {
+    let parsed_url = Url::parse(url)?;
+    Ok(format!(
+        "{}://{}",
+        parsed_url.scheme(),
+        parsed_url.host_str().unwrap_or("")
+    ))
+}
+
+async fn get_flashgeotext_regions(text: &str) -> Result<Vec<&'static str>> {
     let docker_volume = get_docker_volume().await?;
     let regions = Command::new(format!("{}/p3venv/bin/python", docker_volume))
-    .arg("-c")
-    .arg(format!(
-        "import sys; sys.path.append('{}'); from media_to_regions import get_regions; print(get_regions('{}'))",
-        docker_volume, text
-    ))
-    .output()?;
-
+        .arg("-c")
+        .arg(format!(
+            "import sys; sys.path.append('{}'); from media_to_regions import get_regions; print(get_regions('{}'))",
+            docker_volume, text
+        ))
+        .output()?;
     let output = from_utf8(&regions.stdout)?;
     if output.is_empty() || output == "[]\n" {
         return Ok(Vec::new());

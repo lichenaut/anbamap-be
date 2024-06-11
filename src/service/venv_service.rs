@@ -36,6 +36,17 @@ def get_regions(text):
     return regions",
     )?;
 
+    write(
+        format!("{}/url_to_body.py", docker_volume),
+        "from newspaper import Article
+
+def get_body(url):
+    article = Article(url)
+    article.download()
+    article.parse()
+    return article.text",
+    )?;
+
     Ok(())
 }
 
@@ -46,13 +57,15 @@ async fn update_flashgeotext(docker_volume: &str) -> Result<()> {
         .arg("install")
         .arg("--upgrade")
         .arg("flashgeotext")
+        .arg("newspaper3k")
+        .arg("lxml_html_clean")
         .output()?;
 
     if flashgeotext_update.status.success() {
         Ok(())
     } else {
         let err = format!(
-            "Failed to update flashgeotext: {:?}",
+            "Failed to update flashgeotext and newspaper3k: {:?}",
             flashgeotext_update.stderr
         );
         tracing::error!(err);

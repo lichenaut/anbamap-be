@@ -1,20 +1,26 @@
+use crate::db::util::url_exists;
 use crate::prelude::*;
 use crate::scrape::util::{get_regions, look_between, strip_content, truncate_string};
 use crate::service::var_service::is_source_enabled;
 use chrono::Local;
+use sqlx::SqlitePool;
 
-pub async fn scrape_accuracy(media: &mut Vec<(String, String, String, Vec<String>)>) -> Result<()> {
+pub async fn scrape_accuracy(
+    pool: &SqlitePool,
+    media: &mut Vec<(String, String, String, Vec<String>)>,
+) -> Result<()> {
     let accuracy_enabled: bool = is_source_enabled("ACCURACY_B").await?;
     if !accuracy_enabled {
         return Ok(());
     }
 
-    media.extend(scrape_accuracy_releases("https://accuracy.org/news-releases/").await?);
+    media.extend(scrape_accuracy_releases(pool, "https://accuracy.org/news-releases/").await?);
 
     Ok(())
 }
 
 pub async fn scrape_accuracy_releases(
+    pool: &SqlitePool,
     url: &str,
 ) -> Result<Vec<(String, String, String, Vec<String>)>> {
     let mut releases: Vec<(String, String, String, Vec<String>)> = Vec::new();
@@ -62,6 +68,10 @@ pub async fn scrape_accuracy_releases(
                 Some(url) => url,
                 None => continue,
             };
+
+        if url_exists(pool, &url).await? {
+            continue;
+        }
 
         let title = match look_between(item, "title=\"".to_string(), "\"".to_string()).await? {
             Some(title) => strip_content(title)
