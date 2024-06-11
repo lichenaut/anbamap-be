@@ -12,7 +12,7 @@ use unidecode::unidecode;
 use url::Url;
 
 pub(super) async fn get_regions(text: &[&str]) -> Result<Vec<String>> {
-    let text = strip_content(text.join(" ")).await?;
+    let text = strip_content(text.join(" "))?;
     let identified_regions = get_flashgeotext_regions(&text).await?;
 
     let text = &text.replace("\\'", "'").to_lowercase(); //TODO check for correct behavior
@@ -69,7 +69,7 @@ pub(super) async fn get_regions(text: &[&str]) -> Result<Vec<String>> {
     Ok(regions.iter().map(|s| s.to_string()).collect())
 }
 
-pub async fn get_base_url(url: &str) -> Result<String> {
+pub fn get_base_url(url: &str) -> Result<String> {
     let parsed_url = Url::parse(url)?;
     Ok(format!(
         "{}://{}",
@@ -78,27 +78,38 @@ pub async fn get_base_url(url: &str) -> Result<String> {
     ))
 }
 
-pub async fn look_between(text: &str, this: String, that: String) -> Result<Option<String>> {
+pub fn look_between(text: &str, this: String, that: String) -> Result<Option<String>> {
     match text.splitn(2, &this).last() {
         Some(text) => Ok(text.split(&that).next().map(|text| text.to_string())),
         None => Ok(None),
     }
 }
 
-pub async fn strip_html<T: ToString>(input: T) -> Result<String> {
-    let input = input.to_string();
-    Ok(Regex::new(r"<[^>]*>")?
-        .replace_all(&input, "")
-        .replace("&amp;", "&")
-        .replace("&nbsp;", " ")
-        .replace("&#39;", "'")
-        .replace("&#8220;", "\"")
-        .replace("&#8221;", "\"")
-        .replace("&#8217;", "'")
-        .to_string())
+pub fn strip_html<T: ToString>(input: T) -> Result<String> {
+    let mut replacements = HashMap::new();
+    replacements.insert("&amp;", "&");
+    replacements.insert("&nbsp;", " ");
+    replacements.insert("&#39;", "'");
+    replacements.insert("&#8220;", "\"");
+    replacements.insert("&#8221;", "\"");
+    replacements.insert("&#8217;", "'");
+
+    let input = Regex::new(r"<[^>]*>")?
+        .replace_all(&input.to_string(), "")
+        .to_string();
+    let mut result = String::with_capacity(input.len());
+    let chars = input.chars();
+    for ch in chars {
+        match replacements.get(&*ch.to_string()) {
+            Some(replacement) => result.push_str(replacement),
+            None => result.push(ch),
+        }
+    }
+
+    Ok(result)
 }
 
-pub async fn truncate_string(input: String) -> Result<String> {
+pub fn truncate_string(input: String) -> Result<String> {
     let mut words: Vec<&str> = input.split_whitespace().collect();
     while words.join(" ").len() > 130 {
         words.pop();
@@ -109,8 +120,7 @@ pub async fn truncate_string(input: String) -> Result<String> {
     Ok(words.join(" "))
 }
 
-async fn strip_content<T: ToString>(input: T) -> Result<String> {
-    let input = input.to_string();
+fn strip_content<T: ToString>(input: T) -> Result<String> {
     let mut replacements = HashMap::new();
     replacements.insert("\"", r"\'");
     replacements.insert("`", r"\'");
@@ -119,6 +129,7 @@ async fn strip_content<T: ToString>(input: T) -> Result<String> {
     replacements.insert("'", r"\'");
     replacements.insert("–", "");
 
+    let input = input.to_string();
     let mut result = String::with_capacity(input.len());
     let chars = input.chars();
     for ch in chars {
@@ -128,7 +139,7 @@ async fn strip_content<T: ToString>(input: T) -> Result<String> {
         }
     }
 
-    Ok(unidecode(result.as_str()))
+    Ok(unidecode(&result))
 }
 
 async fn get_flashgeotext_regions(text: &str) -> Result<Vec<&'static str>> {

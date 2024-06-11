@@ -47,9 +47,7 @@ pub async fn scrape_consortium_posts(
         &response,
         "<header id=\"archive-header\">".to_string(),
         "<div id=\"secondary\" class=\"c3 end\" role=\"complementary\">".to_string(),
-    )
-    .await?
-    {
+    )? {
         Some(response) => response,
         None => return Ok(posts),
     };
@@ -63,7 +61,7 @@ pub async fn scrape_consortium_posts(
     }
 
     for item in items {
-        let url: String = match look_between(item, "href=\"".to_string(), "\"".to_string()).await? {
+        let url: String = match look_between(item, "href=\"".to_string(), "\"".to_string())? {
             Some(url) => url,
             None => continue,
         };
@@ -73,8 +71,8 @@ pub async fn scrape_consortium_posts(
         }
 
         let title: String =
-            match look_between(item, "rel=\"bookmark\">".to_string(), "<".to_string()).await? {
-                Some(title) => strip_html(title).await?,
+            match look_between(item, "rel=\"bookmark\">".to_string(), "<".to_string())? {
+                Some(title) => strip_html(title)?,
                 None => continue,
             };
 
@@ -82,21 +80,19 @@ pub async fn scrape_consortium_posts(
             item,
             "decoding=\"async\" /></a><p>".to_string(),
             "<".to_string(),
-        )
-        .await?
-        {
-            Some(body) => truncate_string(strip_html(body).await?).await?,
+        )? {
+            Some(body) => truncate_string(strip_html(body)?)?,
             None => continue,
         };
 
-        let tags: String =
-            match look_between(&response, "category".to_string(), "\"".to_string()).await? {
-                Some(response) => response
-                    .replace('-', " ")
-                    .replace("category", "")
-                    .replace("tag", ""),
-                None => return Ok(posts),
-            };
+        let tags: String = match look_between(&response, "category".to_string(), "\"".to_string())?
+        {
+            Some(response) => response
+                .replace('-', " ")
+                .replace("category", "")
+                .replace("tag", ""),
+            None => return Ok(posts),
+        };
 
         let regions = get_regions(&[&title, &format!("{} {}", body, tags)]).await?;
         posts.push((url, title, body, regions));

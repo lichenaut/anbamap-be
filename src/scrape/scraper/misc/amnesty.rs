@@ -38,9 +38,7 @@ pub async fn scrape_amnesty_resources(
         &response,
         "<div class=\"ts-grid-col-3-outline\">".to_string(),
         "<div class=\"p-site xl:container\">".to_string(),
-    )
-    .await?
-    {
+    )? {
         Some(response) => response,
         None => return Ok(resources),
     };
@@ -55,9 +53,7 @@ pub async fn scrape_amnesty_resources(
             item,
             "<p class=\"card-md--tag--hocus utility-2xs mt-xs text-gray-300\">".to_string(),
             "<".to_string(),
-        )
-        .await?
-        {
+        )? {
             Some(date_time) => date_time,
             None => continue,
         };
@@ -66,7 +62,7 @@ pub async fn scrape_amnesty_resources(
             break;
         }
 
-        let url: String = match look_between(item, "href=\"".to_string(), "\"".to_string()).await? {
+        let url: String = match look_between(item, "href=\"".to_string(), "\"".to_string())? {
             Some(url) => url,
             None => continue,
         };
@@ -79,10 +75,8 @@ pub async fn scrape_amnesty_resources(
             item,
             "<h3 class=\"utility-md\">".to_string(),
             "<".to_string(),
-        )
-        .await?
-        {
-            Some(title) => strip_html(title.trim()).await?,
+        )? {
+            Some(title) => strip_html(title.trim())?,
             None => continue,
         };
 
@@ -90,10 +84,8 @@ pub async fn scrape_amnesty_resources(
             item,
             "<p class=\"body-xs mt-xs\">".to_string(),
             "<".to_string(),
-        )
-        .await?
-        {
-            Some(body) => truncate_string(strip_html(body).await?).await?,
+        )? {
+            Some(body) => truncate_string(strip_html(body)?)?,
             None => continue,
         };
 

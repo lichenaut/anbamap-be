@@ -35,9 +35,7 @@ pub async fn scrape_accuracy_releases(
         &response,
         "<div class=\"content-wrap\">".to_string(),
         "<p><a href=\"https://accuracy.org/news-releases/page/2/\" >".to_string(),
-    )
-    .await?
-    {
+    )? {
         Some(response) => response,
         None => return Ok(releases),
     };
@@ -52,9 +50,7 @@ pub async fn scrape_accuracy_releases(
             item,
             "<span class=\"date time published\" title=\"".to_string(),
             "T".to_string(),
-        )
-        .await?
-        {
+        )? {
             Some(date_time) => date_time,
             None => continue,
         };
@@ -63,27 +59,25 @@ pub async fn scrape_accuracy_releases(
             break;
         }
 
-        let url: String =
-            match look_between(item, "<a href=\"".to_string(), "\"".to_string()).await? {
-                Some(url) => url,
-                None => continue,
-            };
+        let url: String = match look_between(item, "<a href=\"".to_string(), "\"".to_string())? {
+            Some(url) => url,
+            None => continue,
+        };
 
         if url_exists(pool, &url).await? {
             break;
         }
 
-        let title: String =
-            match look_between(item, "title=\"".to_string(), "\"".to_string()).await? {
-                Some(title) => strip_html(title).await?.replace("Permanent Link to ", ""),
-                None => continue,
-            };
+        let title: String = match look_between(item, "title=\"".to_string(), "\"".to_string())? {
+            Some(title) => strip_html(title)?.replace("Permanent Link to ", ""),
+            None => continue,
+        };
 
-        let body: String =
-            match look_between(item, "</div></div>".to_string(), "</p>".to_string()).await? {
-                Some(body) => truncate_string(strip_html(body).await?).await?,
-                None => continue,
-            };
+        let body: String = match look_between(item, "</div></div>".to_string(), "</p>".to_string())?
+        {
+            Some(body) => truncate_string(strip_html(body)?)?,
+            None => continue,
+        };
 
         let regions = get_regions(&[&title, &body]).await?;
         releases.push((url, title, body, regions));

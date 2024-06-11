@@ -46,9 +46,7 @@ pub async fn scrape_antiwar_features(
         &response,
         "<div align=\"right\">Updated ".to_string(),
         " -".to_string(),
-    )
-    .await?
-    {
+    )? {
         Some(date) => date,
         None => return Ok(features),
     };
@@ -61,22 +59,20 @@ pub async fn scrape_antiwar_features(
         &response,
         "<tr><td colspan=\"2\"><h1>".to_string(),
         "<tr><td colspan=\"2\"><h1>".to_string(),
-    )
-    .await?
-    {
+    )? {
         Some(response) => response,
         None => return Ok(features),
     };
 
     let mut url_cache: Vec<String> = Vec::new();
     let delay = Duration::from_secs(10);
-    url_cache.push(get_base_url(url).await?);
+    url_cache.push(get_base_url(url)?);
     let items: Vec<&str> = response
         .split("<td width=\"50%\">")
         .skip(1)
         .collect::<Vec<&str>>();
     for item in items {
-        let url: String = match look_between(item, "href=\"".to_string(), "\"".to_string()).await? {
+        let url: String = match look_between(item, "href=\"".to_string(), "\"".to_string())? {
             Some(url) => url,
             None => continue,
         };
@@ -85,12 +81,12 @@ pub async fn scrape_antiwar_features(
             break;
         }
 
-        let title: String = match look_between(item, ">".to_string(), "<".to_string()).await? {
-            Some(title) => strip_html(title).await?,
+        let title: String = match look_between(item, ">".to_string(), "<".to_string())? {
+            Some(title) => strip_html(title)?,
             None => continue,
         };
 
-        let base_url = get_base_url(&url).await?;
+        let base_url = get_base_url(&url)?;
         if url_cache.contains(&base_url) {
             url_cache.clear();
             thread::sleep(delay);
@@ -111,9 +107,7 @@ pub async fn scrape_antiwar_features(
                     &response,
                     "<meta property=\"og:description\" content=\"".to_string(),
                     ">".to_string(),
-                )
-                .await?
-                {
+                )? {
                     Some(body) => body,
                     None => continue,
                 },
@@ -138,7 +132,7 @@ pub async fn scrape_antiwar_features(
             body = Some(stdout.to_string());
         }
         if let Some(body) = body {
-            let body = truncate_string(strip_html(&body).await?).await?;
+            let body = truncate_string(strip_html(&body)?)?;
             let regions = get_regions(&[&title, &body]).await?;
             features.push((url, title, body, regions));
         }

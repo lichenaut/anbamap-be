@@ -41,7 +41,7 @@ pub async fn scrape_cj_resources(
         "Article</h1>".to_string(),
         "class=\"wp-block-group has-global-padding is-layout-constrained wp-container-core-group-is-layout-12 wp-block-group-is-layout-constrained\"".to_string(),
     )
-    .await?
+    ?
     {
         Some(response) => response,
         None => return Ok(resources),
@@ -54,7 +54,7 @@ pub async fn scrape_cj_resources(
         .collect::<Vec<&str>>();
     for item in items {
         let date_time: String =
-            match look_between(item, "datetime=\"".to_string(), "T".to_string()).await? {
+            match look_between(item, "datetime=\"".to_string(), "T".to_string())? {
                 Some(date_time) => date_time,
                 None => continue,
             };
@@ -63,7 +63,7 @@ pub async fn scrape_cj_resources(
             break;
         }
 
-        let url: String = match look_between(item, "href=\"".to_string(), "\"".to_string()).await? {
+        let url: String = match look_between(item, "href=\"".to_string(), "\"".to_string())? {
             Some(url) => url,
             None => continue,
         };
@@ -73,8 +73,8 @@ pub async fn scrape_cj_resources(
         }
 
         let title: String =
-            match look_between(item, "target=\"_self\" >".to_string(), "<".to_string()).await? {
-                Some(title) => strip_html(title).await?,
+            match look_between(item, "target=\"_self\" >".to_string(), "<".to_string())? {
+                Some(title) => strip_html(title)?,
                 None => continue,
             };
 
@@ -92,10 +92,8 @@ pub async fn scrape_cj_resources(
             &response,
             "og:description\" content=\"".to_string(),
             "\"".to_string(),
-        )
-        .await?
-        {
-            Some(body) => truncate_string(strip_html(&body).await?).await?,
+        )? {
+            Some(body) => truncate_string(strip_html(&body)?)?,
             None => return Ok(resources),
         };
 
@@ -103,8 +101,8 @@ pub async fn scrape_cj_resources(
             &response,
             "<div class=\"taxonomy-post_tag has-link-color wp-elements-90c16d2487f1707e39afbb7d15aaa168 wp-block-post-terms has-text-color has-base-color has-small-font-size\">".to_string(),
             "</div>".to_string(),
-        ).await? {
-            Some(response) => strip_html(response).await?,
+        )? {
+            Some(response) => strip_html(response)?,
             None => return Ok(resources),
         };
 

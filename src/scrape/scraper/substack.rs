@@ -41,9 +41,7 @@ pub async fn scrape_substack_archive(
         &response,
         "<div class=\"portable-archive-list\">".to_string(),
         "<div class=\"footer-wrap publication-footer\">".to_string(),
-    )
-    .await?
-    {
+    )? {
         Some(response) => response,
         None => return Ok(letters),
     };
@@ -60,7 +58,7 @@ pub async fn scrape_substack_archive(
         };
 
         let date_time: String =
-            match look_between(&second, "dateTime=\"".to_string(), "T".to_string()).await? {
+            match look_between(&second, "dateTime=\"".to_string(), "T".to_string())? {
                 Some(date_time) => date_time,
                 None => continue,
             };
@@ -74,11 +72,10 @@ pub async fn scrape_substack_archive(
             None => continue,
         };
 
-        let url: String =
-            match look_between(&first, "href=\"".to_string(), "\"".to_string()).await? {
-                Some(url) => url,
-                None => continue,
-            };
+        let url: String = match look_between(&first, "href=\"".to_string(), "\"".to_string())? {
+            Some(url) => url,
+            None => continue,
+        };
 
         if url_exists(pool, &url).await? {
             break;
@@ -89,8 +86,8 @@ pub async fn scrape_substack_archive(
             None => continue,
         };
 
-        let title = match look_between(&intermediate, ">".to_string(), "<".to_string()).await? {
-            Some(title) => strip_html(title).await?,
+        let title = match look_between(&intermediate, ">".to_string(), "<".to_string())? {
+            Some(title) => strip_html(title)?,
             None => continue,
         };
 
@@ -99,11 +96,10 @@ pub async fn scrape_substack_archive(
             None => continue,
         };
 
-        let body: String =
-            match look_between(&intermediate, ">".to_string(), "<".to_string()).await? {
-                Some(body) => truncate_string(strip_html(body).await?).await?,
-                None => continue,
-            };
+        let body: String = match look_between(&intermediate, ">".to_string(), "<".to_string())? {
+            Some(body) => truncate_string(strip_html(body)?)?,
+            None => continue,
+        };
         let regions = get_regions(&[&title, &body]).await?;
         letters.push((url, title, body, regions));
     }

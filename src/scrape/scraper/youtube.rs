@@ -78,12 +78,12 @@ pub async fn scrape_youtube_channel(
         }
 
         let title: String = match snippet["title"].as_str() {
-            Some(title) => strip_html(title).await?,
+            Some(title) => strip_html(title)?,
             None => continue,
         };
 
         let body: String = match snippet["description"].as_str() {
-            Some(body) => truncate_string(strip_html(body).await?).await?,
+            Some(body) => truncate_string(strip_html(body)?)?,
             None => continue,
         };
 
