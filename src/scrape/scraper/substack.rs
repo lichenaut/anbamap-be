@@ -1,6 +1,6 @@
 use crate::db::util::url_exists;
 use crate::prelude::*;
-use crate::scrape::util::{get_regions, look_between, strip_content, truncate_string};
+use crate::scrape::util::{get_regions, look_between, strip_html, truncate_string};
 use crate::service::var_service::get_substack_urls;
 use chrono::Local;
 use sqlx::SqlitePool;
@@ -90,7 +90,7 @@ pub async fn scrape_substack_archive(
         };
 
         let title = match look_between(&intermediate, ">".to_string(), "<".to_string()).await? {
-            Some(title) => strip_content(title).await?,
+            Some(title) => strip_html(title).await?,
             None => continue,
         };
 
@@ -101,7 +101,7 @@ pub async fn scrape_substack_archive(
 
         let body: String =
             match look_between(&intermediate, ">".to_string(), "<".to_string()).await? {
-                Some(body) => truncate_string(strip_content(body).await?).await?,
+                Some(body) => truncate_string(strip_html(body).await?).await?,
                 None => continue,
             };
         let regions = get_regions(&[&title, &body]).await?;

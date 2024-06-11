@@ -1,6 +1,6 @@
 use crate::db::util::url_exists;
 use crate::prelude::*;
-use crate::scrape::util::{get_regions, look_between, strip_content, truncate_string};
+use crate::scrape::util::{get_regions, look_between, strip_html, truncate_string};
 use crate::service::var_service::is_source_enabled;
 use chrono::Local;
 use sqlx::SqlitePool;
@@ -82,7 +82,7 @@ pub async fn scrape_amnesty_resources(
         )
         .await?
         {
-            Some(title) => strip_content(title.trim()).await?,
+            Some(title) => strip_html(title.trim()).await?,
             None => continue,
         };
 
@@ -93,7 +93,7 @@ pub async fn scrape_amnesty_resources(
         )
         .await?
         {
-            Some(body) => truncate_string(strip_content(body).await?).await?,
+            Some(body) => truncate_string(strip_html(body).await?).await?,
             None => continue,
         };
 

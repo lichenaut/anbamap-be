@@ -1,6 +1,6 @@
 use crate::db::util::url_exists;
 use crate::prelude::*;
-use crate::scrape::util::{get_regions, strip_content, truncate_string};
+use crate::scrape::util::{get_regions, strip_html, truncate_string};
 use crate::service::var_service::{get_youtube_api_key, get_youtube_channel_ids};
 use chrono::Local;
 use serde_json::Value;
@@ -78,12 +78,12 @@ pub async fn scrape_youtube_channel(
         }
 
         let title = match snippet["title"].as_str() {
-            Some(title) => strip_content(title).await?,
+            Some(title) => strip_html(title).await?,
             None => continue,
         };
 
         let body = match snippet["description"].as_str() {
-            Some(body) => truncate_string(strip_content(body).await?).await?,
+            Some(body) => truncate_string(strip_html(body).await?).await?,
             None => continue,
         };
 

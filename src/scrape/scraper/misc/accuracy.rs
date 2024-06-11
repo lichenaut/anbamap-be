@@ -1,6 +1,6 @@
 use crate::db::util::url_exists;
 use crate::prelude::*;
-use crate::scrape::util::{get_regions, look_between, strip_content, truncate_string};
+use crate::scrape::util::{get_regions, look_between, strip_html, truncate_string};
 use crate::service::var_service::is_source_enabled;
 use chrono::Local;
 use sqlx::SqlitePool;
@@ -74,15 +74,13 @@ pub async fn scrape_accuracy_releases(
         }
 
         let title = match look_between(item, "title=\"".to_string(), "\"".to_string()).await? {
-            Some(title) => strip_content(title)
-                .await?
-                .replace("Permanent Link to ", ""),
+            Some(title) => strip_html(title).await?.replace("Permanent Link to ", ""),
             None => continue,
         };
 
         let body: String =
             match look_between(item, "</div></div>".to_string(), "</p>".to_string()).await? {
-                Some(body) => truncate_string(strip_content(body).await?).await?,
+                Some(body) => truncate_string(strip_html(body).await?).await?,
                 None => continue,
             };
 

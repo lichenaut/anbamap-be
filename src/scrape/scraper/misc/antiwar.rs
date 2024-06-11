@@ -5,9 +5,7 @@ use std::time::Duration;
 
 use crate::db::util::url_exists;
 use crate::prelude::*;
-use crate::scrape::util::{
-    get_base_url, get_regions, look_between, strip_content, truncate_string,
-};
+use crate::scrape::util::{get_base_url, get_regions, look_between, strip_html, truncate_string};
 use crate::service::var_service::is_source_enabled;
 use chrono::Local;
 use sqlx::SqlitePool;
@@ -71,6 +69,7 @@ pub async fn scrape_antiwar_features(
     };
 
     let mut url_cache: Vec<String> = Vec::new();
+    let delay = Duration::from_secs(10);
     url_cache.push(get_base_url(url).await?);
     let items: Vec<&str> = response
         .split("<td width=\"50%\">")
@@ -87,13 +86,14 @@ pub async fn scrape_antiwar_features(
         }
 
         let title = match look_between(item, ">".to_string(), "<".to_string()).await? {
-            Some(title) => strip_content(title.trim()).await?,
+            Some(title) => strip_html(title).await?,
             None => continue,
         };
 
         let base_url = get_base_url(&url).await?;
         if url_cache.contains(&base_url) {
-            thread::sleep(Duration::from_secs(10));
+            url_cache.clear();
+            thread::sleep(delay);
         } else {
             url_cache.push(base_url);
         }
@@ -138,7 +138,7 @@ pub async fn scrape_antiwar_features(
             body = Some(stdout.to_string());
         }
         if let Some(body) = body {
-            let body = truncate_string(strip_content(&body).await?).await?;
+            let body = truncate_string(strip_html(&body).await?).await?;
             let regions = get_regions(&[&title, &body]).await?;
             features.push((url, title, body, regions));
         }

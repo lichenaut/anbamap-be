@@ -69,6 +69,9 @@ impl RegionKeyphrases {
         let mut short_strings: Vec<&'static str> = Vec::new();
         region_vec.iter_mut().for_each(|s| {
             if s.len() < 4 {
+                if *s == "bid" {
+                    return;
+                }
                 short_strings.push(Box::leak(format!("'{}'", s).into_boxed_str()));
                 short_strings.push(Box::leak(format!("\"{}\"", s).into_boxed_str()));
                 short_strings.push(Box::leak(format!("{}.", s).into_boxed_str()));
@@ -485,12 +488,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 names: Some(vec!["bangladesh"]),
                 demonyms: None,
                 enterprises: None,
-                misc: Some(vec![
-                    "jatiya sangsad",
-                    "awami league",
-                    "jatiya party",
-                    "bengal",
-                ]),
+                misc: Some(vec!["jatiya sangsad", "awami league", "jatiya party"]),
             }
             .get_region_vec(),
             "bd",
@@ -1948,6 +1946,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                     "haaretz",
                     "netanyahu",
                     "yoav gallant",
+                    "zionis",
                 ]),
             }
             .get_region_vec(),
@@ -4704,12 +4703,17 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         "south island",
         "west island",
         "centre island",
+        "erode",
         "georgia",
         "georgetown",
+        "godda",
+        "hassan",
         "kent",
+        "morena",
         "nice",
         "reading",
         "saint john's",
+        "salem",
         "st. john's",
     ]
     .into_par_iter()

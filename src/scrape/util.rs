@@ -3,6 +3,7 @@ use crate::{prelude::*, service::var_service::get_docker_volume};
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use regex::Regex;
 use std::{
+    collections::HashMap,
     process::Command,
     str::from_utf8,
     sync::{Arc, Mutex},
@@ -11,7 +12,7 @@ use unidecode::unidecode;
 use url::Url;
 
 pub(super) async fn get_regions(text: &[&str]) -> Result<Vec<String>> {
-    let text = text.join(" ");
+    let text = strip_content(text.join(" ")).await?;
     let identified_regions = get_flashgeotext_regions(&text).await?;
 
     let text = &text.replace("\\'", "'").to_lowercase(); //TODO check for correct behavior
@@ -64,6 +65,15 @@ pub(super) async fn get_regions(text: &[&str]) -> Result<Vec<String>> {
     Ok(regions.iter().map(|s| s.to_string()).collect())
 }
 
+pub async fn get_base_url(url: &str) -> Result<String> {
+    let parsed_url = Url::parse(url)?;
+    Ok(format!(
+        "{}://{}",
+        parsed_url.scheme(),
+        parsed_url.host_str().unwrap_or("")
+    ))
+}
+
 pub async fn look_between(text: &str, this: String, that: String) -> Result<Option<String>> {
     match text.splitn(2, &this).last() {
         Some(text) => Ok(text.split(&that).next().map(|text| text.to_string())),
@@ -71,22 +81,17 @@ pub async fn look_between(text: &str, this: String, that: String) -> Result<Opti
     }
 }
 
-pub async fn strip_content<T: ToString>(input: T) -> Result<String> {
+pub async fn strip_html<T: ToString>(input: T) -> Result<String> {
     let input = input.to_string();
-    Ok(unidecode(
-        Regex::new(r"<[^>]*>")?
-            .replace_all(&input, "")
-            .replace("&amp;", "&")
-            .replace("&#39;", "'")
-            .replace("&#8220;", "\"")
-            .replace("&#8221;", "\"")
-            .replace("&#8217;", "'")
-            .replace("'s ", " ")
-            .replace("s' ", " ")
-            .replace('\'', r"\'")
-            .replace(['"', '`', '‘', '’', '–', '[', ']'], "")
-            .as_str(),
-    ))
+    Ok(Regex::new(r"<[^>]*>")?
+        .replace_all(&input, "")
+        .replace("&amp;", "&")
+        .replace("&nbsp;", " ")
+        .replace("&#39;", "'")
+        .replace("&#8220;", "\"")
+        .replace("&#8221;", "\"")
+        .replace("&#8217;", "'")
+        .to_string())
 }
 
 pub async fn truncate_string(input: String) -> Result<String> {
@@ -100,13 +105,26 @@ pub async fn truncate_string(input: String) -> Result<String> {
     Ok(words.join(" "))
 }
 
-pub async fn get_base_url(url: &str) -> Result<String> {
-    let parsed_url = Url::parse(url)?;
-    Ok(format!(
-        "{}://{}",
-        parsed_url.scheme(),
-        parsed_url.host_str().unwrap_or("")
-    ))
+async fn strip_content<T: ToString>(input: T) -> Result<String> {
+    let input = input.to_string();
+    let mut replacements = HashMap::new();
+    replacements.insert("\"", r"\'");
+    replacements.insert("`", r"\'");
+    replacements.insert("‘", r"\'");
+    replacements.insert("’", r"\'");
+    replacements.insert("'", r"\'");
+    replacements.insert("–", "");
+
+    let mut result = String::with_capacity(input.len());
+    let chars = input.chars();
+    for ch in chars {
+        match replacements.get(&*ch.to_string()) {
+            Some(replacement) => result.push_str(replacement),
+            None => result.push(ch),
+        }
+    }
+
+    Ok(unidecode(result.as_str()))
 }
 
 async fn get_flashgeotext_regions(text: &str) -> Result<Vec<&'static str>> {
