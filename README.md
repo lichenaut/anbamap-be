@@ -84,5 +84,6 @@ The first run will take a few minutes to set up files.
 | `DN_B`                | `boolean` value for [https://www.democracynow.org/yyyy/m/d/headlines](https://www.democracynow.org/yyyy/m/d/headlines)                                                        |
 | `EI_B`                | `boolean` value for [https://electronicintifada.net/news](https://electronicintifada.net/news) and [https://electronicintifada.net/blog](https://electronicintifada.net/blog) |
 | `GE_B`                | `boolean` value for [https://geopoliticaleconomy.com/yyyy/mm/dd/](https://geopoliticaleconomy.com/yyyy/mm/dd/)                                                                |
+| `SUBSTACK_URLS`       | Comma-separated Substack archive URLs                                                                                                                                         |
 | `YOUTUBE_API_KEY`     | Your Youtube Data API key.                                                                                                                                                    |
 | `YOUTUBE_CHANNEL_IDS` | Comma-separated Youtube channel IDs.                                                                                                                                          |
