@@ -97,13 +97,9 @@ pub fn strip_html<T: ToString>(input: T) -> Result<String> {
     let input = Regex::new(r"<[^>]*>")?
         .replace_all(&input.to_string(), "")
         .to_string();
-    let mut result = String::with_capacity(input.len());
-    let chars = input.chars();
-    for ch in chars {
-        match replacements.get(&*ch.to_string()) {
-            Some(replacement) => result.push_str(replacement),
-            None => result.push(ch),
-        }
+    let mut result = input;
+    for (key, value) in replacements {
+        result = result.replace(key, value);
     }
 
     Ok(result)

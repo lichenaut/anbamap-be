@@ -5,21 +5,21 @@ use crate::service::var_service::is_source_enabled;
 use chrono::Local;
 use sqlx::SqlitePool;
 
-pub async fn scrape_consortium(
+pub async fn scrape_dn(
     pool: &SqlitePool,
     media: &mut Vec<(String, String, String, Vec<String>)>,
 ) -> Result<()> {
-    let consortium_enabled: bool = is_source_enabled("CONSORTIUM_B").await?;
-    if !consortium_enabled {
+    let dn_enabled: bool = is_source_enabled("DN_B").await?;
+    if !dn_enabled {
         return Ok(());
     }
 
     media.extend(
-        scrape_consortium_posts(
+        scrape_dn_headlines(
             pool,
             &format!(
-                "https://consortiumnews.com/{}/",
-                Local::now().format("%Y/%m/%d")
+                "https://www.democracynow.org/{}/headlines",
+                Local::now().format("%Y/%-m/%-d")
             ),
         )
         .await?,
@@ -28,70 +28,72 @@ pub async fn scrape_consortium(
     Ok(())
 }
 
-pub async fn scrape_consortium_posts(
+pub async fn scrape_dn_headlines(
     pool: &SqlitePool,
     url: &str,
 ) -> Result<Vec<(String, String, String, Vec<String>)>> {
-    let mut posts: Vec<(String, String, String, Vec<String>)> = Vec::new();
+    let mut headlines: Vec<(String, String, String, Vec<String>)> = Vec::new();
     let response = reqwest::get(url).await?;
     if !response.status().is_success() {
         tracing::error!(
-            "Non-success response from Consortium: {}",
+            "Non-success response from Democracy Now!: {}",
             response.status()
         );
-        return Ok(posts);
+        return Ok(headlines);
     }
 
     let mut response: String = response.text().await?;
     response = match look_between(
         &response,
-        "<header id=\"archive-header\">".to_string(),
-        "<div id=\"secondary\" class=\"c3 end\" role=\"complementary\">".to_string(),
+        "<div id=\"headlines\">".to_string(),
+        "<div class=\"fine_print grey_description\">".to_string(),
     )? {
         Some(response) => response,
-        None => return Ok(posts),
+        None => return Ok(headlines),
     };
 
     let items: Vec<&str> = response
-        .split("<article id=")
+        .split("<div class=\"headline\"")
         .skip(1)
         .collect::<Vec<&str>>();
     for item in items {
-        let url: String = match look_between(item, "href=\"".to_string(), "\"".to_string())? {
+        let mut url: String = url.to_string() + "#";
+        let url_id: String = match look_between(item, "id=\"".to_string(), "\"".to_string())? {
             Some(url) => url,
             None => continue,
         };
 
+        url.push_str(&url_id);
         if url_exists(pool, &url).await? {
             break;
         }
 
-        let title: String =
-            match look_between(item, "rel=\"bookmark\">".to_string(), "<".to_string())? {
-                Some(title) => strip_html(title)?,
-                None => continue,
-            };
+        let title: String = match look_between(item, "<h2>".to_string(), "</h2>".to_string())? {
+            Some(title) => strip_html(title)?,
+            None => continue,
+        };
 
         let body: String = match look_between(
             item,
-            "decoding=\"async\" /></a><p>".to_string(),
+            "<div class=\"headline_summary\"><p>".to_string(),
             "<".to_string(),
         )? {
             Some(body) => truncate_string(strip_html(body)?)?,
             None => continue,
         };
 
-        let tags: String = match look_between(item, "category".to_string(), "\"".to_string())? {
-            Some(tags) => tags
-                .replace('-', " ")
-                .replace("category", "")
-                .replace("tag", ""),
-            None => return Ok(posts),
+        let tags: String = match look_between(
+            item,
+            "<a data-ga-action=\"Headlines: Topic\"".to_string(),
+            "</li></ul>".to_string(),
+        )? {
+            Some(tags) => strip_html("<".to_string() + &tags)?,
+            None => return Ok(headlines),
         };
 
         let regions = get_regions(&[&title, &format!("{} {}", body, tags)]).await?;
-        posts.push((url, title, body, regions));
+        headlines.push((url, title, body, regions));
     }
 
-    Ok(posts)
+    Ok(headlines)
 }

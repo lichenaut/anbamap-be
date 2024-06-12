@@ -11,6 +11,7 @@ mod scrape {
             pub mod antiwar;
             pub mod cj;
             pub mod consortium;
+            pub mod dn;
         }
         pub mod forbes400;
         pub mod substack;

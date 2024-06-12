@@ -1,10 +1,12 @@
-use crate::db::media::update_media_db;
-use crate::db::util::{create_media_db, get_db_pool};
+use crate::db::{
+    media::update_media_db,
+    util::{create_media_db, get_db_pool},
+};
 use crate::prelude::*;
-use crate::scrape::scraper::misc::consortium::scrape_consortium;
 use crate::scrape::scraper::{
     misc::{
         accuracy::scrape_accuracy, amnesty::scrape_amnesty, antiwar::scrape_antiwar, cj::scrape_cj,
+        consortium::scrape_consortium, dn::scrape_dn,
     },
     {substack::scrape_substack, youtube::scrape_youtube},
 };
@@ -21,6 +23,7 @@ pub async fn run_scrapers(docker_volume: &str) -> Result<()> {
     scrape_antiwar(&pool, docker_volume, &mut media).await?;
     scrape_cj(&pool, &mut media).await?;
     scrape_consortium(&pool, &mut media).await?;
+    scrape_dn(&pool, &mut media).await?;
     scrape_substack(&pool, &mut media).await?;
     scrape_youtube(&pool, &mut media).await?;
     update_media_db(&pool, media).await?;
