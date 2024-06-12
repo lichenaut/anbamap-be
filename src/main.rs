@@ -12,6 +12,7 @@ mod scrape {
             pub mod cj;
             pub mod consortium;
             pub mod dn;
+            pub mod ei;
         }
         pub mod forbes400;
         pub mod substack;

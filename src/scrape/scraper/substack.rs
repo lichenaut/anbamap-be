@@ -86,7 +86,7 @@ pub async fn scrape_substack_archive(
             None => continue,
         };
 
-        let title = match look_between(&intermediate, ">".to_string(), "<".to_string())? {
+        let title = match look_between(&intermediate, ">".to_string(), "</a>".to_string())? {
             Some(title) => strip_html(title)?,
             None => continue,
         };
@@ -96,7 +96,7 @@ pub async fn scrape_substack_archive(
             None => continue,
         };
 
-        let body: String = match look_between(&intermediate, ">".to_string(), "<".to_string())? {
+        let body: String = match look_between(&intermediate, ">".to_string(), "</a>".to_string())? {
             Some(body) => truncate_string(strip_html(body)?)?,
             None => continue,
         };

@@ -76,7 +76,7 @@ pub async fn scrape_dn_headlines(
         let body: String = match look_between(
             item,
             "<div class=\"headline_summary\"><p>".to_string(),
-            "<".to_string(),
+            "</p>".to_string(),
         )? {
             Some(body) => truncate_string(strip_html(body)?)?,
             None => continue,

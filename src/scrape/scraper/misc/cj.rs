@@ -59,7 +59,7 @@ pub async fn scrape_cj_resources(
                 None => continue,
             };
 
-        if date_time.trim() != today {
+        if date_time != today {
             break;
         }
 
@@ -73,7 +73,7 @@ pub async fn scrape_cj_resources(
         }
 
         let title: String =
-            match look_between(item, "target=\"_self\" >".to_string(), "<".to_string())? {
+            match look_between(item, "target=\"_self\" >".to_string(), "</a>".to_string())? {
                 Some(title) => strip_html(title)?,
                 None => continue,
             };

@@ -67,7 +67,7 @@ pub async fn scrape_consortium_posts(
         }
 
         let title: String =
-            match look_between(item, "rel=\"bookmark\">".to_string(), "<".to_string())? {
+            match look_between(item, "rel=\"bookmark\">".to_string(), "</a>".to_string())? {
                 Some(title) => strip_html(title)?,
                 None => continue,
             };
@@ -75,7 +75,7 @@ pub async fn scrape_consortium_posts(
         let body: String = match look_between(
             item,
             "decoding=\"async\" /></a><p>".to_string(),
-            "<".to_string(),
+            "</p>".to_string(),
         )? {
             Some(body) => truncate_string(strip_html(body)?)?,
             None => continue,

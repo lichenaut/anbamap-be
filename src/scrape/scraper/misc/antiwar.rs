@@ -81,7 +81,7 @@ pub async fn scrape_antiwar_features(
             break;
         }
 
-        let title: String = match look_between(item, ">".to_string(), "<".to_string())? {
+        let title: String = match look_between(item, ">".to_string(), "</a>".to_string())? {
             Some(title) => strip_html(title)?,
             None => continue,
         };
@@ -106,7 +106,7 @@ pub async fn scrape_antiwar_features(
                 match look_between(
                     &response,
                     "<meta property=\"og:description\" content=\"".to_string(),
-                    ">".to_string(),
+                    "\"".to_string(),
                 )? {
                     Some(body) => body,
                     None => continue,

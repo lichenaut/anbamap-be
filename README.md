@@ -73,14 +73,15 @@ The first run will take a few minutes to set up files.
 
 ## Environment Variables
 
-| Environment Variable  | Description                                                                                                                | Necessity |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------------- | --------- |
-| `DOCKER_VOLUME`       | Arbitrarily-valued path.                                                                                                   | Mandatory |
-| `ACCURACY_B`          | `boolean` value for [https://accuracy.org/news-releases/](https://accuracy.org/news-releases/)                             | Optional  |
-| `AMNESTY_B`           | `boolean` value for [https://www.amnestyusa.org/news/](https://www.amnestyusa.org/news/)                                   | Optional  |
-| `ANTIWAR_B`           | `boolean` value for [https://www.antiwar.com/latest.php](https://www.antiwar.com/latest.php)                               | Optional  |
-| `CJ_B`                | `boolean` value for [https://caitlinjohnstone.com.au/category/article/](https://caitlinjohnstone.com.au/category/article/) | Optional  |
-| `CONSORTIUM_B`        | `boolean` value for [https://consortiumnews.com/yyyy/mm/dd/](https://consortiumnews.com/yyyy/mm/dd/)                       | Optional  |
-| `DN_B`                | `boolean` value for [https://www.democracynow.org/yyyy/m/d/headlines](https://www.democracynow.org/yyyy/m/d/headlines)     | Optional  |
-| `YOUTUBE_API_KEY`     | Your Youtube Data API key.                                                                                                 | Optional  |
-| `YOUTUBE_CHANNEL_IDS` | Comma-separated Youtube channel IDs.                                                                                       | Optional  |
+| Environment Variable  | Description                                                                                                                |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `DOCKER_VOLUME`       | Arbitrarily-valued path. Only mandatory variable.                                                                          |
+| `ACCURACY_B`          | `boolean` value for [https://accuracy.org/news-releases/](https://accuracy.org/news-releases/)                             |
+| `AMNESTY_B`           | `boolean` value for [https://www.amnestyusa.org/news/](https://www.amnestyusa.org/news/)                                   |
+| `ANTIWAR_B`           | `boolean` value for [https://www.antiwar.com/latest.php](https://www.antiwar.com/latest.php)                               |
+| `CJ_B`                | `boolean` value for [https://caitlinjohnstone.com.au/category/article/](https://caitlinjohnstone.com.au/category/article/) |
+| `CONSORTIUM_B`        | `boolean` value for [https://consortiumnews.com/yyyy/mm/dd/](https://consortiumnews.com/yyyy/mm/dd/)                       |
+| `DN_B`                | `boolean` value for [https://www.democracynow.org/yyyy/m/d/headlines](https://www.democracynow.org/yyyy/m/d/headlines)     |
+| `EI_B`                | `boolean` value for [https://electronicintifada.net/blog](https://electronicintifada.net/blog)                             |
+| `YOUTUBE_API_KEY`     | Your Youtube Data API key.                                                                                                 |
+| `YOUTUBE_CHANNEL_IDS` | Comma-separated Youtube channel IDs.                                                                                       |
