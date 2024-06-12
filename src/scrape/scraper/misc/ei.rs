@@ -76,7 +76,7 @@ pub async fn scrape_ei_blogs(
             break;
         }
 
-        let mut url = url.chars().take(url.len() - 4).collect::<String>();
+        let mut url: String = url.chars().take(url.len() - 4).collect::<String>();
         let url_blog: String = match look_between(item, "href=\"/".to_string(), "\"".to_string())? {
             Some(url) => url,
             None => {
