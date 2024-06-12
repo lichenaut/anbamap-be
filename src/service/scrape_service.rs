@@ -6,7 +6,7 @@ use crate::prelude::*;
 use crate::scrape::scraper::{
     misc::{
         accuracy::scrape_accuracy, amnesty::scrape_amnesty, antiwar::scrape_antiwar, cj::scrape_cj,
-        consortium::scrape_consortium, dn::scrape_dn, ei::scrape_ei,
+        consortium::scrape_consortium, dn::scrape_dn, ei::scrape_ei, ge::scrape_ge,
     },
     {substack::scrape_substack, youtube::scrape_youtube},
 };
@@ -25,6 +25,7 @@ pub async fn run_scrapers(docker_volume: &str) -> Result<()> {
     scrape_consortium(&pool, &mut media).await?;
     scrape_dn(&pool, &mut media).await?;
     scrape_ei(&pool, &mut media).await?;
+    scrape_ge(&pool, &mut media).await?;
     scrape_substack(&pool, &mut media).await?;
     scrape_youtube(&pool, &mut media).await?;
     update_media_db(&pool, media).await?;

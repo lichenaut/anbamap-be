@@ -4,6 +4,7 @@ use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use regex::Regex;
 use std::{
     collections::HashMap,
+    fmt::Display,
     process::Command,
     str::from_utf8,
     sync::{Arc, Mutex},
@@ -67,6 +68,10 @@ pub(super) async fn get_regions(text: &[&str]) -> Result<Vec<String>> {
     }
 
     Ok(regions.iter().map(|s| s.to_string()).collect())
+}
+
+pub fn notify_parse_fail<T: Display>(msg: &str, item: T) {
+    tracing::error!("Continue occured while parsing HTML: {} at {}", msg, item);
 }
 
 pub fn get_base_url(url: &str) -> Result<String> {

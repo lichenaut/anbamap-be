@@ -1,14 +1,15 @@
+use crate::db::util::url_exists;
+use crate::prelude::*;
+use crate::scrape::util::{
+    get_base_url, get_regions, look_between, notify_parse_fail, strip_html, truncate_string,
+};
+use crate::service::var_service::is_source_enabled;
+use chrono::Local;
+use sqlx::SqlitePool;
 use std::process::Command;
 use std::str::from_utf8;
 use std::thread;
 use std::time::Duration;
-
-use crate::db::util::url_exists;
-use crate::prelude::*;
-use crate::scrape::util::{get_base_url, get_regions, look_between, strip_html, truncate_string};
-use crate::service::var_service::is_source_enabled;
-use chrono::Local;
-use sqlx::SqlitePool;
 
 pub async fn scrape_antiwar(
     pool: &SqlitePool,
@@ -48,7 +49,10 @@ pub async fn scrape_antiwar_features(
         " -".to_string(),
     )? {
         Some(date) => date,
-        None => return Ok(features),
+        None => {
+            notify_parse_fail("Antiwar date", &response);
+            return Ok(features);
+        }
     };
 
     if date != today {
@@ -61,7 +65,10 @@ pub async fn scrape_antiwar_features(
         "<tr><td colspan=\"2\"><h1>".to_string(),
     )? {
         Some(response) => response,
-        None => return Ok(features),
+        None => {
+            notify_parse_fail("Antiwar features", &response);
+            return Ok(features);
+        }
     };
 
     let mut url_cache: Vec<String> = Vec::new();
@@ -74,7 +81,10 @@ pub async fn scrape_antiwar_features(
     for item in items {
         let url: String = match look_between(item, "href=\"".to_string(), "\"".to_string())? {
             Some(url) => url,
-            None => continue,
+            None => {
+                notify_parse_fail("Antiwar url", item);
+                break;
+            }
         };
 
         if url_exists(pool, &url).await? {
@@ -83,7 +93,10 @@ pub async fn scrape_antiwar_features(
 
         let title: String = match look_between(item, ">".to_string(), "</a>".to_string())? {
             Some(title) => strip_html(title)?,
-            None => continue,
+            None => {
+                notify_parse_fail("Antiwar title", item);
+                break;
+            }
         };
 
         let base_url = get_base_url(&url)?;
@@ -109,7 +122,10 @@ pub async fn scrape_antiwar_features(
                     "\"".to_string(),
                 )? {
                     Some(body) => body,
-                    None => continue,
+                    None => {
+                        notify_parse_fail("Antiwar body", &response);
+                        break;
+                    }
                 },
             );
         } else {
@@ -121,20 +137,25 @@ pub async fn scrape_antiwar_features(
             ))
             .output()?;
             if !output.status.success() {
+                tracing::debug!(
+                    "newspaper3k failed to get body from Antiwar: {}",
+                    from_utf8(&output.stderr)?
+                );
                 continue;
             }
 
             let stdout = from_utf8(&output.stdout)?;
             if stdout.is_empty() {
+                tracing::debug!("newspaper3k returned empty body from Antiwar");
                 continue;
             }
 
             body = Some(stdout.to_string());
         }
         if let Some(body) = body {
-            let body = truncate_string(strip_html(&body)?)?;
+            let body = strip_html(&body)?;
             let regions = get_regions(&[&title, &body]).await?;
-            features.push((url, title, body, regions));
+            features.push((url, title, truncate_string(body)?, regions));
         }
     }
 

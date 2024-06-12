@@ -13,6 +13,7 @@ mod scrape {
             pub mod consortium;
             pub mod dn;
             pub mod ei;
+            pub mod ge;
         }
         pub mod forbes400;
         pub mod substack;

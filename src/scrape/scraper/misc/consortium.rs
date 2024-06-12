@@ -1,6 +1,8 @@
 use crate::db::util::url_exists;
 use crate::prelude::*;
-use crate::scrape::util::{get_regions, look_between, strip_html, truncate_string};
+use crate::scrape::util::{
+    get_regions, look_between, notify_parse_fail, strip_html, truncate_string,
+};
 use crate::service::var_service::is_source_enabled;
 use chrono::Local;
 use sqlx::SqlitePool;
@@ -49,7 +51,10 @@ pub async fn scrape_consortium_posts(
         "<div id=\"secondary\" class=\"c3 end\" role=\"complementary\">".to_string(),
     )? {
         Some(response) => response,
-        None => return Ok(posts),
+        None => {
+            notify_parse_fail("Consortium posts", &response);
+            return Ok(posts);
+        }
     };
 
     let items: Vec<&str> = response
@@ -59,7 +64,10 @@ pub async fn scrape_consortium_posts(
     for item in items {
         let url: String = match look_between(item, "href=\"".to_string(), "\"".to_string())? {
             Some(url) => url,
-            None => continue,
+            None => {
+                notify_parse_fail("Consortium url", item);
+                break;
+            }
         };
 
         if url_exists(pool, &url).await? {
@@ -69,7 +77,10 @@ pub async fn scrape_consortium_posts(
         let title: String =
             match look_between(item, "rel=\"bookmark\">".to_string(), "</a>".to_string())? {
                 Some(title) => strip_html(title)?,
-                None => continue,
+                None => {
+                    notify_parse_fail("Consortium title", item);
+                    break;
+                }
             };
 
         let body: String = match look_between(
@@ -77,8 +88,11 @@ pub async fn scrape_consortium_posts(
             "decoding=\"async\" /></a><p>".to_string(),
             "</p>".to_string(),
         )? {
-            Some(body) => truncate_string(strip_html(body)?)?,
-            None => continue,
+            Some(body) => strip_html(body)?,
+            None => {
+                notify_parse_fail("Consortium body", item);
+                break;
+            }
         };
 
         let tags: String = match look_between(item, "category".to_string(), "\"".to_string())? {
@@ -86,11 +100,14 @@ pub async fn scrape_consortium_posts(
                 .replace('-', " ")
                 .replace("category", "")
                 .replace("tag", ""),
-            None => return Ok(posts),
+            None => {
+                notify_parse_fail("Consortium tags", item);
+                break;
+            }
         };
 
         let regions = get_regions(&[&title, &format!("{} {}", body, tags)]).await?;
-        posts.push((url, title, body, regions));
+        posts.push((url, title, truncate_string(body)?, regions));
     }
 
     Ok(posts)

@@ -1,6 +1,8 @@
 use crate::db::util::url_exists;
 use crate::prelude::*;
-use crate::scrape::util::{get_regions, look_between, strip_html, truncate_string};
+use crate::scrape::util::{
+    get_regions, look_between, notify_parse_fail, strip_html, truncate_string,
+};
 use crate::service::var_service::get_substack_urls;
 use chrono::Local;
 use sqlx::SqlitePool;
@@ -43,7 +45,10 @@ pub async fn scrape_substack_archive(
         "<div class=\"footer-wrap publication-footer\">".to_string(),
     )? {
         Some(response) => response,
-        None => return Ok(letters),
+        None => {
+            notify_parse_fail("Substack archive", &response);
+            return Ok(letters);
+        }
     };
 
     let today: String = Local::now().format("%Y-%m-%d").to_string();
@@ -54,13 +59,19 @@ pub async fn scrape_substack_archive(
     for chunk in items.chunks(3) {
         let second: String = match chunk.get(1) {
             Some(second) => second.to_string(),
-            None => continue,
+            None => {
+                notify_parse_fail("Substack second chunk", chunk.join(" "));
+                break;
+            }
         };
 
         let date_time: String =
             match look_between(&second, "dateTime=\"".to_string(), "T".to_string())? {
                 Some(date_time) => date_time,
-                None => continue,
+                None => {
+                    notify_parse_fail("Substack date", &second);
+                    break;
+                }
             };
 
         if date_time != today {
@@ -69,12 +80,18 @@ pub async fn scrape_substack_archive(
 
         let first: String = match chunk.first() {
             Some(first) => first.to_string(),
-            None => continue,
+            None => {
+                notify_parse_fail("Substack first chunk", chunk.join(" "));
+                break;
+            }
         };
 
         let url: String = match look_between(&first, "href=\"".to_string(), "\"".to_string())? {
             Some(url) => url,
-            None => continue,
+            None => {
+                notify_parse_fail("Substack url", &first);
+                break;
+            }
         };
 
         if url_exists(pool, &url).await? {
@@ -83,25 +100,38 @@ pub async fn scrape_substack_archive(
 
         let mut intermediate: String = match first.splitn(2, '>').last() {
             Some(intermediate) => intermediate.to_string(),
-            None => continue,
+            None => {
+                notify_parse_fail("Substack intermediate 1", &first);
+                break;
+            }
         };
 
         let title = match look_between(&intermediate, ">".to_string(), "</a>".to_string())? {
             Some(title) => strip_html(title)?,
-            None => continue,
+            None => {
+                notify_parse_fail("Substack title", &intermediate);
+                break;
+            }
         };
 
         intermediate = match second.splitn(2, '>').last() {
             Some(intermediate) => intermediate.to_string(),
-            None => continue,
+            None => {
+                notify_parse_fail("Substack intermediate 2", &second);
+                break;
+            }
         };
 
         let body: String = match look_between(&intermediate, ">".to_string(), "</a>".to_string())? {
-            Some(body) => truncate_string(strip_html(body)?)?,
-            None => continue,
+            Some(body) => strip_html(body)?,
+            None => {
+                notify_parse_fail("Substack body", &intermediate);
+                break;
+            }
         };
+
         let regions = get_regions(&[&title, &body]).await?;
-        letters.push((url, title, body, regions));
+        letters.push((url, title, truncate_string(body)?, regions));
     }
 
     Ok(letters)

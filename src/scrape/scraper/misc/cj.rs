@@ -1,6 +1,8 @@
 use crate::db::util::url_exists;
 use crate::prelude::*;
-use crate::scrape::util::{get_regions, look_between, strip_html, truncate_string};
+use crate::scrape::util::{
+    get_regions, look_between, notify_parse_fail, strip_html, truncate_string,
+};
 use crate::service::var_service::is_source_enabled;
 use chrono::Local;
 use sqlx::SqlitePool;
@@ -44,7 +46,10 @@ pub async fn scrape_cj_resources(
     ?
     {
         Some(response) => response,
-        None => return Ok(resources),
+        None => {
+            notify_parse_fail("Caitlin Johnstone resources", &response);
+            return Ok(resources);
+        }
     };
 
     let today: String = Local::now().format("%Y-%m-%d").to_string();
@@ -56,7 +61,10 @@ pub async fn scrape_cj_resources(
         let date_time: String =
             match look_between(item, "datetime=\"".to_string(), "T".to_string())? {
                 Some(date_time) => date_time,
-                None => continue,
+                None => {
+                    notify_parse_fail("Caitlin Johnstone date", item);
+                    break;
+                }
             };
 
         if date_time != today {
@@ -65,7 +73,10 @@ pub async fn scrape_cj_resources(
 
         let url: String = match look_between(item, "href=\"".to_string(), "\"".to_string())? {
             Some(url) => url,
-            None => continue,
+            None => {
+                notify_parse_fail("Caitlin Johnstone url", item);
+                break;
+            }
         };
 
         if url_exists(pool, &url).await? {
@@ -75,7 +86,10 @@ pub async fn scrape_cj_resources(
         let title: String =
             match look_between(item, "target=\"_self\" >".to_string(), "</a>".to_string())? {
                 Some(title) => strip_html(title)?,
-                None => continue,
+                None => {
+                    notify_parse_fail("Caitlin Johnstone title", item);
+                    break;
+                }
             };
 
         let response = reqwest::get(&url).await?;
@@ -93,8 +107,11 @@ pub async fn scrape_cj_resources(
             "og:description\" content=\"".to_string(),
             "\"".to_string(),
         )? {
-            Some(body) => truncate_string(strip_html(&body)?)?,
-            None => return Ok(resources),
+            Some(body) => strip_html(&body)?,
+            None => {
+                notify_parse_fail("Caitlin Johnstone body", &response);
+                break;
+            }
         };
 
         let tags: String = match look_between(
@@ -103,11 +120,14 @@ pub async fn scrape_cj_resources(
             "</div>".to_string(),
         )? {
             Some(response) => strip_html(response)?,
-            None => return Ok(resources),
+            None => {
+                notify_parse_fail("Caitlin Johnstone tags", &response);
+                break;
+            }
         };
 
         let regions = get_regions(&[&title, &format!("{} {}", body, tags)]).await?;
-        resources.push((url, title, body, regions));
+        resources.push((url, title, truncate_string(body)?, regions));
     }
 
     Ok(resources)

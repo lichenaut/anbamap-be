@@ -1,12 +1,13 @@
-use std::thread;
-use std::time::Duration;
-
 use crate::db::util::url_exists;
 use crate::prelude::*;
-use crate::scrape::util::{get_regions, look_between, strip_html, truncate_string};
+use crate::scrape::util::{
+    get_regions, look_between, notify_parse_fail, strip_html, truncate_string,
+};
 use crate::service::var_service::is_source_enabled;
 use chrono::Local;
 use sqlx::SqlitePool;
+use std::thread;
+use std::time::Duration;
 
 pub async fn scrape_ei(
     pool: &SqlitePool,
@@ -47,7 +48,10 @@ pub async fn scrape_ei_blogs(
         "<ul class=\"pager pager-lite\">".to_string(),
     )? {
         Some(response) => response,
-        None => return Ok(blogs),
+        None => {
+            notify_parse_fail("Electronic Intifada blogs", &response);
+            return Ok(blogs);
+        }
     };
 
     let today: String = Local::now().format("%-d %B %Y").to_string();
@@ -62,7 +66,10 @@ pub async fn scrape_ei_blogs(
             "</span>".to_string(),
         )? {
             Some(date_time) => date_time,
-            None => continue,
+            None => {
+                notify_parse_fail("Electronic Intifada date", item);
+                break;
+            }
         };
 
         if date_time != today {
@@ -72,7 +79,10 @@ pub async fn scrape_ei_blogs(
         let mut url = url.chars().take(url.len() - 4).collect::<String>();
         let url_blog: String = match look_between(item, "href=\"/".to_string(), "\"".to_string())? {
             Some(url) => url,
-            None => continue,
+            None => {
+                notify_parse_fail("Electronic Intifada blog url", item);
+                break;
+            }
         };
 
         url.push_str(&url_blog);
@@ -86,7 +96,10 @@ pub async fn scrape_ei_blogs(
             "</a>".to_string(),
         )? {
             Some(title) => capitalize_words(strip_html(title)?)?,
-            None => continue,
+            None => {
+                notify_parse_fail("Electronic Intifada blog title", item);
+                break;
+            }
         };
 
         let body: String = match look_between(
@@ -94,8 +107,11 @@ pub async fn scrape_ei_blogs(
             "</span></span> </p>".to_string(),
             "&nbsp;<a".to_string(),
         )? {
-            Some(body) => truncate_string(strip_html(body)?)?,
-            None => continue,
+            Some(body) => strip_html(body)?,
+            None => {
+                notify_parse_fail("Electronic Intifada blog body", item);
+                break;
+            }
         };
 
         thread::sleep(*delay);
@@ -115,11 +131,14 @@ pub async fn scrape_ei_blogs(
             "</ul>".to_string(),
         )? {
             Some(tags) => strip_html(tags)?,
-            None => continue,
+            None => {
+                notify_parse_fail("Electronic Intifada tags", &response);
+                break;
+            }
         };
 
         let regions = get_regions(&[&title, &format!("{} {}", body, tags)]).await?;
-        blogs.push((url, title, body, regions));
+        blogs.push((url, title, truncate_string(body)?, regions));
     }
 
     Ok(blogs)

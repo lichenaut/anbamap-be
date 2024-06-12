@@ -1,6 +1,6 @@
 use crate::db::util::url_exists;
 use crate::prelude::*;
-use crate::scrape::util::{get_regions, strip_html, truncate_string};
+use crate::scrape::util::{get_regions, notify_parse_fail, strip_html, truncate_string};
 use crate::service::var_service::{get_youtube_api_key, get_youtube_channel_ids};
 use chrono::Local;
 use serde_json::Value;
@@ -51,16 +51,19 @@ pub async fn scrape_youtube_channel(
     let json: Value = response.json().await?;
     let today: String = Local::now().format("%Y-%m-%d").to_string();
     let Some(items) = json["items"].as_array() else {
+        notify_parse_fail("Youtube items", &json);
         return Ok(videos);
     };
 
     for item in items {
         let Some(snippet) = item["snippet"].as_object() else {
-            continue;
+            notify_parse_fail("Youtube snippet", item);
+            break;
         };
 
         let Some(published_at) = snippet["publishedAt"].as_str() else {
-            continue;
+            notify_parse_fail("Youtube publishedAt", "snippet");
+            break;
         };
 
         if published_at.chars().take(10).collect::<String>() != today {
@@ -70,7 +73,10 @@ pub async fn scrape_youtube_channel(
         let id = item["id"]["videoId"].as_str();
         let url: String = match id {
             Some(id) => format!("https://www.youtube.com/watch?v={}", id),
-            None => continue,
+            None => {
+                notify_parse_fail("Youtube videoId", item);
+                break;
+            }
         };
 
         if url_exists(pool, &url).await? {
@@ -79,16 +85,22 @@ pub async fn scrape_youtube_channel(
 
         let title: String = match snippet["title"].as_str() {
             Some(title) => strip_html(title)?,
-            None => continue,
+            None => {
+                notify_parse_fail("Youtube title", "snippet");
+                break;
+            }
         };
 
         let body: String = match snippet["description"].as_str() {
-            Some(body) => truncate_string(strip_html(body)?)?,
-            None => continue,
+            Some(body) => strip_html(body)?,
+            None => {
+                notify_parse_fail("Youtube description", "snippet");
+                break;
+            }
         };
 
         let regions = get_regions(&[&title, &body]).await?;
-        videos.push((url, title, body, regions));
+        videos.push((url, title, truncate_string(body)?, regions));
     }
 
     Ok(videos)

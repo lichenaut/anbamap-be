@@ -1,6 +1,8 @@
 use crate::db::util::url_exists;
 use crate::prelude::*;
-use crate::scrape::util::{get_regions, look_between, strip_html, truncate_string};
+use crate::scrape::util::{
+    get_regions, look_between, notify_parse_fail, strip_html, truncate_string,
+};
 use crate::service::var_service::is_source_enabled;
 use chrono::Local;
 use sqlx::SqlitePool;
@@ -49,7 +51,10 @@ pub async fn scrape_dn_headlines(
         "<div class=\"fine_print grey_description\">".to_string(),
     )? {
         Some(response) => response,
-        None => return Ok(headlines),
+        None => {
+            notify_parse_fail("Democracy Now! headlines", &response);
+            return Ok(headlines);
+        }
     };
 
     let items: Vec<&str> = response
@@ -60,7 +65,10 @@ pub async fn scrape_dn_headlines(
         let mut url: String = url.to_string() + "#";
         let url_id: String = match look_between(item, "id=\"".to_string(), "\"".to_string())? {
             Some(url) => url,
-            None => continue,
+            None => {
+                notify_parse_fail("Democracy Now! url", item);
+                break;
+            }
         };
 
         url.push_str(&url_id);
@@ -70,7 +78,10 @@ pub async fn scrape_dn_headlines(
 
         let title: String = match look_between(item, "<h2>".to_string(), "</h2>".to_string())? {
             Some(title) => strip_html(title)?,
-            None => continue,
+            None => {
+                notify_parse_fail("Democracy Now! title", item);
+                break;
+            }
         };
 
         let body: String = match look_between(
@@ -78,8 +89,11 @@ pub async fn scrape_dn_headlines(
             "<div class=\"headline_summary\"><p>".to_string(),
             "</p>".to_string(),
         )? {
-            Some(body) => truncate_string(strip_html(body)?)?,
-            None => continue,
+            Some(body) => strip_html(body)?,
+            None => {
+                notify_parse_fail("Democracy Now! body", item);
+                break;
+            }
         };
 
         let tags: String = match look_between(
@@ -88,11 +102,14 @@ pub async fn scrape_dn_headlines(
             "</li></ul>".to_string(),
         )? {
             Some(tags) => strip_html("<".to_string() + &tags)?,
-            None => return Ok(headlines),
+            None => {
+                notify_parse_fail("Democracy Now! tags", item);
+                break;
+            }
         };
 
         let regions = get_regions(&[&title, &format!("{} {}", body, tags)]).await?;
-        headlines.push((url, title, body, regions));
+        headlines.push((url, title, truncate_string(body)?, regions));
     }
 
     Ok(headlines)
