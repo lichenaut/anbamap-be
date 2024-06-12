@@ -74,6 +74,7 @@ pub async fn region_code_to_figures(client: &Client, iso_code: &str) -> Result<V
             !figure.to_lowercase().contains("chad")
                 && !figure.to_lowercase().contains("israel")
                 && !figure.to_lowercase().contains("jordan")
+                && !figure.to_lowercase().contains("denmark")
         })
         .cloned()
         .collect())
