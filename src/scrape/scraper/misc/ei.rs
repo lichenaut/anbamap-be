@@ -17,7 +17,10 @@ pub async fn scrape_ei(
         return Ok(());
     }
 
-    media.extend(scrape_ei_blogs(pool, "https://electronicintifada.net/blog").await?);
+    let delay = Duration::from_secs(10);
+    media.extend(scrape_ei_blogs(pool, "https://electronicintifada.net/news", &delay).await?);
+    thread::sleep(delay);
+    media.extend(scrape_ei_blogs(pool, "https://electronicintifada.net/blog", &delay).await?);
 
     Ok(())
 }
@@ -25,6 +28,7 @@ pub async fn scrape_ei(
 pub async fn scrape_ei_blogs(
     pool: &SqlitePool,
     url: &str,
+    delay: &Duration,
 ) -> Result<Vec<(String, String, String, Vec<String>)>> {
     let mut blogs: Vec<(String, String, String, Vec<String>)> = Vec::new();
     let response = reqwest::get(url).await?;
@@ -46,7 +50,6 @@ pub async fn scrape_ei_blogs(
         None => return Ok(blogs),
     };
 
-    let delay = Duration::from_secs(10);
     let today: String = Local::now().format("%-d %B %Y").to_string();
     let items: Vec<&str> = response
         .split("<h2 class=\"node__title node-title\">")
@@ -95,7 +98,7 @@ pub async fn scrape_ei_blogs(
             None => continue,
         };
 
-        thread::sleep(delay);
+        thread::sleep(*delay);
         let response = reqwest::get(&url).await?;
         if !response.status().is_success() {
             tracing::error!(
