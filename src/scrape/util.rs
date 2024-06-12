@@ -14,7 +14,7 @@ use url::Url;
 pub(super) async fn get_regions(text: &[&str]) -> Result<Vec<String>> {
     let text = strip_content(text.join(" "))?;
     let identified_regions = get_flashgeotext_regions(&text).await?;
-
+    let has_eu: bool = text.contains("EU");
     let text = &text.replace("\\'", "'").to_lowercase(); //TODO check for correct behavior
     let identified_regions = Arc::new(Mutex::new(identified_regions));
     KEYPHRASE_REGION_MAP
@@ -62,7 +62,7 @@ pub(super) async fn get_regions(text: &[&str]) -> Result<Vec<String>> {
     if text.contains("sudan") && !text.contains("south sudan") && !regions.contains(&"sd") {
         regions.push("sd");
     }
-    if regions.is_empty() {
+    if regions.is_empty() && !text.contains("europe") && !has_eu {
         regions.push("us");
     }
 
@@ -89,7 +89,7 @@ pub fn strip_html<T: ToString>(input: T) -> Result<String> {
     let mut replacements = HashMap::new();
     replacements.insert("&amp;", "&");
     replacements.insert("&nbsp;", " ");
-    replacements.insert("&#39;", "'");
+    replacements.insert("&#039;", "'");
     replacements.insert("&#8220;", "\"");
     replacements.insert("&#8221;", "\"");
     replacements.insert("&#8217;", "'");
