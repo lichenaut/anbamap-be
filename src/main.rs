@@ -14,6 +14,17 @@ mod scrape {
             pub mod dn;
             pub mod ei;
             pub mod ge;
+            pub mod grayzone;
+            pub mod hrw;
+            pub mod intercept;
+            pub mod jc;
+            pub mod optout;
+            pub mod os;
+            pub mod propublica;
+            pub mod ti;
+            pub mod truthout;
+            pub mod ur;
+            pub mod yv;
         }
         pub mod forbes400;
         pub mod substack;

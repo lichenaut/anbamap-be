@@ -104,7 +104,7 @@ pub async fn scrape_cj_resources(
         let response: String = response.text().await?;
         let body: String = match look_between(
             &response,
-            "og:description\" content=\"".to_string(),
+            "description\" content=\"".to_string(),
             "\"".to_string(),
         )? {
             Some(body) => strip_html(&body)?,

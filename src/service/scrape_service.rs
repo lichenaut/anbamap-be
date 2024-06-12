@@ -7,6 +7,9 @@ use crate::scrape::scraper::{
     misc::{
         accuracy::scrape_accuracy, amnesty::scrape_amnesty, antiwar::scrape_antiwar, cj::scrape_cj,
         consortium::scrape_consortium, dn::scrape_dn, ei::scrape_ei, ge::scrape_ge,
+        grayzone::scrape_grayzone, /*hrw::scrape_hrw, intercept::scrape_intercept, jc::scrape_jc,
+                                   optout::scrape_optout, os::scrape_os, propublica::scrape_propublica, ti::scrape_ti,
+                                   truthout::scrape_truthout, ur::scrape_ur, yv::scrape_yv,*/
     },
     {substack::scrape_substack, youtube::scrape_youtube},
 };
@@ -26,6 +29,17 @@ pub async fn run_scrapers(docker_volume: &str) -> Result<()> {
     scrape_dn(&pool, &mut media).await?;
     scrape_ei(&pool, &mut media).await?;
     scrape_ge(&pool, &mut media).await?;
+    scrape_grayzone(&pool, &mut media).await?;
+    // scrape_hrw(&pool, &mut media).await?;
+    // scrape_intercept(&pool, &mut media).await?;
+    // scrape_jc(&pool, &mut media).await?;
+    // scrape_optout(&pool, &mut media).await?;
+    // scrape_os(&pool, &mut media).await?;
+    // scrape_propublica(&pool, &mut media).await?;
+    // scrape_ti(&pool, &mut media).await?;
+    // scrape_truthout(&pool, &mut media).await?;
+    // scrape_ur(&pool, &mut media).await?;
+    // scrape_yv(&pool, &mut media).await?;
     scrape_substack(&pool, &mut media).await?;
     scrape_youtube(&pool, &mut media).await?;
     update_media_db(&pool, media).await?;

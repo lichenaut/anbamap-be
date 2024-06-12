@@ -71,7 +71,7 @@ pub(super) async fn get_regions(text: &[&str]) -> Result<Vec<String>> {
 }
 
 pub fn notify_parse_fail<T: Display>(msg: &str, item: T) {
-    tracing::error!("Continue occured while parsing HTML: {} at {}", msg, item);
+    tracing::error!("Unexpected value while parsing HTML: {} at {}", msg, item);
 }
 
 pub fn get_base_url(url: &str) -> Result<String> {

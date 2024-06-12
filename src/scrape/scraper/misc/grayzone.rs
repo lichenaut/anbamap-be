@@ -6,23 +6,21 @@ use crate::scrape::util::{
 use crate::service::var_service::is_source_enabled;
 use chrono::Local;
 use sqlx::SqlitePool;
-use std::thread;
-use std::time::Duration;
 
-pub async fn scrape_ge(
+pub async fn scrape_grayzone(
     pool: &SqlitePool,
     media: &mut Vec<(String, String, String, Vec<String>)>,
 ) -> Result<()> {
-    let ge_enabled: bool = is_source_enabled("GE_B").await?;
-    if !ge_enabled {
+    let grayzone_enabled: bool = is_source_enabled("GRAYZONE_B").await?;
+    if !grayzone_enabled {
         return Ok(());
     }
 
     media.extend(
-        scrape_ge_reports(
+        scrape_grayzone_stories(
             pool,
             &format!(
-                "https://geopoliticaleconomy.com/{}/",
+                "https://thegrayzone.com/{}/",
                 Local::now().format("%Y/%m/%d")
             ),
         )
@@ -32,43 +30,40 @@ pub async fn scrape_ge(
     Ok(())
 }
 
-pub async fn scrape_ge_reports(
+pub async fn scrape_grayzone_stories(
     pool: &SqlitePool,
     url: &str,
 ) -> Result<Vec<(String, String, String, Vec<String>)>> {
-    let mut reports: Vec<(String, String, String, Vec<String>)> = Vec::new();
+    let mut stories: Vec<(String, String, String, Vec<String>)> = Vec::new();
     let response = reqwest::get(url).await?;
     if !response.status().is_success() {
-        tracing::error!(
-            "Non-success response from Geopolitical Economy Report: {}",
-            response.status()
-        );
-        return Ok(reports);
+        tracing::error!("Non-success response from Grayzone: {}", response.status());
+        return Ok(stories);
     }
 
     let mut response: String = response.text().await?;
     response = match look_between(
         &response,
-        "<div class=\"zox-main-blog zoxrel left zox100\">".to_string(),
-        "<div class=\"zox-inf-more-wrap left zoxrel\">".to_string(),
+        "<div id=\"cb-content\" class=\"contents-wrap clearfix wrap side-spacing sb--right\">"
+            .to_string(),
+        "<footer id=\"cb-footer\" class=\"site-footer\">".to_string(),
     )? {
         Some(response) => response,
         None => {
-            notify_parse_fail("Geopolitical Economy Report reports", &response);
-            return Ok(reports);
+            notify_parse_fail("Grayzone stories", &response);
+            return Ok(stories);
         }
     };
 
-    let delay = Duration::from_secs(20);
     let items: Vec<&str> = response
-        .split("<div class=\"zox-art-title\">")
+        .split("<div class=\"cb-mask mask\" style=\"background:#bc2c27;\">")
         .skip(1)
         .collect::<Vec<&str>>();
     for item in items {
         let url: String = match look_between(item, "href=\"/".to_string(), "\"".to_string())? {
             Some(url) => url,
             None => {
-                notify_parse_fail("Geopolitical Economy Report url", item);
+                notify_parse_fail("Grayzone url", item);
                 break;
             }
         };
@@ -79,23 +74,19 @@ pub async fn scrape_ge_reports(
 
         let title: String = match look_between(
             item,
-            "<h2 class=\"zox-s-title2\">".to_string(),
+            "<h2 class=\"title cb-post-title\">".to_string(),
             "</h2>".to_string(),
         )? {
-            Some(title) => strip_html(title)?,
+            Some(title) => strip_html(title.trim())?,
             None => {
-                notify_parse_fail("Geopolitical Economy Report title", item);
+                notify_parse_fail("Grayzone title", item);
                 break;
             }
         };
 
-        thread::sleep(delay);
         let response = reqwest::get(&url).await?;
         if !response.status().is_success() {
-            tracing::error!(
-                "Non-success response from Geopolitical Economy Report: {}",
-                response.status()
-            );
+            tracing::error!("Non-success response from Grayzone: {}", response.status());
             break;
         }
 
@@ -107,26 +98,22 @@ pub async fn scrape_ge_reports(
         )? {
             Some(body) => strip_html(body)?,
             None => {
-                notify_parse_fail("Geopolitical Economy Report body", &response);
+                notify_parse_fail("Grayzone body", &response);
                 break;
             }
         };
 
-        let tags = match look_between(
-            &response,
-            "</span><span itemprop=\"keywords\">".to_string(),
-            "</span>".to_string(),
-        )? {
-            Some(tags) => strip_html(tags)?,
+        let tags = match look_between(&response, "\"keywords\":[".to_string(), "]".to_string())? {
+            Some(tags) => tags.replace('"', "").replace(',', " "),
             None => {
-                notify_parse_fail("Geopolitical Economy Report tags", &response);
+                notify_parse_fail("Grayzone tags", &response);
                 break;
             }
         };
 
         let regions = get_regions(&[&title, &format!("{} {}", body, tags)]).await?;
-        reports.push((url, title, truncate_string(body)?, regions));
+        stories.push((url, title, truncate_string(body)?, regions));
     }
 
-    Ok(reports)
+    Ok(stories)
 }

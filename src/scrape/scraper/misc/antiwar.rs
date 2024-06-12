@@ -118,7 +118,7 @@ pub async fn scrape_antiwar_features(
             body = Some(
                 match look_between(
                     &response,
-                    "<meta property=\"og:description\" content=\"".to_string(),
+                    "description\" content=\"".to_string(),
                     "\"".to_string(),
                 )? {
                     Some(body) => body,
