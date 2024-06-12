@@ -82,6 +82,6 @@ The first run will take a few minutes to set up files.
 | `CJ_B`                | `boolean` value for [https://caitlinjohnstone.com.au/category/article/](https://caitlinjohnstone.com.au/category/article/)                                                    |
 | `CONSORTIUM_B`        | `boolean` value for [https://consortiumnews.com/yyyy/mm/dd/](https://consortiumnews.com/yyyy/mm/dd/)                                                                          |
 | `DN_B`                | `boolean` value for [https://www.democracynow.org/yyyy/m/d/headlines](https://www.democracynow.org/yyyy/m/d/headlines)                                                        |
-| `EI_B`                | `boolean` value for [https://electronicintifada.net/blog](https://electronicintifada.net/blog) and [https://electronicintifada.net/news](https://electronicintifada.net/news) |
+| `EI_B`                | `boolean` value for [https://electronicintifada.net/news](https://electronicintifada.net/news) and [https://electronicintifada.net/blog](https://electronicintifada.net/blog) |
 | `YOUTUBE_API_KEY`     | Your Youtube Data API key.                                                                                                                                                    |
 | `YOUTUBE_CHANNEL_IDS` | Comma-separated Youtube channel IDs.                                                                                                                                          |
