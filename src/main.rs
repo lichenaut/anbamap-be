@@ -18,7 +18,6 @@ mod scrape {
             pub mod hrw;
             pub mod intercept;
             pub mod jc;
-            pub mod optout;
             pub mod os;
             pub mod propublica;
             pub mod ti;

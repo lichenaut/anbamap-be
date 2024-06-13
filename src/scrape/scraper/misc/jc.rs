@@ -1,6 +1,8 @@
 use crate::db::util::url_exists;
 use crate::prelude::*;
-use crate::scrape::util::{get_regions, look_between, notify_parse_fail, strip_html};
+use crate::scrape::util::{
+    get_regions, look_between, notify_parse_fail, strip_html, truncate_string,
+};
 use crate::service::var_service::is_source_enabled;
 use chrono::Local;
 use sqlx::SqlitePool;
@@ -83,7 +85,7 @@ pub async fn scrape_jc_blogs(
 
         // Crawl delay is five minutes: not worth it for body and tags.
         let regions = get_regions(&[&title]).await?;
-        blogs.push((url, title.clone(), title, regions));
+        blogs.push((url, title.clone(), truncate_string(title)?, regions));
     }
 
     Ok(blogs)

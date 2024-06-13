@@ -207,7 +207,7 @@ pub async fn scrape_os_reports(
             "<span class=\"report-card-title\">".to_string(),
             "</span>".to_string(),
         )? {
-            Some(title) => title,
+            Some(title) => strip_html(title)?,
             None => {
                 notify_parse_fail("OpenSecrets title", item);
                 break;
@@ -215,7 +215,7 @@ pub async fn scrape_os_reports(
         };
 
         let body: String = match look_between(item, "</em></p>".to_string(), "[".to_string())? {
-            Some(body) => strip_html(body.trim())?,
+            Some(body) => strip_html(body)?,
             None => {
                 notify_parse_fail("OpenSecrets body", item);
                 break;
