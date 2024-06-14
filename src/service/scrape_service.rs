@@ -9,8 +9,9 @@ use crate::scrape::scraper::{
         consortium::scrape_consortium, dn::scrape_dn, ei::scrape_ei, ge::scrape_ge,
         grayzone::scrape_grayzone, hrw::scrape_hrw, intercept::scrape_intercept, jc::scrape_jc,
         os::scrape_os, propublica::scrape_propublica,
-        truthout::scrape_truthout, /* ti::scrape_ti,
-                                   ur::scrape_ur, yv::scrape_yv,*/
+        ti::scrape_ti,
+        /* ur::scrape_ur, yv::scrape_yv,*/
+        truthout::scrape_truthout,
     },
     {substack::scrape_substack, youtube::scrape_youtube},
 };
@@ -36,7 +37,7 @@ pub async fn run_scrapers(docker_volume: &str) -> Result<()> {
     scrape_jc(&pool, &mut media).await?;
     scrape_os(&pool, &mut media).await?;
     scrape_propublica(&pool, &mut media).await?;
-    // scrape_ti(&pool, &mut media).await?;
+    scrape_ti(&pool, &mut media).await?;
     scrape_truthout(&pool, &mut media).await?;
     // scrape_ur(&pool, &mut media).await?;
     // scrape_yv(&pool, &mut media).await?;
