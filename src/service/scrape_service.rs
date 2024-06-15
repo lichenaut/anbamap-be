@@ -9,7 +9,7 @@ use crate::scrape::scraper::{
         consortium::scrape_consortium, dn::scrape_dn, ei::scrape_ei, ge::scrape_ge,
         grayzone::scrape_grayzone, hrw::scrape_hrw, intercept::scrape_intercept, jc::scrape_jc,
         os::scrape_os, propublica::scrape_propublica, ti::scrape_ti, truthout::scrape_truthout,
-        ur::scrape_ur, /* yv::scrape_yv,*/
+        ur::scrape_ur,
     },
     {substack::scrape_substack, youtube::scrape_youtube},
 };
@@ -38,7 +38,6 @@ pub async fn run_scrapers(docker_volume: &str) -> Result<()> {
     scrape_ti(&pool, &mut media).await?;
     scrape_truthout(&pool, &mut media).await?;
     scrape_ur(&pool, &mut media).await?;
-    // scrape_yv(&pool, &mut media).await?;
     scrape_substack(&pool, &mut media).await?;
     scrape_youtube(&pool, &mut media).await?;
     update_media_db(&pool, media).await?;

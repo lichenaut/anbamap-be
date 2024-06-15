@@ -16,15 +16,10 @@ pub async fn scrape_grayzone(
         return Ok(());
     }
 
+    let today: String = Local::now().format("%Y/%m/%d").to_string();
     media.extend(
-        scrape_grayzone_stories(
-            pool,
-            &format!(
-                "https://thegrayzone.com/{}/",
-                Local::now().format("%Y/%m/%d")
-            ),
-        )
-        .await?,
+        scrape_grayzone_stories(pool, &format!("https://thegrayzone.com/{}/", today), today)
+            .await?,
     );
 
     Ok(())
@@ -33,6 +28,7 @@ pub async fn scrape_grayzone(
 pub async fn scrape_grayzone_stories(
     pool: &SqlitePool,
     url: &str,
+    today: String,
 ) -> Result<Vec<(String, String, String, Vec<String>)>> {
     let mut stories: Vec<(String, String, String, Vec<String>)> = Vec::new();
     let response = reqwest::get(url).await?;
@@ -60,6 +56,7 @@ pub async fn scrape_grayzone_stories(
         .skip(1)
         .collect::<Vec<&str>>();
     for item in items {
+        println!("Grayzone Item: {}", item);
         let url: String = match look_between(item, "href=\"/".to_string(), "\"".to_string())? {
             Some(url) => url,
             None => {
@@ -68,9 +65,14 @@ pub async fn scrape_grayzone_stories(
             }
         };
 
-        if url_exists(pool, &url).await? {
+        println!("Grayzone URL: {}", url);
+        println!("Grayzone Today: {}", today);
+
+        if url_exists(pool, &url).await? || !url.contains(&today) {
             break;
         }
+
+        println!("after");
 
         let title: String = match look_between(
             item,
