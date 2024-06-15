@@ -11,7 +11,7 @@ pub async fn scrape_hrw(
     pool: &SqlitePool,
     media: &mut Vec<(String, String, String, Vec<String>)>,
 ) -> Result<()> {
-    let hrw_enabled: bool = is_source_enabled("hrw_B").await?;
+    let hrw_enabled: bool = is_source_enabled("HRW_B").await?;
     if !hrw_enabled {
         return Ok(());
     }
@@ -28,7 +28,7 @@ pub async fn scrape_hrw_releases(
     let mut releases: Vec<(String, String, String, Vec<String>)> = Vec::new();
     let response = reqwest::get(url).await?;
     if !response.status().is_success() {
-        tracing::error!(
+        tracing::debug!(
             "Non-success response from Human Rights Watch: {}",
             response.status()
         );

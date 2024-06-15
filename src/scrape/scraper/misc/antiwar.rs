@@ -37,7 +37,7 @@ pub async fn scrape_antiwar_features(
     let mut features: Vec<(String, String, String, Vec<String>)> = Vec::new();
     let response = reqwest::get(url).await?;
     if !response.status().is_success() {
-        tracing::error!("Non-success response from Antiwar: {}", response.status());
+        tracing::debug!("Non-success response from Antiwar: {}", response.status());
         return Ok(features);
     }
 
@@ -110,7 +110,7 @@ pub async fn scrape_antiwar_features(
         if url.contains("antiwar.com") {
             let response = reqwest::get(&url).await?;
             if !response.status().is_success() {
-                tracing::error!("Non-success response from Antiwar: {}", response.status());
+                tracing::debug!("Non-success response from Antiwar: {}", response.status());
                 break;
             }
 

@@ -19,7 +19,7 @@ pub async fn region_code_to_figures(client: &Client, iso_code: &str) -> Result<V
     );
     let response = client.get(&url).send().await?;
     if !response.status().is_success() {
-        tracing::error!("Non-success response from Wikidata: {}", response.status());
+        tracing::debug!("Non-success response from Wikidata: {}", response.status());
         return Ok(figures);
     }
 

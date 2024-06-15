@@ -13,7 +13,7 @@ pub async fn get_private_enterprises_map(client: &Client) -> Result<HashMap<Stri
     let url = "https://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&rvslots=main&format=json&titles=List_of_largest_private_non-governmental_companies_by_revenue";
     let response = client.get(url).send().await?;
     if !response.status().is_success() {
-        tracing::error!("Non-success response from Wikipedia: {}", response.status());
+        tracing::debug!("Non-success response from Wikipedia: {}", response.status());
         return Ok(region_to_companies);
     }
 

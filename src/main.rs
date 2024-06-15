@@ -23,7 +23,6 @@ mod scrape {
             pub mod ti;
             pub mod truthout;
             pub mod ur;
-            pub mod yv;
         }
         pub mod forbes400;
         pub mod substack;

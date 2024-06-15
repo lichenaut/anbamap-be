@@ -4,7 +4,7 @@ use crate::scrape::util::{
     get_regions, look_between, notify_parse_fail, strip_html, truncate_string,
 };
 use crate::service::var_service::is_source_enabled;
-use chrono::{DateTime, Local};
+use chrono::{DateTime, FixedOffset, Local, NaiveDateTime};
 use sqlx::SqlitePool;
 
 pub async fn scrape_propublica(
@@ -37,7 +37,7 @@ pub async fn scrape_propublica_news(
     let mut news: Vec<(String, String, String, Vec<String>)> = Vec::new();
     let response = reqwest::get(url).await?;
     if !response.status().is_success() {
-        tracing::error!(
+        tracing::debug!(
             "Non-success response from ProPublica: {}",
             response.status()
         );
@@ -72,23 +72,23 @@ pub async fn scrape_propublica_news(
                 }
             };
 
-        let date_time = DateTime::parse_from_str(&date_time, "%Y-%m-%d%Z%H:%M")?
-            .with_timezone(&Local)
-            .format("%Y-%m-%d")
-            .to_string();
-        if date_time != today {
-            break;
-        }
-
-        let url: String = match look_between(item, "href=\"".to_string(), "\"".to_string())? {
-            Some(url) => url,
+        let naive_date_time =
+            NaiveDateTime::parse_from_str(&date_time.replace("EDT", ""), "%Y-%m-%d%H:%M")?;
+        let offset = match FixedOffset::east_opt(14400) {
+            Some(offset) => offset,
             None => {
-                notify_parse_fail("ProPublica url", item);
+                notify_parse_fail("ProPublica offset", item);
                 break;
             }
         };
 
-        if url_exists(pool, &url).await? {
+        let date_time: DateTime<FixedOffset> =
+            DateTime::from_naive_utc_and_offset(naive_date_time, offset);
+        let date_time = date_time
+            .with_timezone(&chrono::Local)
+            .format("%Y-%m-%d")
+            .to_string();
+        if date_time != today {
             break;
         }
 
@@ -103,6 +103,18 @@ pub async fn scrape_propublica_news(
 
         if body.is_empty() {
             continue;
+        }
+
+        let url: String = match look_between(item, "href=\"".to_string(), "\"".to_string())? {
+            Some(url) => url,
+            None => {
+                notify_parse_fail("ProPublica url", item);
+                break;
+            }
+        };
+
+        if url_exists(pool, &url).await? {
+            break;
         }
 
         let title: String = match look_between(

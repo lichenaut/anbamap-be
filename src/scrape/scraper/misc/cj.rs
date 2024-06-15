@@ -30,7 +30,7 @@ pub async fn scrape_cj_resources(
     let mut resources: Vec<(String, String, String, Vec<String>)> = Vec::new();
     let response = reqwest::get(url).await?;
     if !response.status().is_success() {
-        tracing::error!(
+        tracing::debug!(
             "Non-success response from Caitlin Johnstone: {}",
             response.status()
         );

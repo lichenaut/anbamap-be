@@ -34,7 +34,7 @@ pub async fn scrape_substack_archive(
     let mut letters: Vec<(String, String, String, Vec<String>)> = Vec::new();
     let response = reqwest::get(url).await?;
     if !response.status().is_success() {
-        tracing::error!("Non-success response from Substack: {}", response.status());
+        tracing::debug!("Non-success response from Substack: {}", response.status());
         return Ok(letters);
     }
 

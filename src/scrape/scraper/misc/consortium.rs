@@ -37,7 +37,7 @@ pub async fn scrape_consortium_posts(
     let mut posts: Vec<(String, String, String, Vec<String>)> = Vec::new();
     let response = reqwest::get(url).await?;
     if !response.status().is_success() {
-        tracing::error!(
+        tracing::debug!(
             "Non-success response from Consortium: {}",
             response.status()
         );

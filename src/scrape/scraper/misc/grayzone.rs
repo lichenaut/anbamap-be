@@ -33,7 +33,7 @@ pub async fn scrape_grayzone_stories(
     let mut stories: Vec<(String, String, String, Vec<String>)> = Vec::new();
     let response = reqwest::get(url).await?;
     if !response.status().is_success() {
-        tracing::error!("Non-success response from Grayzone: {}", response.status());
+        tracing::debug!("Non-success response from Grayzone: {}", response.status());
         return Ok(stories);
     }
 
@@ -56,7 +56,6 @@ pub async fn scrape_grayzone_stories(
         .skip(1)
         .collect::<Vec<&str>>();
     for item in items {
-        println!("Grayzone Item: {}", item);
         let url: String = match look_between(item, "href=\"/".to_string(), "\"".to_string())? {
             Some(url) => url,
             None => {
@@ -65,14 +64,9 @@ pub async fn scrape_grayzone_stories(
             }
         };
 
-        println!("Grayzone URL: {}", url);
-        println!("Grayzone Today: {}", today);
-
         if url_exists(pool, &url).await? || !url.contains(&today) {
             break;
         }
-
-        println!("after");
 
         let title: String = match look_between(
             item,
@@ -88,7 +82,7 @@ pub async fn scrape_grayzone_stories(
 
         let response = reqwest::get(&url).await?;
         if !response.status().is_success() {
-            tracing::error!("Non-success response from Grayzone: {}", response.status());
+            tracing::debug!("Non-success response from Grayzone: {}", response.status());
             break;
         }
 

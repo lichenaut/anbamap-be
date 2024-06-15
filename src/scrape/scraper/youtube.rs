@@ -44,7 +44,7 @@ pub async fn scrape_youtube_channel(
     );
     let response = reqwest::get(&url).await?;
     if !response.status().is_success() {
-        tracing::error!("Non-success response from Youtube: {}", response.status());
+        tracing::debug!("Non-success response from Youtube: {}", response.status());
         return Ok(videos);
     }
 

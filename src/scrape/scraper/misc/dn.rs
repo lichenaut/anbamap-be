@@ -37,7 +37,7 @@ pub async fn scrape_dn_headlines(
     let mut headlines: Vec<(String, String, String, Vec<String>)> = Vec::new();
     let response = reqwest::get(url).await?;
     if !response.status().is_success() {
-        tracing::error!(
+        tracing::debug!(
             "Non-success response from Democracy Now!: {}",
             response.status()
         );

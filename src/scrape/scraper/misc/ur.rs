@@ -4,7 +4,7 @@ use crate::scrape::util::{
     get_regions, look_between, notify_parse_fail, strip_html, truncate_string,
 };
 use crate::service::var_service::is_source_enabled;
-use chrono::{DateTime, Local};
+use chrono::Local;
 use sqlx::SqlitePool;
 
 pub async fn scrape_ur(
@@ -28,7 +28,7 @@ pub async fn scrape_ur_posts(
     let mut posts: Vec<(String, String, String, Vec<String>)> = Vec::new();
     let response = reqwest::get(url).await?;
     if !response.status().is_success() {
-        tracing::error!(
+        tracing::debug!(
             "Non-success response from Unicorn Riot: {}",
             response.status()
         );
@@ -63,10 +63,6 @@ pub async fn scrape_ur_posts(
                 }
             };
 
-        let date_time = DateTime::parse_from_rfc3339(&date_time)?
-            .with_timezone(&Local)
-            .format("%Y-%m-%d")
-            .to_string();
         if date_time != today {
             break;
         }

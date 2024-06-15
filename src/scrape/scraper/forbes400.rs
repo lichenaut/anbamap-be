@@ -9,7 +9,7 @@ pub async fn get_largest_billionaires_map(client: &Client) -> Result<HashMap<Str
     let url = "https://forbes400.onrender.com/api/forbes400/getAllBillionaires".to_string();
     let response = client.get(&url).send().await?;
     if !response.status().is_success() {
-        tracing::error!("Non-success response from Forbes400: {}", response.status());
+        tracing::debug!("Non-success response from Forbes400: {}", response.status());
         return Ok(billionaires);
     }
 

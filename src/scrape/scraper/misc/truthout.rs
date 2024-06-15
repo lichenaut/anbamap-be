@@ -11,7 +11,7 @@ pub async fn scrape_truthout(
     pool: &SqlitePool,
     media: &mut Vec<(String, String, String, Vec<String>)>,
 ) -> Result<()> {
-    let truthout_enabled: bool = is_source_enabled("truthout_B").await?;
+    let truthout_enabled: bool = is_source_enabled("TRUTHOUT_B").await?;
     if !truthout_enabled {
         return Ok(());
     }
@@ -28,7 +28,7 @@ pub async fn scrape_truthout_news(
     let mut news: Vec<(String, String, String, Vec<String>)> = Vec::new();
     let response = reqwest::get(url).await?;
     if !response.status().is_success() {
-        tracing::error!("Non-success response from Truthout: {}", response.status());
+        tracing::debug!("Non-success response from Truthout: {}", response.status());
         return Ok(news);
     }
 
