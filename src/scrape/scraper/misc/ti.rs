@@ -18,7 +18,7 @@ pub async fn scrape_ti(
 
     let today = Local::now().format("%m%d%Y").to_string();
     media.extend(
-        scrape_ti_stories(
+        scrape_ti_investigations(
             pool,
             &format!(
                 "https://www.typeinvestigations.org/all/?post_date={}+{}/",
@@ -31,18 +31,18 @@ pub async fn scrape_ti(
     Ok(())
 }
 
-pub async fn scrape_ti_stories(
+pub async fn scrape_ti_investigations(
     pool: &SqlitePool,
     url: &str,
 ) -> Result<Vec<(String, String, String, Vec<String>)>> {
-    let mut stories: Vec<(String, String, String, Vec<String>)> = Vec::new();
+    let mut investigations: Vec<(String, String, String, Vec<String>)> = Vec::new();
     let response = reqwest::get(url).await?;
     if !response.status().is_success() {
         tracing::error!(
             "Non-success response from Type Investigations: {}",
             response.status()
         );
-        return Ok(stories);
+        return Ok(investigations);
     }
 
     let mut response: String = response.text().await?;
@@ -53,8 +53,8 @@ pub async fn scrape_ti_stories(
     )? {
         Some(response) => response,
         None => {
-            notify_parse_fail("Type Investigations stories", &response);
-            return Ok(stories);
+            notify_parse_fail("Type Investigations investigations", &response);
+            return Ok(investigations);
         }
     };
 
@@ -97,8 +97,8 @@ pub async fn scrape_ti_stories(
         };
 
         let regions = get_regions(&[&title, &body]).await?;
-        stories.push((url, title, truncate_string(body)?, regions));
+        investigations.push((url, title, truncate_string(body)?, regions));
     }
 
-    Ok(stories)
+    Ok(investigations)
 }

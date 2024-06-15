@@ -93,6 +93,7 @@ pub fn look_between(text: &str, this: String, that: String) -> Result<Option<Str
 pub fn strip_html<T: ToString>(input: T) -> Result<String> {
     let mut replacements = HashMap::new();
     replacements.insert("&amp;", "&");
+    replacements.insert("&hellip;", "...");
     replacements.insert("&nbsp;", " ");
     replacements.insert("&#039;", "'");
     replacements.insert("&#8220;", "\"");
