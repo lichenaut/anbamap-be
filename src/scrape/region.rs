@@ -132,7 +132,7 @@ fn get_automated_keyphrases(
                 for s in s.split(',') {
                     let s = s.trim().to_string();
                     match s.as_str() {
-                        "acre" | "arges" | "gard" | "marche" | "wien" => {
+                        "acre" | "arges" | "gard" | "marche" | "teni" | "wien" => {
                             results.push(" ".to_owned() + &s.clone() + " ");
                         }
                         _ => results.push(s.clone()),
@@ -1951,6 +1951,8 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                     "netanyahu",
                     "yoav gallant",
                     "zionis",
+                    "kibbutz",
+                    "shin bet",
                 ]),
             }
             .get_region_vec(),
@@ -2107,7 +2109,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                     "enel inc",
                     "intesa sanpaolo",
                     "unicredit",
-                    "eni",
+                    "eni inc",
                     "generali",
                     "prada",
                     "moncler",
@@ -3128,7 +3130,16 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 names: Some(vec!["palestin"]),
                 demonyms: None,
                 enterprises: None,
-                misc: Some(vec!["plo", "hamas", "fatah", "gaza", "rafah"]),
+                misc: Some(vec![
+                    "plo",
+                    "hamas",
+                    "fatah",
+                    "gaza",
+                    "rafah",
+                    "khan yunis",
+                    "khan younis",
+                    "khan yunus",
+                ]),
             }
             .get_region_vec(),
             "ps",
@@ -3265,7 +3276,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                     "etihad etisalat",
                     "mobily",
                 ]),
-                misc: None,
+                misc: Some(vec!["mount arafat"]),
             }
             .get_region_vec(),
             "sa",
@@ -3761,7 +3772,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 names: Some(vec!["ukrain"]),
                 demonyms: None,
                 enterprises: None,
-                misc: Some(vec!["verkhovna rada", "zelensky"]),
+                misc: Some(vec!["verkhovna rada", "zelensky", "azov"]),
             }
             .get_region_vec(),
             "ua",
@@ -4443,6 +4454,9 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                     "blinken",
                     "nyc",
                     "wall street",
+                    "world bank",
+                    "ifc",
+                    "leahy",
                 ]),
             }
             .get_region_vec(),
