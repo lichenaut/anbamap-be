@@ -562,7 +562,7 @@ pub async fn verify_codes() {
     print_result(
         "Brunei",
         "bn",
-        &verify_iso_match(&client, "bn", "Brunei Darussalam").await,
+        &verify_iso_match(&client, "bn", "Brunei").await,
     )
     .await; //tag
     print_result(

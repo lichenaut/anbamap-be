@@ -1,4 +1,4 @@
-FROM rust:latest-slim AS builder
+FROM rust:latest AS builder
 WORKDIR /scraper
 COPY . /scraper
 RUN cargo build --release
