@@ -95,6 +95,7 @@ pub fn strip_html<T: ToString>(input: T) -> Result<String> {
     replacements.insert("&amp;", "&");
     replacements.insert("&hellip;", "...");
     replacements.insert("&nbsp;", " ");
+    replacements.insert("&quot;", "\"");
     replacements.insert("&#39;", "'");
     replacements.insert("&#039;", "'");
     replacements.insert("&#8220;", "\"");

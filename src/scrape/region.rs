@@ -69,7 +69,7 @@ impl RegionKeyphrases {
         let mut short_strings: Vec<&'static str> = Vec::new();
         region_vec.iter_mut().for_each(|s| {
             if s.len() < 4 {
-                if *s == "bid" {
+                if *s == "ain" || *s == "bid" || *s == "est" {
                     return;
                 }
                 short_strings.push(Box::leak(format!("'{}'", s).into_boxed_str()));
@@ -860,7 +860,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 demonyms: Some(vec!["swiss"]),
                 enterprises: Some(vec![
                     "nestle",
-                    "roche",
+                    "roche inc",
                     "novartis",
                     "chubb inc",
                     "ubs",
@@ -1625,7 +1625,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
                 misc: None,
             }
             .get_region_vec(),
-            "gf",
+            "fr", // Its own code is 'gf', but it's a region of France (for leaflet purposes).
         ),
         (
             RegionKeyphrases {
@@ -4735,6 +4735,7 @@ pub static KEYPHRASE_REGION_MAP: Lazy<Vec<(Vec<&'static str>, &'static str)>> = 
         "salem",
         "smic",
         "st. john's",
+        "timis",
     ]
     .into_par_iter()
     .collect();
